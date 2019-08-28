@@ -49,6 +49,9 @@ class mySelectPosts extends Component {
         this.getButtonsLabel = this.getButtonsLabel.bind(this);
         this.getButtons = this.getButtons.bind(this);
         this.getBookMedia = this.getBookMedia.bind(this);
+        this.getTitlePrefixToggle = this.getTitlePrefixToggle.bind(this);
+        this.getCoverToggle = this.getCoverToggle.bind(this);
+        this.getButtonSegment = this.getButtonSegment.bind(this);
     
     }
 
@@ -181,6 +184,78 @@ class mySelectPosts extends Component {
         );
     }
 
+    getCoverToggle() {
+        return (
+            this.props.attributes.title &&
+            this.props.attributes.cover ? (
+                <ToggleControl
+                label="Reverse Cover Position"
+                checked={ !!this.props.attributes.flexReverse }
+                onChange={ this.onChangeFlexDirection }
+                className="flex-direction"
+            />
+            ) : (
+                null
+            )
+           
+        );
+    }
+
+    getButtonSegment() {
+        return (
+            this.props.attributes.title ? (
+            <div>
+                <ToggleControl
+                    label="Custom Label for Buttons Section"
+                    help="Defaults to 'Now Available From'"
+                    checked={ !!this.props.attributes.customLabel }
+                    onChange={ this.onChangeCustomLabel }
+                    className="custom-label"
+                    />
+                <div className="buylinks"> 
+                    <this.getButtonsLabel/>
+                    <this.getButtons/>
+                </div> 
+            </div>
+            ) : (
+                null
+            )
+        );
+    }
+
+    getTitlePrefixToggle() {
+        return (
+            this.props.attributes.title ? (
+            <div className="title-prefix-toggle is-flex">
+            <ToggleControl
+                label="Add Prefix to Title"
+                help="ie, 'Coming Soon' or 'Just Released', etc."
+                checked={ !!this.props.attributes.addTitlePrefix }
+                onChange={ this.onChangeAddPrefix }
+                className="add-title-prefix"
+            />
+            {
+                this.props.attributes.addTitlePrefix && (
+                    <RichText
+                    tagName='h4'
+                    placeholder= 'Coming Soon, etc.'	
+                    className="title-prefix"
+                    value={ this.props.attributes.titlePrefix }
+                    onChange={ this.onChangeTitlePrefix }
+                    keepPlaceholderOnFocus={true}
+                    withoutInteractiveFormatting={true}
+                    />
+                )
+            }
+            </div>
+        ) : (
+            null
+        )
+        );
+    }
+
+    
+
     getOptions() {
         const Book = wp.api.models.Post.extend( {
             urlRoot: wpApiSettings.root + 'wp/v2/mbt_book',
@@ -249,37 +324,12 @@ class mySelectPosts extends Component {
                 options={ options } 
                 className="book-select"
             />  
-
-            <ToggleControl
-                label="Reverse Cover Position"
-                checked={ !!this.props.attributes.flexReverse }
-                onChange={ this.onChangeFlexDirection }
-                className="flex-direction"
-            />
-
-            <div className="title-prefix-toggle is-flex">
-            <ToggleControl
-                label="Add Prefix to Title"
-                help="ie, 'Coming Soon' or 'Just Released', etc."
-                checked={ !!this.props.attributes.addTitlePrefix }
-                onChange={ this.onChangeAddPrefix }
-                className="add-title-prefix"
-            />
-            {
-                this.props.attributes.addTitlePrefix && (
-                    <RichText
-                    tagName='h4'
-                    placeholder= 'Coming Soon, etc.'	
-                    className="title-prefix"
-                    value={ this.props.attributes.titlePrefix }
-                    onChange={ this.onChangeTitlePrefix }
-                    keepPlaceholderOnFocus={true}
-                    withoutInteractiveFormatting={true}
-                    />
-                )
-            }
-            </div>
-			
+            
+            
+            
+            <this.getCoverToggle/> 
+            <this.getTitlePrefixToggle/> 
+             
 
             <div className="block-preview ">
                 <h2 className="preview-title is-flex">
@@ -356,25 +406,9 @@ class mySelectPosts extends Component {
                     }
                     </div>
 
-                    <div>
+                      <this.getButtonSegment/>
 
-                    <ToggleControl
-                        label="Custom Label for Buttons Section"
-                        help="Defaults to 'Now Available From'"
-                        checked={ !!this.props.attributes.customLabel }
-                        onChange={ this.onChangeCustomLabel }
-                        className="custom-label"
-                        />
-                    
-                    <div className="buylinks">
-                    
-                       <this.getButtonsLabel/>
-                       <this.getButtons/>
-                       
-                    
-                    </div>   
-
-                    </div>          
+                          
                 </div>
             </div>
             </div>
