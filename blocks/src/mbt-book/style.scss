@@ -1,0 +1,106 @@
+.wp-block-blueprint-blocks-mbt-book {
+    .is-flex.flex-row-reverse {
+        flex-direction:row-reverse !important;
+    }
+    .preview-left {
+
+        a.image-link {
+            display:block;
+            width:100%;
+            min-width:250px;
+            margin:0 auto;
+
+            img {
+                width:100%;
+            }
+        }
+        .cover-links {
+            margin-bottom:40px;
+        }
+        .cover-links span, .cover-links a  {            
+            font-size:13px !important;
+            text-align:center;
+            display:inline;
+            font-style:italic;   
+        }
+        
+        }
+
+    .preview-right {
+        display:flex;
+        flex-direction:column;
+        justify-content:space-between;
+    }
+    .preview-tagline {
+        font-weight:bold;
+        margin-bottom:12px;
+    }
+    .preview-blurb {
+        margin-bottom:20px;
+        justify-self:flex-start;
+    }
+    .blurb-link, .blurb-text, .blurb-text p {
+        display:inline;
+    }
+    .blurb-link a {
+        display:inline-block;
+
+        &.button-inline {
+            font-size:12px;
+            padding:4px 12px !important;
+        }
+    }
+    h6.buttons-label {
+        text-align:center;
+        position:relative;
+        margin:0 auto;
+        width:max-content;
+        background-color:#fff;
+        padding:0 20px;
+        bottom:38px;
+    }
+    .buylinks {
+        padding:30px 20px 20px;
+        border:1px solid #999;
+        justify-self:flex-end;
+
+        &:empty {
+            border:none;
+        }
+    }
+    .buylinks ul {
+        display:flex;
+        list-style:none;
+        margin-left:0;
+        padding-left:0;
+        justify-content:center;
+
+        li {
+            margin-right: 12px;
+
+            &:last-child {
+                margin-right:0;
+            }
+        }
+    }
+}
+
+@media all and (min-width: 620px ) {
+    .wp-block-blueprint-blocks-mbt-book {
+
+        .preview-left {
+            padding-right:30px;
+
+            .cover-links {
+                margin-bottom:0;
+            }
+        }
+
+        .is-flex.flex-row-reverse {
+            .preview-left {
+                padding-right:0;
+                padding-left:30px;
+            }
+        }
+    }
+}

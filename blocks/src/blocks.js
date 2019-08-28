@@ -1,0 +1,1 @@
+import './mbt-book/block.js';
