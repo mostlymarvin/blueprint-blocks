@@ -69,6 +69,8 @@ class mySelectPosts extends Component {
         const bookASIN = post.mbt_unique_id_asin;	
         const bookSample = bookASIN[0];
         const booklinks = post.mbt_buybuttons[0];
+        const styleURL = post.mbt_style_url;
+        console.log(styleURL);
 
         const coverID = post.mbt_book_image_id[0];
         this.getBookMedia( coverID );
@@ -86,6 +88,7 @@ class mySelectPosts extends Component {
             customLabel: false,
             buttonsLabel: 'Now Available From',
             titlePrefix: '',
+            styleURL: styleURL,
         } );
     }
 
@@ -165,19 +168,22 @@ class mySelectPosts extends Component {
     getButtons() {
         return (
             this.props.attributes.buylinks ? (
-                <ul>
+               <div className="mbt-book-buybuttons blueprint">
                 { 
                 this.props.attributes.buylinks.map( (item, key) =>
                     {
-                    return <li className={item.store}>
-                        <a href={item.url}>
-                            {item.store}
+                    return <div className="mbt-book-buybutton">
+                    <a className="image-link"
+                        href={item.url}>
+                        <img className="image-link"
+                        src={this.props.attributes.styleURL + item.store + '_button.png'} 
+                        alt={ 'buy from ' + item.store }/> 
                         </a>
-                    </li>;
+                    </div>
                     }
                     )
                 }
-                </ul>
+               </div>
             ) : (
                 null
             )
@@ -488,6 +494,9 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
             type: 'boolean',
             default: false,
         },
+        styleURL: {
+            type: 'string'
+        }
         
 	  },
 
@@ -589,21 +598,27 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
 
                         )
                     }
+                    
                     {
                     props.attributes.buylinks && (
-                       <ul>
+                    <div className="mbt-book blueprint-mbt-book">
+                    <div className="mbt-book-buybuttons">
                        { 
                         props.attributes.buylinks.map( (item, key) =>
                             {
-                            return <li className={item.store}>
-                                <a href={item.url}>
-                                    {item.store}
-                                </a>
-                            </li>;
+                            return <div className="mbt-book-buybutton">
+                            <a className="image-link"
+                                href={item.url}>
+                                <img className="image-link"
+                                src={props.attributes.styleURL + item.store + '_button.png'} 
+                                alt={ 'buy from ' + item.store }/> 
+                            </a>
+                            </div>
                             }
                             )
                        }
-                       </ul>
+                       </div>
+                       </div>
                        
                     )
                     }

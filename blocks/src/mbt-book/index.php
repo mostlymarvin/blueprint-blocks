@@ -72,6 +72,13 @@ function blueprint_blocks_create_api_meta_fields() {
           'get_callback' => 'blueprint_blocks_mbt_get_tagline',
         )
     );
+    register_rest_field(
+        'mbt_book',
+        'mbt_style_url',
+          array(
+            'get_callback' => 'blueprint_blocks_mbt_get_style',
+          )
+      );
  }
 
 function blueprint_blocks_mbt_get_book_buylinks( $object ) {
@@ -103,6 +110,14 @@ function blueprint_blocks_mbt_get_asin( $object ) {
 function blueprint_blocks_mbt_get_tagline( $object ) {
 	$meta = get_post_meta( $object['id'], 'mbt_book_teaser' );
 	return $meta;
+}
+function blueprint_blocks_mbt_get_style( $object ) {
+    $style_url = false;
+    if( function_exists( 'mbt_current_style_url') ) {
+        $style_url =  mbt_current_style_url( $file );
+    }
+    
+	return $style_url;
 }
 
 
