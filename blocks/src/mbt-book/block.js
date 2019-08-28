@@ -11,13 +11,15 @@ import './editor.scss';
 
 
 
+
 const { __ } = wp.i18n; 
 const { registerBlockType } = wp.blocks; 
-const { SelectControl, ToggleControl } = wp.components;
+const { SelectControl, ToggleControl, TextControl } = wp.components;
 const { Component } = wp.element;
 const {
     RichText, 
     BlockControls, } = wp.editor;
+
 
 class mySelectPosts extends Component {
 	static getInitialState( selectedPost ) {
@@ -30,21 +32,24 @@ class mySelectPosts extends Component {
       
 
     constructor() {
-    super( ...arguments );
-    
-    this.state = this.constructor.getInitialState( this.props.attributes.selectedPost );
-    
-    this.getOptions = this.getOptions.bind(this);
-    // Load posts.
-    this.getOptions();
+        super( ...arguments );
+        
+        this.state = this.constructor.getInitialState( this.props.attributes.selectedPost );
+        
+        this.getOptions = this.getOptions.bind(this);
+        // Load posts.
+        this.getOptions();
 
-    this.onChangeSelectPost = this.onChangeSelectPost.bind(this);
-    this.onChangeTitlePrefix = this.onChangeTitlePrefix.bind(this);
-    this.onChangeButtonsLabel = this.onChangeButtonsLabel.bind(this);
-    this.onChangeFlexDirection = this.onChangeFlexDirection.bind(this);
-    this.onChangeCustomLabel = this.onChangeCustomLabel.bind(this);
-    this.onChangeCustomButton = this.onChangeCustomButton.bind(this);
-    this.getBookMedia = this.getBookMedia.bind(this);
+        this.onChangeSelectPost = this.onChangeSelectPost.bind(this);
+        this.onChangeTitlePrefix = this.onChangeTitlePrefix.bind(this);
+        this.onChangeButtonsLabel = this.onChangeButtonsLabel.bind(this);
+        this.onChangeFlexDirection = this.onChangeFlexDirection.bind(this);
+        this.onChangeCustomLabel = this.onChangeCustomLabel.bind(this);
+        this.onChangeAddPrefix = this.onChangeAddPrefix.bind(this);
+        this.getButtonsLabel = this.getButtonsLabel.bind(this);
+        this.getButtons = this.getButtons.bind(this);
+        this.getBookMedia = this.getBookMedia.bind(this);
+    
     }
 
     onChangeSelectPost( value ) {
@@ -57,17 +62,13 @@ class mySelectPosts extends Component {
         
         const tagLine = post.mbt_book_teaser[0];
         const blurb = post.excerpt.rendered;
-        
-        
         const audioSample = post.mbt_sample_audio[0];
-        
         const bookASIN = post.mbt_unique_id_asin;	
         const bookSample = bookASIN[0];
+        const booklinks = post.mbt_buybuttons[0];
 
         const coverID = post.mbt_book_image_id[0];
         this.getBookMedia( coverID );
-        
-        const booklinks = post.mbt_buybuttons[0];
         
         // Set the attributes
         this.props.setAttributes( {
@@ -121,19 +122,63 @@ class mySelectPosts extends Component {
     }
 
     onChangeCustomLabel() {
-        if ( this.props.attributes.customLabel) {
+        if ( this.props.attributes.customLabel ) {
             this.props.setAttributes( { customLabel: false } );
         } else {
             this.props.setAttributes( { customLabel: true } );
         }
+    }   
+    
+    onChangeAddPrefix() {
+        if ( this.props.attributes.addTitlePrefix ) {
+            this.props.setAttributes( { addTitlePrefix: false } );
+        } else {
+            this.props.setAttributes( { addTitlePrefix: true } );
+        }
+    }   
+
+    getButtonsLabel() {
+        return (
+            this.props.attributes.buylinks &&
+            this.props.attributes.customLabel ? (
+                <RichText
+                tagName='h4'
+                placeholder= 'Now Available From'	
+                className="buttons-label"
+                value={ this.props.attributes.buttonsLabel }
+                onChange={ this.onChangeButtonsLabel }
+                keepPlaceholderOnFocus={true}
+                />
+            ) : (
+                <RichText.Content
+                tagName='h4'	
+                className="buttons-label noneditable"
+                value={ this.props.attributes.buttonsLabel }
+                />
+            )
+        );
     }
 
-    onChangeCustomButton() {
-        if ( this.props.attributes.customButton) {
-            this.props.setAttributes( { customButton: false } );
-        } else {
-            this.props.setAttributes( { customButton: true } );
-        }
+    getButtons() {
+        return (
+            this.props.attributes.buylinks ? (
+                <ul>
+                { 
+                this.props.attributes.buylinks.map( (item, key) =>
+                    {
+                    return <li className={item.store}>
+                        <a href={item.url}>
+                            {item.store}
+                        </a>
+                    </li>;
+                    }
+                    )
+                }
+                </ul>
+            ) : (
+                null
+            )
+        );
     }
 
     getOptions() {
@@ -197,11 +242,6 @@ class mySelectPosts extends Component {
 		return (
 		 
             <div className={this.props.className }>
-
-            <div className="block-directions">
-                Select book to display. Editable text fields are highlighted in blue, below.
-            </div>
-
             <SelectControl 
                 onChange={this.onChangeSelectPost} 
                 value={ this.props.attributes.selectedPost } 
@@ -216,35 +256,43 @@ class mySelectPosts extends Component {
                 onChange={ this.onChangeFlexDirection }
                 className="flex-direction"
             />
-						          
-            
+
+            <div className="title-prefix-toggle is-flex">
+            <ToggleControl
+                label="Add Prefix to Title"
+                help="ie, 'Coming Soon' or 'Just Released', etc."
+                checked={ !!this.props.attributes.addTitlePrefix }
+                onChange={ this.onChangeAddPrefix }
+                className="add-title-prefix"
+            />
+            {
+                this.props.attributes.addTitlePrefix && (
+                    <RichText
+                    tagName='h4'
+                    placeholder= 'Coming Soon, etc.'	
+                    className="title-prefix"
+                    value={ this.props.attributes.titlePrefix }
+                    onChange={ this.onChangeTitlePrefix }
+                    keepPlaceholderOnFocus={true}
+                    withoutInteractiveFormatting={true}
+                    />
+                )
+            }
+            </div>
+			
 
             <div className="block-preview ">
                 <h2 className="preview-title is-flex">
-                <div>
                 {
-                    this.props.attributes.title && (
-                        <label className='components-base-control__label block-label'>Title Prefix: &nbsp;&nbsp;&nbsp;</label>
+                    this.props.attributes.titlePrefix &&
+                    this.props.attributes.addTitlePrefix && (
+                      <span className="title-prefix">{this.props.attributes.titlePrefix}&nbsp;
+                      </span> 
+                       
                     )
                 }
-                {
-                    this.props.attributes.title && (
-
-                        <RichText
-                        tagName='h4'
-                        placeholder= 'Coming Soon, etc.'	
-                        className="title-prefix"
-                        value={ this.props.attributes.titlePrefix }
-                        onChange={ this.onChangeTitlePrefix }
-                        keepPlaceholderOnFocus={true}
-                        withoutInteractiveFormatting={true}
-                    />
-                    )
-                }
-                </div>
-
                 <span className="title">
-                { this.props.attributes.title }
+                    { this.props.attributes.title }
                 </span>
                 </h2>
            
@@ -317,57 +365,15 @@ class mySelectPosts extends Component {
                         onChange={ this.onChangeCustomLabel }
                         className="custom-label"
                         />
-
-                    <ToggleControl
-                        label="Custom Button"
-                        help="Select to display custom button instead of default buy links"
-                        checked={ !!this.props.attributes.customButton }
-                        onChange={ this.onChangeCustomButton }
-                        className="custom-button"
-                    />
-                
-                <div className="buylinks">
-                    {
-                        this.props.attributes.buylinks &&
-                        this.props.attributes.customLabel ? (
-                            <RichText
-                            tagName='h4'
-                            placeholder= 'Now Available From'	
-                            className="buttons-label"
-                            value={ this.props.attributes.buttonsLabel }
-                            onChange={ this.onChangeButtonsLabel }
-                            keepPlaceholderOnFocus={true}
-                            />
-                        ) : (
-                            <RichText.Content
-                            tagName='h4'	
-                            className="buttons-label noneditable"
-                            value={ this.props.attributes.buttonsLabel }
-                            />
-                        )
-                    }
+                    
+                    <div className="buylinks">
+                    
+                       <this.getButtonsLabel/>
+                       <this.getButtons/>
                        
-                    {
-                    this.props.attributes.buylinks && (
-                       <ul>
-                       { 
-                        this.props.attributes.buylinks.map( (item, key) =>
-                            {
-                            return <li className={item.store}>
-                                <a href={item.url}>
-                                    {item.store}
-                                </a>
-                            </li>;
-                            }
-                            )
-                       }
-                       </ul>
-                      
-                        )
-                        }
-                   
                     
                     </div>   
+
                     </div>          
                 </div>
             </div>
@@ -444,15 +450,16 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
             type: 'string',
             default: 'flex-row',
         },
+        addTitlePrefix: {
+            type: 'boolean',
+            default: false,
+        },
         
 	  },
 
 	edit: mySelectPosts,
 
 	save: function( props ) {
-
-        
-
 		return (
 			<div className={ props.className }>
             <div className={ "inner is-flex " + props.attributes.flexClass }>
@@ -534,6 +541,9 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
                         )
 					}
                     </div>
+                    
+
+
                     <div className="buylinks">
                     {
                         props.attributes.buylinks && props.attributes.buttonsLabel && (

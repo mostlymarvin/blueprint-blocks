@@ -1,11 +1,6 @@
 .wp-block-blueprint-blocks-mbt-book {
 
-    .block-directions {
-        background-color:#f4f4f4;
-        padding:20px;
-        font-style:italic;
-        margin-bottom:40px;
-    }
+    
     font-size:15px;
     
     .preview-left {
@@ -40,7 +35,7 @@
 .is-flex {
     display:flex;
     margin-bottom:20px;
-    align-items:flex-end;
+    align-items:center;
 
     & .components-base-control__label {
         margin-bottom:0 !important;
@@ -48,6 +43,15 @@
     }
     &.inner-preview {
         align-items:stretch;
+    }
+    &.custom-button-inputs {
+        width:100%;
+        & > div {
+            flex-basis:49%;
+        }
+        & > div:first-of-type {
+            margin-right:2%;
+        }
     }
 }
 .book-select label {
@@ -67,7 +71,8 @@
         margin-bottom:20px !important;
     }
 }
-h4.title-prefix, h4.buttons-label {
+h4.title-prefix, 
+h4.buttons-label {
     background-color: #E5F3F8;
     padding: 0 12px 0 !important;
     font-size:16px;
@@ -85,19 +90,19 @@ h4.title-prefix, h4.buttons-label {
         border:none;
     }
 }
+h4.title-prefix {
+    margin-left:12px;
+}
 h4.buttons-label {
     text-align:center;
     width:max-content;
     padding:0 12px;
     margin:0 auto;
     position:relative;
-    
     bottom:38px;
 }
 
-h2.preview-title span {
-    margin-left:20px;
-}
+
 .components-toggle-control__label,
 .components-base-control__label {
     font-size:14px !important;
@@ -109,13 +114,20 @@ h2.preview-title span {
     &.block-label {
         margin-bottom:8px !important;
     }
+    .add-title-prefix &,
     .custom-label &,
     .custom-button & {
         margin-bottom:0 !important;
         padding-bottom:0 !important;
     }
+    .custom-button-inputs & {
+        margin-bottom:0 !important;
+        padding-bottom:0 !important;
+
+    }
 }
 .components-base-control__help {
+    .add-title-prefix &,
     .custom-label &,
     .custom-button & {
         padding-left:50px;
@@ -123,18 +135,10 @@ h2.preview-title span {
         margin-bottom:20px;
     }
 }
+.add-title-prefix .components-base-control__field,
 .custom-label .components-base-control__field,
 .custom-button .components-base-control__field {
     margin-bottom:4px;
 }
 
-h2.preview-title span.title,
-.preview-left, 
-.preview-right-top,
-.buylinks ul {
-    //opacity:.7;
-}
-h2.preview-title span.title {
-    position:relative;
-    top:4px;
-}
+
