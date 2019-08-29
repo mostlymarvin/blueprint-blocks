@@ -119,6 +119,172 @@ function blueprint_blocks_mbt_get_style( $object ) {
     
 	return $style_url;
 }
+function blueprint_blocks_get_allowed_tags() {
+    $allowed_atts = array(
+        'class' => array(),
+        'id' => array(),
+    );
 
+    $allowedTags  = array(
+        'a' => array(
+            'href' => array(),
+            'title' => array(),
+            'target' => array(),
+            'class' => array(),
+            'id' => array(),
+        ),
+        'br' => array( $allowed_atts ),
+        'em' => array( $allowed_atts ),
+        'strong' => array( $allowed_atts ),
+        'span' => array( $allowed_atts ),
+        'i' => array( $allowed_atts ),
+        'b' => array( $allowed_atts ),
+        'br' => array(),
+    );
+
+    return $allowedTags;
+}
+
+
+function blueprint_dynamic_render_mbt_book_block( $atts ) {
+    //print_r( $atts );
+
+    $allowedTags = blueprint_blocks_get_allowed_tags();
+   
+
+    $audioSample = $atts['audioSample'];
+    $buttonsLabel = !empty( $atts['buttonsLabel']) ? $atts['buttonsLabel'] : 'Now Available From';
+    
+    $blurb = $atts['blurb'];
+    $customBlurb = $atts['customBlurb'];
+
+    $bookSample = $atts['bookSample'];
+    $buylinks = $atts["buylinks"];
+
+    $class = 'wp-block-blueprint-blocks-mbt-book';
+    $cover = $atts["cover"];
+    $link = $atts["link"];
+    $selectedPost = $atts["selectedPost"];
+    $styleURL = $atts['styleURL'];
+    $tagline = $atts["customTagline"];
+    $title = $atts["title"];
+    $flexClass = !empty( $atts['flexClass'] ) ? $atts['flexClass'] : 'flex-row';
+    $titlePrefix = !empty( $atts['titlePrefix'] ) ? $atts['titlePrefix'] : false;
+
+    $cover_markup = '';
+    $cover_links = '';
+    $audioSampleLink = '';
+    $bookSampleLink = '';
+    $divider = '';
+   
+    if( $audioSample ) {
+        $audioSampleLink = sprintf(
+            '<a className="preview-link audio-sample" 
+            href="%1$s">Hear Audiobook Sample</a>',
+            esc_url( $audioSample )
+        );
+    }
+
+    if( $bookSample ) {
+        $bookSampleLink = sprintf(
+            '<a className="preview-link book-sample" 
+            href="https://read.amazon.com/kp/embed?asin=%1$s&preview=newtab">
+            View Book Sample</a>',
+                strip_tags( $bookSample )
+        );
+    }
+    if( $audioSample && $bookSample ) {
+        $divider = '<span class="divider">&nbsp;|&nbsp;</span>';
+    }
+
+
+    if( $audioSample || $bookSample ) {
+        $cover_links = sprintf(
+            '<div class="cover-links">%1$s %2$s %3$s</div>',
+            $bookSampleLink,
+            $divider,
+            $audioSampleLink
+        );
+    }
+
+    if( $cover ) {
+        $cover_markup = sprintf(
+            '<a href="%1$s" class="image-link">
+            <img src="%2$s" class="preview-cover" alt="%3$s"/></a>',
+            $link,
+            $cover,
+            $title
+        );
+    }
+
+    $title_prefix = $titlePrefix ? '<span class="title-prefix">' . wp_kses_post( $titlePrefix ) . '</span>' : '';
+
+    $read_more_link =  '<a class="button button-primary button-inline button-small" 
+    href="' . esc_url( $link ) . '">Read More</a>';
+
+   
+
+    /**
+     * Strip 'p' tags from last paragraph of blurb so we can insert
+     * an inline read-more link, reformat with 'p' tags.
+     */
+        $paragraphs = explode( '<p>', $customBlurb );
+        $count = '';
+        if( $paragraphs ) {
+            $count = count( $paragraphs );
+        }
+        $count = $count -1;
+
+        $lastP = wp_kses( $paragraphs[$count], $allowedTags );
+        $paragraphs[$count] =  $lastP . ' ' . $read_more_link;
+        
+        $bestBlurb = implode( '<p>', $paragraphs );
+
+
+    
+    $buttons = '';
+
+    foreach( $buylinks as $buylink ) {
+        $buttons .= sprintf(
+            '<div class="mbt-book-buybutton">
+             <a class="image-link" href="%1$s">
+            <img class="image-link" src="%3$s%2$s_button.png" alt="buy from %2$s"/></a></div>',
+            esc_url( $buylink['url'] ),
+            strip_tags( $buylink['store'] ),
+            $styleURL 
+        );
+    }
+
+    
+
+    $html = sprintf(
+        '<div class="%1$s">
+        <div class="inner is-flex %2$s">
+        <div class="preview-left">
+        %3$s
+        %4$s
+        </div>
+        <div class="preview-right">
+        <div class="preview-right-top">
+        <h2 class="preview-title">%5$s %6$s</h2>
+        <div class="preview-tagline">%7$s</div>
+        <div class="preview-blurb">%8$s</div></div>
+        <div class="buylinks"><h6 class="buttons-label">%9$s</h6> <div class="mbt-book blueprint-mbt-book">
+        <div class="mbt-book-buybuttons">%10$s</div></div> </div>
+        </div></div></div>',
+        esc_attr( $class ),
+        esc_attr( $flexClass ),
+        $cover_markup,
+        $cover_links,
+        $title_prefix,
+        wp_kses_post( $title ),
+        wp_kses_post( $tagline ),
+        wp_kses_post( $bestBlurb ),
+        $buttonsLabel,
+        $buttons
+    );
+
+    return $html;
+}
 
 

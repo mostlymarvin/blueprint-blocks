@@ -40,18 +40,22 @@ class mySelectPosts extends Component {
         // Load posts.
         this.getOptions();
 
-        this.onChangeSelectPost = this.onChangeSelectPost.bind(this);
         this.onChangeTitlePrefix = this.onChangeTitlePrefix.bind(this);
-        this.onChangeButtonsLabel = this.onChangeButtonsLabel.bind(this);
+        this.onChangeTagline = this.onChangeTagline.bind(this);
+        this.onChangeSelectPost = this.onChangeSelectPost.bind(this);
         this.onChangeFlexDirection = this.onChangeFlexDirection.bind(this);
         this.onChangeCustomLabel = this.onChangeCustomLabel.bind(this);
+        this.onChangeCustomBlurb = this.onChangeCustomBlurb.bind(this);
+        this.onChangeButtonsLabel = this.onChangeButtonsLabel.bind(this);
         this.onChangeAddPrefix = this.onChangeAddPrefix.bind(this);
+        this.getTitlePrefixToggle = this.getTitlePrefixToggle.bind(this);
+        this.getTagline = this.getTagline.bind(this);
+        this.getPreviewBlurb = this.getPreviewBlurb.bind(this);
+        this.getCoverToggle = this.getCoverToggle.bind(this);
         this.getButtonsLabel = this.getButtonsLabel.bind(this);
         this.getButtons = this.getButtons.bind(this);
-        this.getBookMedia = this.getBookMedia.bind(this);
-        this.getTitlePrefixToggle = this.getTitlePrefixToggle.bind(this);
-        this.getCoverToggle = this.getCoverToggle.bind(this);
         this.getButtonSegment = this.getButtonSegment.bind(this);
+        this.getBookMedia = this.getBookMedia.bind(this);
     
     }
 
@@ -70,8 +74,8 @@ class mySelectPosts extends Component {
         const bookSample = bookASIN[0];
         const booklinks = post.mbt_buybuttons[0];
         const styleURL = post.mbt_style_url;
-        console.log(styleURL);
 
+        
         const coverID = post.mbt_book_image_id[0];
         this.getBookMedia( coverID );
         
@@ -89,6 +93,8 @@ class mySelectPosts extends Component {
             buttonsLabel: 'Now Available From',
             titlePrefix: '',
             styleURL: styleURL,
+            customBlurb: blurb,
+            customTagline: tagLine,
         } );
     }
 
@@ -103,6 +109,14 @@ class mySelectPosts extends Component {
 
     onChangeTitlePrefix( newValue ) {
         this.props.setAttributes( { titlePrefix: newValue } );
+    } 
+
+    onChangeCustomBlurb( newValue ) {
+        this.props.setAttributes( { customBlurb: newValue } );
+    } 
+
+    onChangeTagline( newValue ) {
+        this.props.setAttributes( { customTagline: newValue } );
     } 
 
     onChangeButtonsLabel( newValue ) {
@@ -129,9 +143,15 @@ class mySelectPosts extends Component {
 
     onChangeCustomLabel() {
         if ( this.props.attributes.customLabel ) {
-            this.props.setAttributes( { customLabel: false } );
+            this.props.setAttributes( { 
+                customLabel: false,
+                buttonsLabel: 'Now Available From',
+             } );
         } else {
-            this.props.setAttributes( { customLabel: true } );
+            this.props.setAttributes( {
+                customLabel: true,
+                buttonsLabel: this.props.attributes.buttonsLabel
+            } );
         }
     }   
     
@@ -156,11 +176,46 @@ class mySelectPosts extends Component {
                 keepPlaceholderOnFocus={true}
                 />
             ) : (
-                <RichText.Content
-                tagName='h4'	
-                className="buttons-label noneditable"
-                value={ this.props.attributes.buttonsLabel }
+                <h4 className="buttons-label noneditable">
+                { this.props.attributes.buttonsLabel }
+                </h4>
+            
+            )
+        );
+    }
+
+    getTagline() {
+        return (
+        
+            <RichText
+                tagName='div'
+                placeholder= 'Lorem Ipsum Dolor Sunt...'	
+                className='preview-tagline'
+                value={ this.props.attributes.customTagline }
+                onChange={ this.onChangeTagline }
+                keepPlaceholderOnFocus={true}
+                /> 
+        
+        );
+    }
+    
+    getPreviewBlurb() {
+
+        return (
+            this.props.attributes.title ? (
+            <div class="preview-blurb">
+                <RichText
+                    tagName='div'
+                    multiline='p'
+                    placeholder='Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam id dolor id nibh ultricies vehicula ut id elit. Nulla vitae elit libero, a pharetra augue.'	
+                    className="custom-blurb"
+                    value={ this.props.attributes.customBlurb }
+                    onChange={ this.onChangeCustomBlurb }
+                    keepPlaceholderOnFocus={true}
                 />
+            </div>
+            ) : (
+                null
             )
         );
     }
@@ -331,8 +386,6 @@ class mySelectPosts extends Component {
                 className="book-select"
             />  
             
-            
-            
             <this.getCoverToggle/> 
             <this.getTitlePrefixToggle/> 
              
@@ -387,29 +440,13 @@ class mySelectPosts extends Component {
                 <div className="preview-right">
                    <div className="preview-right-top">
 
-                    { 
-                        this.props.attributes.tagline && (
-                        <div class="preview-tagline">
-                        { this.props.attributes.tagline }
-                        </div>
-                        )
-                    }
+                    
+                        <this.getTagline/>
 
-                    { 
-                        this.props.attributes.blurb && (
-                        <div 
-                        class="preview-blurb">
-                        <span className="blurb-text"
-                        dangerouslySetInnerHTML={ { __html: this.props.attributes.blurb } }
-                        /><span className="blurb-link">
-                            <a className="button button-primary" href={ this.props.attributes.link }>
-                                Read More
-                            </a>
-                        </span>
-                        </div>
+                    
+                        <this.getPreviewBlurb/>
                         
-                        )
-                    }
+                    
                     </div>
 
                       <this.getButtonSegment/>
@@ -432,71 +469,73 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
 		__( 'Book' ),
 	],
 	attributes: {
-		title: {
-		  type: 'string',
-		},
-		link: {
-		  type: 'string',
-		  selector: 'a'
-		},
-		selectedPost: {
-		  type: 'number',
-		  default: null,
-		},
-		buylinks: {
-            type: 'array',
-		},
-		cover: {
+        addTitlePrefix: {
+            type: 'boolean',
+            default: false,
+        },
+        audioSample: {
             type: 'string',
-		},
-		tagline: {
-			type: 'string',
-		},
-		blurb: {
-			type: 'string',
-		},
-		audioSample: {
-			type: 'string',
-			default: '',
-		},
-		bookSample: {
-			type: 'string',
-			default: '',
-		},
-		titlePrefix: {
-			type: 'string',
-			source: 'html',
-			selector: '.title-prefix',
+            default: '',
+        },
+        blurb: {
+            type: 'string',
+        },
+        bookSample: {
+            type: 'string',
+            default: '',
         },
         buttonsLabel: {
             type: 'string',
-            source: 'html',
-            selector: '.buttons-label',
             default: 'Now Available From',
         },
-        customLabel : {
-            type: 'boolean',
-            default: false,
+        buylinks: {
+            type: 'array',
         },
-        flexReverse: {
-            type: 'boolean',
-            default: false,
+        cover: {
+            type: 'string',
+        },
+        customBlurb: {
+            type: 'string',
         },
         customButton: {
             type: 'boolean',
             default: false,
         },
+        customLabel : {
+            type: 'boolean',
+            default: false,
+        },
+        customTagline: {
+            type: 'string',
+        },
         flexClass: {
             type: 'string',
             default: 'flex-row',
         },
-        addTitlePrefix: {
+        flexReverse: {
             type: 'boolean',
             default: false,
         },
+        link: {
+            type: 'string',
+            selector: 'a'
+        },
+        selectedPost: {
+            type: 'number',
+            default: null,
+        },
         styleURL: {
             type: 'string'
-        }
+        },
+        tagline: {
+            type: 'string',
+        },
+        title: {
+            type: 'string',
+        },
+        titlePrefix: {
+            type: 'string',
+        },
         
 	  },
 
@@ -504,128 +543,6 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
 
 	save: function( props ) {
 		return (
-			<div className={ props.className }>
-            <div className={ "inner is-flex " + props.attributes.flexClass }>
-			  	<div className="preview-left">
-                  {
-                       props.attributes.cover && (
-					  <a 
-                        href={ props.attributes.link } 
-                        className="image-link">
-					  <img 
-                        src={ props.attributes.cover } 
-					    className="preview-cover"
-					    alt={ props.attributes.title }/>
-					  </a>
-                       )
-                  }
-					<div className="cover-links">
-						{
-							props.attributes.bookSample && (
-								<a className="preview-link book-sample" 
-								href={ "https://read.amazon.com/kp/embed?asin=" + props.attributes.bookSample + "&preview=newtab" } >
-								View Book Sample</a>
-							)
-                            
-						}
-                        {
-                            props.attributes.bookSample && props.attributes.audioSample && (
-                                <span className="divider">&nbsp;|&nbsp;</span>
-                            )
-                        }
-						{
-							props.attributes.audioSample && (
-								<a 
-                                    className="preview-link audio-sample" 
-								    href={ props.attributes.audioSample } target="_blank" 
-                                    rel="noopener noreferrer">
-								Hear Audiobook Sample</a>
-							)
-						}
-					</div>
-					 
-				</div>
-				<div className="preview-right">
-                    <div className="preview-right-top">
-					<h2 className="preview-title">
-					{
-						props.attributes.titlePrefix && (
-						<RichText.Content 
-							tagName="span" 
-							className="title-prefix" 
-							value={ props.attributes.titlePrefix } 
-							/>
-						)
-					}
-						{ props.attributes.title }
-					</h2>
-
-					{ 
-						props.attributes.tagline && (
-							<div class="preview-tagline">
-							{ props.attributes.tagline }
-							</div>
-						)
-					}
-					{ 
-						props.attributes.blurb && (
-                        <div 
-                        class="preview-blurb">
-                        <span className="blurb-text"
-                        dangerouslySetInnerHTML={ { __html: props.attributes.blurb } }
-                        /><span className="blurb-link">
-                            <a className="button button-primary button-inline" 
-                            href={ props.attributes.link }>
-                                Read More
-                            </a>
-                        </span>
-                        </div>
-                        
-                        )
-					}
-                    </div>
-                    
-
-
-                    <div className="buylinks">
-                    {
-                        props.attributes.buylinks && props.attributes.buttonsLabel && (
-                            <RichText.Content
-                            tagName="h6"
-                            className="buttons-label"
-                            value={ props.attributes.buttonsLabel }
-                            />
-
-                        )
-                    }
-                    
-                    {
-                    props.attributes.buylinks && (
-                    <div className="mbt-book blueprint-mbt-book">
-                    <div className="mbt-book-buybuttons">
-                       { 
-                        props.attributes.buylinks.map( (item, key) =>
-                            {
-                            return <div className="mbt-book-buybutton">
-                            <a className="image-link"
-                                href={item.url}>
-                                <img className="image-link"
-                                src={props.attributes.styleURL + item.store + '_button.png'} 
-                                alt={ 'buy from ' + item.store }/> 
-                            </a>
-                            </div>
-                            }
-                            )
-                       }
-                       </div>
-                       </div>
-                       
-                    )
-                    }
-                    </div>
-				</div>
-				</div>
-			</div>
-		  );
+			null);
 	},
 } );
