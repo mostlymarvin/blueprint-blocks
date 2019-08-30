@@ -8,7 +8,7 @@
         a.image-link {
             display:block;
             width:100%;
-            min-width:250px;
+            min-width:300px;
             margin:0 auto;
 
             img {
@@ -17,6 +17,7 @@
         }
         .cover-links {
             margin-bottom:40px;
+            text-align:center;
         }
         .cover-links span, .cover-links a  {            
             font-size:13px !important;
@@ -43,15 +44,15 @@
     .blurb-link, .blurb-text, .blurb-text p {
         display:inline;
     }
-    .blurb-link a {
-        display:inline-block;
 
-        &.button-inline {
-            font-size:12px;
-            padding:4px 12px !important;
-        }
+    .bpb-more.button.button-primary {
+        font-size:12px;
+        padding:.4em 12px !important;
+        position:relative;
+        top:-1px;
     }
-    h6.buttons-label {
+    
+    h5.buttons-label {
         text-align:center;
         position:relative;
         margin:0 auto;

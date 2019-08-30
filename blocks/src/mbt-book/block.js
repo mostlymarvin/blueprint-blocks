@@ -72,7 +72,7 @@ class mySelectPosts extends Component {
         const bookASIN = post.mbt_unique_id_asin;	
         const bookSample = bookASIN[0];
         const booklinks = post.mbt_buybuttons[0];
-        const styleURL = post.mbt_style_url;
+        const styleURL = post.mbt_editor_style_url;
 
         
         const coverID = post.mbt_book_image_id[0];
@@ -185,6 +185,7 @@ class mySelectPosts extends Component {
 
     getTagline() {
         return (
+            this.props.attributes.title ? (
             <RichText
                 tagName='div'
                 placeholder= 'Lorem Ipsum Dolor Sunt...'	
@@ -193,6 +194,9 @@ class mySelectPosts extends Component {
                 onChange={ this.onChangeTagline }
                 keepPlaceholderOnFocus={true}
                 /> 
+            ) : (
+                null
+            )
         );
     }
     

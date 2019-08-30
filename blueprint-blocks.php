@@ -11,5 +11,3 @@
 defined( 'ABSPATH' ) || exit;
 
 require_once plugin_dir_path( __FILE__ ) . 'blocks/src/init.php';
-
-require_once plugin_dir_path( __FILE__ ) . 'blocks/src/mbt-book/index.php';
