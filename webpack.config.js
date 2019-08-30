@@ -1,64 +1,63 @@
-var ExtractText = require('extract-text-webpack-plugin');
-//var debug = process.env.NODE_ENV !== 'production';
-var webpack = require('webpack');
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-var extractEditorSCSS = new ExtractText({
-    filename: './blocks.editor.build.css'
-  });
-  
-var extractBlockSCSS = new ExtractText({
-    filename: './blocks.style.build.css'
-});
 
-var plugins = [ extractEditorSCSS, extractBlockSCSS ];
-
-var scssConfig = {
-    use: [
-      {
-        loader: 'css-loader'
-      },
-      {
-        loader: 'sass-loader',
-        options: {
-          outputStyle: 'compressed'
-        }
-      }
-    ]
-  };
-
-  module.exports = {
-    context: __dirname,
-    //devtool: debug ? 'inline-sourcemap' : null,
-    //mode: debug ? 'development' : 'production',
-    mode: 'production',
-    entry: './blocks/src/blocks.js',
-    output: {
-      path: __dirname + '/blocks/dist/',
+module.exports = {
+   context: __dirname,
+   entry: './blocks/src/blocks.js',
+   mode: 'production',
+	output: {
+		path: __dirname + '/blocks/dist/',
       filename: 'blocks.build.js'
-    },
-    module: {
-      rules: [
-        {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          use: [
-            {
-              loader: 'babel-loader'
-            }
-          ]
+   },
+   watch:true,
+	module: {
+		rules: [
+			{
+				test: /.js$/,
+            exclude: /node_modules/,
+            use: [
+               {
+                   loader: 'babel-loader'
+               }
+           ],
+         },
+         {
+            test: /\.scss$/,
+            use: [  
+                {
+                    loader: 'file-loader',
+                    options: {
+                        name: 'blocks.[name].build.css',
+                    }
+                },
+                {
+                    loader: 'extract-loader'
+                },
+                {
+                    loader: 'css-loader',
+                },
+                {
+                    loader: 'sass-loader',
+                    options: {
+                        sourceMap: true
+                    }
+                }
+            ]
         },
-        {
-          test: /editor\.scss$/,
-          exclude: /node_modules/,
-          use: extractEditorSCSS.extract(scssConfig)
-        },
-        {
-          test: /style\.scss$/,
-          exclude: /node_modules/,
-          use: extractBlockSCSS.extract(scssConfig)
-        }
-      ]
-    },
-    plugins: plugins,
-    watch: true
-  };
+		],
+   },
+   plugins: [
+      new MiniCssExtractPlugin('blocks.[name].build.css'),
+      new OptimizeCSSAssetsPlugin({
+         assetNameRegExp: /\.optimize\.css$/g,
+         cssProcessor: require('cssnano'),
+         cssProcessorPluginOptions: {
+           preset: ['default', { discardComments: { removeAll: true } }],
+         },
+         canPrint: true
+       })
+   ],
+};

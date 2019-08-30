@@ -55,3 +55,44 @@
   }
   
 add_action('init', 'blueprint_blocks_register_blocks', 2, 200);
+
+function blueprint_maybe_render_button_styles() {
+
+    $load_blueprint_styles  = false;
+
+    $settings = get_option( 'mbt_settings', array() );
+    $style = $settings['style_pack'];
+  
+    $default_style_packs = array(
+      'blue_flat_compli',
+      'blue_flat',
+      'gold_flat_compli',
+      'gold_flat',
+      'golden_compli',
+      'golden',
+      'green_flat_compli',
+      'green_flat',
+      'grey_flat',
+      'grey_flat_compli',
+      'orange_flat',
+      'orange_flat_compli',
+      'silver_compli',
+      'silver',
+    );
+
+    if( !in_array( $style, $default_style_packs ) ) {
+      $load_blueprint_styles = true;
+    }
+   
+  if( !defined( 'MBT_VERSION' ) || $load_blueprint_styles ) {
+        wp_register_style(
+          'blueprint-blocks-mbt-buttons-style',
+          plugins_url('/dist/blocks.buttons.build.css', dirname(__FILE__)),
+          array( 'wp-edit-blocks' )
+        ); 
+
+      //wp_enqueue_style( 'blueprint-blocks-mbt-buttons-style' );
+  }
+}
+//add_action( 'wp_enqueue_scripts', 'blueprint_maybe_render_button_styles' );
+//add_action( 'enqueue_block_editor_assets', 'blueprint_maybe_render_button_styles' );

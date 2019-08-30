@@ -8,17 +8,13 @@
 //  Import CSS.
 import './style.scss';
 import './editor.scss';
-
-
-
+import './buttons.scss';
 
 const { __ } = wp.i18n; 
 const { registerBlockType } = wp.blocks; 
-const { SelectControl, ToggleControl, TextControl } = wp.components;
+const { SelectControl, ToggleControl } = wp.components;
 const { Component } = wp.element;
-const {
-    RichText, 
-    BlockControls, } = wp.editor;
+const { RichText,  } = wp.editor;
 
 
 class mySelectPosts extends Component {
@@ -40,9 +36,12 @@ class mySelectPosts extends Component {
         // Load posts.
         this.getOptions();
 
+
+        this.onChangeSelectPost = this.onChangeSelectPost.bind(this);
+        
         this.onChangeTitlePrefix = this.onChangeTitlePrefix.bind(this);
         this.onChangeTagline = this.onChangeTagline.bind(this);
-        this.onChangeSelectPost = this.onChangeSelectPost.bind(this);
+        
         this.onChangeFlexDirection = this.onChangeFlexDirection.bind(this);
         this.onChangeCustomLabel = this.onChangeCustomLabel.bind(this);
         this.onChangeCustomBlurb = this.onChangeCustomBlurb.bind(this);
@@ -186,7 +185,6 @@ class mySelectPosts extends Component {
 
     getTagline() {
         return (
-        
             <RichText
                 tagName='div'
                 placeholder= 'Lorem Ipsum Dolor Sunt...'	
@@ -195,7 +193,6 @@ class mySelectPosts extends Component {
                 onChange={ this.onChangeTagline }
                 keepPlaceholderOnFocus={true}
                 /> 
-        
         );
     }
     
@@ -469,6 +466,10 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
 		__( 'Book' ),
 	],
 	attributes: {
+      selectedPost: {
+         type: 'number',
+         default: null,
+     },
         addTitlePrefix: {
             type: 'boolean',
             default: false,
@@ -520,10 +521,7 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
             type: 'string',
             selector: 'a'
         },
-        selectedPost: {
-            type: 'number',
-            default: null,
-        },
+        
         styleURL: {
             type: 'string'
         },

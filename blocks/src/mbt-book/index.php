@@ -111,14 +111,15 @@ function blueprint_blocks_mbt_get_tagline( $object ) {
 	$meta = get_post_meta( $object['id'], 'mbt_book_teaser' );
 	return $meta;
 }
+
 function blueprint_blocks_mbt_get_style( $object ) {
     $style_url = false;
     if( function_exists( 'mbt_current_style_url') ) {
         $style_url =  mbt_current_style_url( $file );
     }
-    
 	return $style_url;
 }
+
 function blueprint_blocks_get_allowed_tags() {
     $allowed_atts = array(
         'class' => array(),
