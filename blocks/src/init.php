@@ -3,7 +3,7 @@
    * Register  Blocks and Assets
    */
 
-  function my_plugin_block_categories( $categories, $post ) {
+function my_plugin_block_categories( $categories, $post ) {
     
   return array_merge(
         $categories,
@@ -33,7 +33,7 @@ add_filter( 'block_categories', 'my_plugin_block_categories', 10, 2 );
     // Register our block's base CSS  
     wp_register_style(
       'blueprint-blocks-style',
-      plugins_url( 'dist/css/blocks.style.build.css', dirname(__FILE__ )),
+      plugins_url( 'dist/css/blocks.styles.build.css', dirname(__FILE__ )),
       array()
     );
     
@@ -50,11 +50,10 @@ add_filter( 'block_categories', 'my_plugin_block_categories', 10, 2 );
         'name' => 'mbt-book',
         'render_callback' => 'blueprint_dynamic_render_mbt_book_block',
       ),
+      //array(
+        //'name' => 'blueprint-author',
+      //),
     );
-
-    if( defined( 'MBT_VERSION' ) ) {
-      unset( $blocks['mbt-book'] );
-    }
 
     foreach( $blocks as $block ) {
       $render_cb = '';

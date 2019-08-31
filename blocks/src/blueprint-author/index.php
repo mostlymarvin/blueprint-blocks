@@ -32,14 +32,6 @@ function blueprint_blocks_create_api_user_fields() {
 
    register_rest_field( 
       'user', 
-      'author_profile', 
-      array(
-      'get_callback' => 'blueprint_blocks_mbt_get_user_links',
-      )
-   );
-
-   register_rest_field( 
-      'user', 
       'profile_display_name', 
       array(
       'get_callback' => 'blueprint_blocks_mbt_get_profile_display_name',

@@ -198,37 +198,40 @@ function blueprint_dynamic_render_mbt_buttons( $buylinks, $styleURL ) {
       $compliantStyle = true;
    }
 
-   foreach( $buylinks as $buylink ) {
+   if( !empty( $buylinks ) && is_array( $buylinks ) ) :
 
-      $url = !empty( $buylink['url'] ) ? $buylink['url'] : false;
-      $store = !empty( $buylink['store'] ) ? $buylink['store'] : false;
-      $imageURL = $styleURL;
-      $class = 'mbt-book-buybutton';
+      foreach( $buylinks as $buylink ) {
 
-      $compliantButton = false;
+         $url = !empty( $buylink['url'] ) ? $buylink['url'] : false;
+         $store = !empty( $buylink['store'] ) ? $buylink['store'] : false;
+         $imageURL = $styleURL;
+         $class = 'mbt-book-buybutton';
 
-      if( in_array( $store, $compliant_stores ) ) {
-         $compliantButton = true; 
-         $class .= ' compliant-buttons';
+         $compliantButton = false;
+
+         if( in_array( $store, $compliant_stores ) ) {
+            $compliantButton = true; 
+            $class .= ' compliant-buttons';
+         }
+         if( $compliantStyle && !$compliantButton ) {
+            $imageURL = str_replace( '_compli', '', $styleURL );
+         }
+         
+         $button = sprintf(
+            '<div class="%4$s">
+            <a class="image-link" href="%1$s">
+            <img class="image-link" src="%3$s%2$s_button.png" alt="buy from %2$s"/></a></div>',
+            esc_url( $buylink ),
+            strip_tags( $store ),
+            $imageURL,
+            esc_attr( $class )
+         );
+
+         if( $url && $store ) {
+            $buttons .= $button;
+         }
       }
-      if( $compliantStyle && !$compliantButton ) {
-         $imageURL = str_replace( '_compli', '', $styleURL );
-      }
-      
-      $button = sprintf(
-         '<div class="%4$s">
-         <a class="image-link" href="%1$s">
-         <img class="image-link" src="%3$s%2$s_button.png" alt="buy from %2$s"/></a></div>',
-         esc_url( $buylink ),
-         strip_tags( $store ),
-         $imageURL,
-         esc_attr( $class )
-      );
-
-      if( $url && $store ) {
-         $buttons .= $button;
-      }
-   }
+   endif;
 
    return $buttons;
 }
@@ -336,7 +339,7 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
     $buttons = blueprint_dynamic_render_mbt_buttons( $buylinks, $styleURL );
    
     $html = sprintf(
-   '<div class="%1$s">
+      '<div class="%1$s">
       <div class="inner is-flex %2$s">
       <div class="preview-left">
       %3$s
