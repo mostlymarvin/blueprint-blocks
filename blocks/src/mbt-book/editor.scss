@@ -1,6 +1,15 @@
 @import 'buttons';
 .wp-block-blueprint-blocks-mbt-book {
     font-size:15px;
+
+    .block-preview {
+    
+        &.active-preview {
+            margin-top:20px;
+            border-top:1px solid #E2E4E7;
+            padding-top:20px;
+        }
+    }
     
     .preview-left {
         min-width:45%;
@@ -13,7 +22,60 @@
             font-family:'serif';
         }
     }
+    
+    .block-message {
+        margin: 20px auto 0;
+        background-color:#f4f4f4;
+        padding:0 10px 20px;
+        text-align:center;
+        font-weight:bold;
 
+        span {
+            display:block;
+        }
+
+        &.active {
+            font-weight:normal;
+        }
+
+        a {
+            color:#11A0D2;
+        }
+    }
+    .block-settings {
+        background-color:#f4f4f4;
+        padding:20px 20px 20px;
+    }
+    
+    .buylinks {
+
+        padding: 0 20px 10px;
+    
+        .mbt-book-buybuttons.blueprint {
+            display:flex;
+            flex-wrap:wrap;
+
+            .mbt-book-buybutton {
+                flex-basis:48%;
+                margin:0 1% 10px;
+                max-width:48% !important;
+                transform:none !important;
+
+                a {
+                    background-color:#fff !important;
+
+                    &:after {
+                        font-size:9px !important;
+                    }
+
+                    img {
+                        object-fit:contain;
+                    }
+                }
+              
+            }
+        }
+    }
 
 }
 .editor-styles-wrapper span.blurb-link {
@@ -99,7 +161,7 @@ h4.buttons-label {
     padding:0 12px;
     margin:0 auto;
     position:relative;
-    bottom:38px;
+    bottom:12px;
 }
 
 

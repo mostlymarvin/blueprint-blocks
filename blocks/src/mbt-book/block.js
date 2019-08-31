@@ -347,31 +347,31 @@ class mySelectPosts extends Component {
     }
 	
     render() {
-        let options = [ { value: 0, label: __( 'Select a Post' ) } ];
-        let output  = __( 'Choose Book' );
+        let options = [ { value: 0, label: __( 'Select a Book' ) } ];
+        let mbtActive = false;
+        let previewClass = 'block-preview';
     
         this.props.className += ' loading';
 
         if( this.state.posts.length > 0 ) {
+            
             this.state.posts.forEach((post) => {
-            options.push({value:post.id, label:post.title.rendered});
-        });
+                options.push({value:post.id, label:post.title.rendered});
+            });
         
-        } else {
-            output = __( 'No posts found. Please create some first.' );
-        }
+        } 
         // Checking if we have anything in the object
         if( this.state.post !== undefined && this.state.post.hasOwnProperty('title')) {
-            output = <div className="post">
-            <a href={ this.state.post.link }> 
-                { this.state.post.title.rendered }
-            </a>
-            </div>;
-        
+           
+            mbtActive = true;
             this.props.className += ' has-post';
 
         } else {
             this.props.className += ' no-post';
+        }
+
+        if( this.props.attributes.title !== undefined ) {
+            previewClass = 'block-preview active-preview';
         }
 
         
@@ -379,6 +379,19 @@ class mySelectPosts extends Component {
 		return (
 		 
             <div className={this.props.className }>
+            <div className="block-settings">
+            {
+                this.props.attributes.title ? (
+                    <div className="block-message active">
+                    <h2>{ this.props.attributes.title }</h2>
+                    </div>
+                ) : (
+                    <div className="block-message"><span>No books found, or MyBookTable is not active.</span><span> Please activate <a href="https://wordpress.org/plugins/mybooktable/" target="_blank">MyBookTable</a> or create books first.</span></div>
+                )
+            }
+
+            {
+            mbtActive && (
             <SelectControl 
                 onChange={this.onChangeSelectPost} 
                 value={ this.props.attributes.selectedPost } 
@@ -386,26 +399,15 @@ class mySelectPosts extends Component {
                 options={ options } 
                 className="book-select"
             />  
+            )
             
+            }
+
             <this.getCoverToggle/> 
             <this.getTitlePrefixToggle/> 
-             
+             </div>
 
-            <div className="block-preview ">
-                <h2 className="preview-title is-flex">
-                {
-                    this.props.attributes.titlePrefix &&
-                    this.props.attributes.addTitlePrefix && (
-                      <span className="title-prefix">{this.props.attributes.titlePrefix}&nbsp;
-                      </span> 
-                       
-                    )
-                }
-                <span className="title">
-                    { this.props.attributes.title }
-                </span>
-                </h2>
-           
+            <div className={ previewClass }>           
                 <div className={ "inner-preview is-flex " + this.props.attributes.flexClass }>
                 <div className="preview-left">
 
@@ -441,6 +443,19 @@ class mySelectPosts extends Component {
                 <div className="preview-right">
                    <div className="preview-right-top">
 
+                   <h2 className="preview-title is-flex">
+                    {
+                        this.props.attributes.titlePrefix &&
+                        this.props.attributes.addTitlePrefix && (
+                        <span className="title-prefix"> 
+                            {this.props.attributes.titlePrefix}&nbsp;
+                        </span> 
+                        )
+                    }
+                        <span className="title">
+                            { this.props.attributes.title }
+                        </span>
+                    </h2>
                     
                         <this.getTagline/>
 
@@ -464,7 +479,7 @@ class mySelectPosts extends Component {
 registerBlockType( 'blueprint-blocks/mbt-book', {
 	title: __( 'Book Preview' ), 
 	icon: 'book', 
-	category: 'common',
+	category: 'blueprint-blocks',
 	keywords: [
 		__( 'blueprint-blocks — mbt-book' ),
 		__( 'Book' ),

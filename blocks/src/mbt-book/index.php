@@ -113,10 +113,6 @@ function blueprint_blocks_mbt_get_tagline( $object ) {
 }
 
 function blueprint_blocks_mbt_editor_style( $object ) {
-    //$style_url = false;
-    //if( function_exists( 'mbt_current_style_url') ) {
-      //  $style_url =  mbt_current_style_url( $file );
-    //}
    $style_url = plugins_url( 'blueprint-blocks/blocks/src/mbt-book/buttons/' );
 	return $style_url;
 }
@@ -159,7 +155,6 @@ function blueprint_dynamic_get_mbt_style_url() {
 }
 
 function blueprint_dynamic_render_mbt_buttons( $buylinks, $styleURL ) {
-   
    $compliantStyle = false;
    $buttons = '';
 
@@ -339,8 +334,7 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
 
     
     $buttons = blueprint_dynamic_render_mbt_buttons( $buylinks, $styleURL );
-    
-
+   
     $html = sprintf(
    '<div class="%1$s">
       <div class="inner is-flex %2$s">
@@ -368,7 +362,11 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
       $buttons
     );
 
-    return $html;
+    if( $selectedPost ) {
+   
+      return $html;
+    }
+    return false;
 }
 
 function blueprint_maybe_render_button_styles() {
@@ -401,7 +399,7 @@ function blueprint_maybe_render_button_styles() {
   
    wp_register_style(
      'blueprint-blocks-mbt-buttons-style',
-     plugins_url('/dist/blocks.buttons.build.css', dirname(__FILE__)),
+     plugins_url('blueprint-blocks/blocks/dist/css/blocks.buttons.build.css'),
      array()
    ); 
   
@@ -411,3 +409,4 @@ function blueprint_maybe_render_button_styles() {
 }
 add_action('wp_enqueue_scripts', 'blueprint_maybe_render_button_styles');
 add_action('enqueue_block_editor_assets','blueprint_maybe_render_button_styles');
+add_action('enqueue_block_assets','blueprint_maybe_render_button_styles');
