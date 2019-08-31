@@ -4,10 +4,6 @@
  * Author Profile + Photo and Social Links
  */
 
-//  Import CSS.
-import './style.scss';
-import './editor.scss';
-
 const { __ } = wp.i18n; 
 const { registerBlockType } = wp.blocks; 
 const { SelectControl, ToggleControl } = wp.components;

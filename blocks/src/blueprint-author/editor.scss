@@ -1,6 +1,16 @@
 .wp-block-blueprint-blocks-blueprint-author {
    .is-flex {
       display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+
+      & > .media {
+          flex-basis: 40%;
+      }
+
+      & > .profile-data {
+          flex-basis:53%;
+      }
    }
 
    .media:hover,

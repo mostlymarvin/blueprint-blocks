@@ -5,11 +5,6 @@
  * customized to work with Blueprint Theme / Blueprint Child themes.
  */
 
-//  Import CSS.
-import './style.scss';
-import './editor.scss';
-import './buttons.scss';
-
 const { __ } = wp.i18n; 
 const { registerBlockType } = wp.blocks; 
 const { SelectControl, ToggleControl } = wp.components;

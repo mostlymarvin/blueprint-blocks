@@ -33,14 +33,14 @@ add_filter( 'block_categories', 'my_plugin_block_categories', 10, 2 );
     // Register our block's base CSS  
     wp_register_style(
       'blueprint-blocks-style',
-      plugins_url( 'dist/css/blocks.styles.build.css', dirname(__FILE__ )),
+      plugins_url( 'dist/blocks.style.build.css', dirname(__FILE__ )),
       array()
     );
     
     // Register our block's editor-specific CSS
     wp_register_style(
       'blueprint-blocks-editor-style',
-      plugins_url('/dist/css/blocks.editor.build.css', dirname(__FILE__)),
+      plugins_url('/dist/blocks.editor.build.css', dirname(__FILE__)),
       array( 'wp-edit-blocks' )
     );  
 
@@ -50,9 +50,9 @@ add_filter( 'block_categories', 'my_plugin_block_categories', 10, 2 );
         'name' => 'mbt-book',
         'render_callback' => 'blueprint_dynamic_render_mbt_book_block',
       ),
-      //array(
-        //'name' => 'blueprint-author',
-      //),
+      array(
+        'name' => 'blueprint-author',
+      ),
     );
 
     foreach( $blocks as $block ) {
