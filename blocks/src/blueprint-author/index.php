@@ -30,6 +30,22 @@ add_action( 'rest_api_init', 'blueprint_blocks_create_api_user_fields' );
 
 function blueprint_blocks_create_api_user_fields() {
 
+   register_rest_route( 
+      'blueprint-mmk/v1', 
+      '/blueprint',
+       array(
+         'methods' => 'GET',
+         'callback' => 'blueprint_register_rest_route',
+      ) 
+   );
+   register_rest_field(
+      'type',
+      'blueprint_social_links',
+      array(
+         'get_callback' => 'blueprint_blocks_get_blueprint_social_links'
+      )
+      );
+
    register_rest_field( 
       'user', 
       'profile_display_name', 
@@ -78,6 +94,23 @@ function blueprint_blocks_create_api_user_fields() {
          )
       );
    }
+ }
+
+ function blueprint_register_rest_route( WP_REST_Request $request ) {
+   $social_links = get_option( 'blueprint_social', array() );
+   $social_links = json_decode( $social_links, true );
+
+   $social_display = get_option( 'blueprint_social_display', array() );
+
+
+   return array(
+      'social_links' => $social_links,
+      'display' => $social_display,
+   );
+ }
+ function blueprint_blocks_get_blueprint_social_links( $object ) {
+    $social_links = get_option( 'blueprint_social', array() );
+    return $social_links;
  }
 
  function blueprint_blocks_get_amazon_link( $object ) {

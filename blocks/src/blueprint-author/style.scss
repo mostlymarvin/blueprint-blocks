@@ -1,0 +1,58 @@
+.wp-block-blueprint-blocks-blueprint-author {
+
+   &:after {
+      content:'';
+      display:table;
+      clear:both;
+   }
+   .is-flex {
+      display:flex;
+   }
+
+   .media {
+      max-width:100%;
+      float:left;
+      width:30%;
+      margin-right:30px;
+      border-radius:50%;
+      -webkit-shape-outside:circle();
+      shape-outside:circle();
+
+      img {
+         display:block;
+         object-fit:cover;
+         border-radius:50%;
+      }
+   }
+   h3.profile-title {
+      border-bottom: 1px solid;
+      text-align:center;
+      position:relative;
+      margin-bottom:30px;
+      
+      span {
+         display:inline-block;
+         padding:0 12px;
+         background-color:#fff;
+         position:absolute;
+         top:50%;
+         left:50%;
+         transform:translate(-50%, -50%);
+
+      }
+   }
+   .blueprint-profile-links ul{
+      
+      li {
+         list-style:none;
+
+         a {
+            border-bottom:none !important;
+
+            span {
+               display:none;
+            }
+         }
+      }
+   }
+}

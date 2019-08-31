@@ -30,10 +30,15 @@ class myAuthorEdit extends Component {
         // Load users.
         this.getUsers();
 
+        this.getBlueprintApi = this.getBlueprintApi.bind(this);
+        this.getBlueprintApi();
+
 
         this.onChangeSelectUser = this.onChangeSelectUser.bind(this);
         this.getSocialLinks = this.getSocialLinks.bind(this);
         this.onSelectImage = this.onSelectImage.bind(this);
+        this.getLinkTypeToggle = this.getLinkTypeToggle.bind(this);
+        this.onChangeLinkType = this.onChangeLinkType.bind(this);
     
     }
     onChangeSelectUser( value ) {
@@ -43,8 +48,8 @@ class myAuthorEdit extends Component {
         // Set the state
         this.setState( { selectedUser: parseInt( value ), user } );
 
-        const userName = user.profile_display_name[0];
-        const userDescription = user.description;
+        const userName = user.profile_display_name ? user.profile_display_name[0] : null;
+        const userDescription = user.description ? user.description : null;
         
         const amazon = user.amazon_link;
         const bookbub = user.bookbub_link;
@@ -97,6 +102,16 @@ class myAuthorEdit extends Component {
         } );
     }
 
+    onChangeLinkType() {
+        
+    if ( this.props.attributes.useSiteLinks) {
+        this.props.setAttributes( { useSiteLinks: false } );
+    } else {
+        this.props.setAttributes( { useSiteLinks: true } );
+    }
+    
+    }   
+
     getUsers() {
 
         return ( new wp.api.collections.Users() ).fetch().then( ( users ) => {
@@ -112,22 +127,63 @@ class myAuthorEdit extends Component {
           });
     }
 
+    getBlueprintApi() {
+        const Blueprint = wp.api.models.Status.extend( {
+            urlRoot: wpApiSettings.root + 'blueprint-mmk/v1/blueprint',
+            defaults: {
+                type: 'blueprint',
+                },
+            } );
+        const Blueprints = wp.api.collections.Statuses.extend( {
+            url: wpApiSettings.root + 'blueprint-mmk/v1/blueprint',
+            } );
+
+        const theBlueprint = new Blueprints();
+
+        theBlueprint.fetch().then( ( blueprint ) => {
+            
+            this.props.setAttributes( {
+                siteLinks: blueprint.social_links,
+                siteLinkDisplay: blueprint.display,
+            } );
+
+        });
+        //fetch( wpApiSettings.root + "/wp-json/blueprint-mmk/v1/blueprint" )
+        //.then(function(response) {
+            //return response.json();
+           // console.log( response.json() );
+        //});
+    }
+
+    getLinkTypeToggle() {
+        return (
+            <ToggleControl
+            label="Use Main Site Social Links"
+            checked={ !!this.props.attributes.useSiteLinks }
+            onChange={ this.onChangeLinkType }
+            className="link-type"
+            />
+        );
+    }
+
     getSocialLinks() {
         return (
             this.props.attributes.userLinks ? (
                <div className="blueprint-profile-links">
+               <ul>
                 { 
                     this.props.attributes.userLinks.map( (item, key) =>
                     {
-                        return <div className="profile-link">
-                        <a className={ item.name }
+                        return <li className="profile-link">
+                        <a className={ item.name + ' icon-' + item.name }
                             href={ item.link }>
-                            { item.name }
+                            <span>{ item.name }</span>
                         </a>
-                        </div>
+                        </li>
                     }
                     )
                 }
+                </ul>
                </div>
             ) : (
                 null
@@ -141,7 +197,8 @@ class myAuthorEdit extends Component {
             imgUrl: value.sizes.full.url,
         })
     }
-	
+
+    
     render() {
         let options = [ { value: 0, label: __( 'Select a User' ) } ];
         let output = 'Choose User';
@@ -175,6 +232,7 @@ class myAuthorEdit extends Component {
 		return (
 		 
             <div className={this.props.className }>
+
             <SelectControl 
                 onChange={this.onChangeSelectUser} 
                 value={ this.props.attributes.selectedUser } 
@@ -182,26 +240,40 @@ class myAuthorEdit extends Component {
                 options={ options } 
                 className="author-select"
             />  
-            <div className="profile-preview is-flex">
-            <div className="media">
+            <this.getLinkTypeToggle/>
+            <div className="profile-preview">
+
+            <h3 className="profile-title">
+                <span>{ this.props.attributes.userName }</span>
+            </h3>
+            <div className="inner is-flex">
+            <div className="profile-main">
+           
             <MediaUpload 
                 onSelect={this.onSelectImage}
                 render={ ({ open }) => {
-                    return <img 
-                        src={ this.props.attributes.imgUrl }
-                        onClick={ open }
-                        />;
+                    return <div className="media">
+                            <span className="dashicons dashicons-edit edit-media" onClick={ open }></span>
+                            <img 
+                            src={ this.props.attributes.imgUrl }
+                            onClick={ open }
+                            /></div>;
                 }}
             />
-            </div>
+            
             <div class="profile-data">
 
-                { this.props.attributes.userName }
+                
+                <div className="profile-blurb">
                 { this.props.attributes.userDescription }
+                </div>
                
                 </div>      
             </div>
+
             <this.getSocialLinks/>
+            </div>
+            </div>
             </div>
 		)
 	}
@@ -227,8 +299,18 @@ registerBlockType( 'blueprint-blocks/blueprint-author', {
         userDescription: {
             type: 'string',
         },
+        useSiteLinks : {
+            type: 'boolean',
+            default: false
+        },
         userLinks: {
             type: 'array'
+        },
+        siteLinks: {
+            type: 'array',
+        },
+        siteLinkDisplay: {
+            type: 'array',
         },
         imgUrl: {
             type: 'string',
@@ -243,10 +325,41 @@ registerBlockType( 'blueprint-blocks/blueprint-author', {
 
 		return (
 			<div className={ props.className }>
-                { props.attributes.userName }
-                { props.attributes.userDescription }
-                { props.attributes.userLinks }
+            
+            <h3 className="profile-title">
+                <span>{ props.attributes.userName }</span>
+            </h3>
+
+            <div className="inner is-flex">
+            <div className="profile-main">
+                <div className="media">
+                <img src={ props.attributes.imgUrl }
+                className="profile-image"/>
+                </div>
+                <div className="profile-info">
+                    <div className="profile-blurb">
+                    { props.attributes.userDescription }
+                    </div>
+                </div>
+            </div>
+            <div className="blueprint-profile-links">
+            <ul>
+                {
+                    props.attributes.userLinks.map( (item, key) =>
+                    {
+                        return <li className="profile-link">
+                        <a className={ item.name + ' icon-' + item.name }
+                            href={ item.link }>
+                            <span>{ item.name }</span>
+                        </a>
+                        </li>
+                    }
+                    )
+                }
+            </ul>
+            </div>
 			</div>
+            </div>
 		  );
 	},
 } );
