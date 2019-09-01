@@ -36,28 +36,31 @@ class myAuthorEdit extends Component {
 
         this.onChangeSelectUser = this.onChangeSelectUser.bind(this);
         this.getSocialLinks = this.getSocialLinks.bind(this);
+        this.getSiteLinks = this.getSiteLinks.bind(this);
+        this.getUserLinks = this.getUserLinks.bind(this);
         this.onSelectImage = this.onSelectImage.bind(this);
         this.getLinkTypeToggle = this.getLinkTypeToggle.bind(this);
         this.onChangeLinkType = this.onChangeLinkType.bind(this);
+        this.onChangeProfileTitle = this.onChangeProfileTitle.bind(this);
     
     }
     onChangeSelectUser( value ) {
         // Find the post
         const user = this.state.users.find( ( item ) => { return item.id == parseInt( value ) } );
-        console.log( parseInt( value ) );
+        //console.log( parseInt( value ) );
         // Set the state
         this.setState( { selectedUser: parseInt( value ), user } );
 
         const userName = user.profile_display_name ? user.profile_display_name[0] : null;
         const userDescription = user.description ? user.description : null;
-        
-        const amazon = user.amazon_link;
-        const bookbub = user.bookbub_link;
-        const facebook = user.facebook_link;
-        const instagram = user.instagram_link;
-        const linkedin = user.linkedin_link;
-        const pinterest = user.pinterest_link;
-        const twitter = user.twitter_link;
+        console.log( userDescription );
+        const amazon = user.amazon_link ? user.amazon_link : null;
+        const bookbub = user.bookbub_link ? user.bookbub_link : null;
+        const facebook = user.facebook_link ? user.facebook_link : null;
+        const instagram = user.instagram_link ? user.instagram_link : null;
+        const linkedin = user.linkedin_link ? user.linkedin_link : null;
+        const pinterest = user.pinterest_link ? user.pinterest_link : null;
+        const twitter = user.twitter_link ? user.twitter_link : null;
 
         const socialLinks = [
            {
@@ -90,25 +93,35 @@ class myAuthorEdit extends Component {
            },
         ];
 
-
-        
-        
         // Set the attributes
         this.props.setAttributes( {
             selectedUser: parseInt( value ),
             userName: userName,
             userDescription: userDescription,
             userLinks: socialLinks,
+            customTitle: this.props.attributes.customTitle ? this.props.attributes.customTitle : userName,
         } );
     }
 
+     
+
+    onChangeProfileTitle( newValue ) {
+        this.props.setAttributes( { customTitle: newValue } );
+    } 
+
     onChangeLinkType() {
         
-    if ( this.props.attributes.useSiteLinks) {
-        this.props.setAttributes( { useSiteLinks: false } );
-    } else {
-        this.props.setAttributes( { useSiteLinks: true } );
-    }
+        if ( this.props.attributes.useSiteLinks ) {
+            this.props.setAttributes( { 
+                useSiteLinks: false,
+            } );
+           // console.log( this.props.attributes.whichLinks );
+        } else {
+            this.props.setAttributes( { 
+                useSiteLinks: true,
+             } );
+           // console.log( this.props.attributes.whichLinks );
+        }
     
     }   
 
@@ -121,6 +134,7 @@ class myAuthorEdit extends Component {
               
 
               this.setState( { user, users } );
+
             } else {
               this.setState({ users });
             }
@@ -141,35 +155,30 @@ class myAuthorEdit extends Component {
         const theBlueprint = new Blueprints();
 
         theBlueprint.fetch().then( ( blueprint ) => {
-            
+            //console.log( blueprint.blueprint_social.links );
             this.props.setAttributes( {
-                siteLinks: blueprint.social_links,
-                siteLinkDisplay: blueprint.display,
+                siteLinks: blueprint.blueprint_social.links,
+                siteLinkDisplay: blueprint.blueprint_social.display,
             } );
 
         });
-        //fetch( wpApiSettings.root + "/wp-json/blueprint-mmk/v1/blueprint" )
-        //.then(function(response) {
-            //return response.json();
-           // console.log( response.json() );
-        //});
     }
 
     getLinkTypeToggle() {
         return (
             <ToggleControl
-            label="Use Main Site Social Links"
-            checked={ !!this.props.attributes.useSiteLinks }
+            label="Use site-wide social media links instead of user profile social links?"
+            checked={ !! this.props.attributes.useSiteLinks }
             onChange={ this.onChangeLinkType }
             className="link-type"
             />
         );
     }
 
-    getSocialLinks() {
+    getUserLinks() {
         return (
             this.props.attributes.userLinks ? (
-               <div className="blueprint-profile-links">
+               <div className="blueprint-profile-links user-links">
                <ul>
                 { 
                     this.props.attributes.userLinks.map( (item, key) =>
@@ -188,11 +197,47 @@ class myAuthorEdit extends Component {
             ) : (
                 null
             )
+            );
+    }
+
+    getSiteLinks() {
+        return (
+            this.props.attributes.siteLinks ? (
+            <div className="blueprint-profile-links site-links">
+            <ul>
+            { 
+                this.props.attributes.siteLinks.map( (item, key) =>
+                {
+                    return <li className="profile-link">
+                    <a className={ item.network + ' icon-' + item.network }
+                        href={ item.url }>
+                        <span>{ item.network }</span>
+                    </a>
+                    </li>
+                }
+                )
+            }
+            </ul>
+            </div>
+            ) : (
+                null
+            )
         );
     }
 
+    getSocialLinks() {
+        return (
+            this.props.attributes.useSiteLinks ? (
+                <this.getSiteLinks/>
+            ) : (
+                <this.getUserLinks/>
+               
+            )
+        )
+    }
+
     onSelectImage( value ) {
-        console.log( value );
+        //console.log( value );
         this.props.setAttributes({
             imgUrl: value.sizes.full.url,
         })
@@ -244,9 +289,16 @@ class myAuthorEdit extends Component {
             <div className="profile-preview">
 
             <h3 className="profile-title">
-                <span>{ this.props.attributes.userName }</span>
+            <RichText
+                tagName='span'
+                placeholder= { this.props.attributes.customTitle }
+                className="buttons-label"
+                value={ this.props.attributes.customTitle }
+                onChange={ this.onChangeProfileTitle }
+                keepPlaceholderOnFocus={true}
+                />
             </h3>
-            <div className="inner is-flex">
+            <div className="inner ">
             <div className="profile-main">
            
             <MediaUpload 
@@ -261,17 +313,14 @@ class myAuthorEdit extends Component {
                 }}
             />
             
-            <div class="profile-data">
-
+            <div class="profile-data"> 
                 
-                <div className="profile-blurb">
+                <div class="profile-blurb">
                 { this.props.attributes.userDescription }
                 </div>
-               
                 </div>      
             </div>
-
-            <this.getSocialLinks/>
+                <this.getSocialLinks/>
             </div>
             </div>
             </div>
@@ -298,6 +347,9 @@ registerBlockType( 'blueprint-blocks/blueprint-author', {
         },
         userDescription: {
             type: 'string',
+        },
+        customTitle: {
+             type: 'string',   
         },
         useSiteLinks : {
             type: 'boolean',
@@ -327,7 +379,7 @@ registerBlockType( 'blueprint-blocks/blueprint-author', {
 			<div className={ props.className }>
             
             <h3 className="profile-title">
-                <span>{ props.attributes.userName }</span>
+                <span>{ props.attributes.customTitle }</span>
             </h3>
 
             <div className="inner is-flex">
@@ -337,14 +389,30 @@ registerBlockType( 'blueprint-blocks/blueprint-author', {
                 className="profile-image"/>
                 </div>
                 <div className="profile-info">
-                    <div className="profile-blurb">
-                    { props.attributes.userDescription }
-                    </div>
+                    <RichText.Content
+                    className="profile-blurb"
+                    tagName='div'
+                    multiline='p'
+                    value={ props.attributes.userDescription }
+                   />
                 </div>
             </div>
             <div className="blueprint-profile-links">
             <ul>
                 {
+                    props.attributes.useSiteLinks ? (
+                        props.attributes.siteLinks.map( (item, key) =>
+                    {
+                        return <li className="profile-link">
+                        <a className={ item.network + ' icon-' + item.network }
+                            href={ item.url }>
+                            <span>{ item.network }</span>
+                        </a>
+                        </li>
+                    }
+                    )
+
+                    ) : (
                     props.attributes.userLinks.map( (item, key) =>
                     {
                         return <li className="profile-link">
@@ -354,6 +422,7 @@ registerBlockType( 'blueprint-blocks/blueprint-author', {
                         </a>
                         </li>
                     }
+                    )
                     )
                 }
             </ul>

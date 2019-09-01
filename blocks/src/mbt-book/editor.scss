@@ -1,14 +1,10 @@
 @import 'buttons';
 .wp-block-blueprint-blocks-mbt-book {
     font-size:15px;
+    padding:0;
 
     .block-preview {
-    
-        &.active-preview {
-            margin-top:20px;
-            border-top:1px solid #E2E4E7;
-            padding-top:20px;
-        }
+        padding: 40px 20px;
     }
     
     .preview-left {
@@ -44,6 +40,7 @@
     }
     .block-settings {
         background-color:#f4f4f4;
+        color:#000;
         padding:20px 20px 20px;
     }
     
@@ -134,10 +131,10 @@
 }
 .preview-tagline:focus,
 .custom-blurb:focus,
-h4.title-prefix, 
+h4.title-prefix,
 h4.buttons-label {
-    background-color: #E5F3F8;
-    padding: 0 12px 0 !important;
+    background-color: #f4f4f4;
+    color:#000;
     margin-bottom:0;
     line-height:28px;
     border:1px solid #f4f4f4;
@@ -148,7 +145,6 @@ h4.buttons-label {
     }
 
     &.noneditable, &.noneditable:focus {
-        background-color:#fff;
         border:none;
     }
 }

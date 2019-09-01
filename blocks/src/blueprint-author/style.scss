@@ -41,6 +41,9 @@
 
       }
    }
+   .blueprint-profile-links {
+      clear:both;
+   }
    .blueprint-profile-links ul{
       
       li {
@@ -50,7 +53,7 @@
             border-bottom:none !important;
 
             span {
-               display:none;
+               //display:none;
             }
          }
       }

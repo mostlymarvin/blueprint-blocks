@@ -7,9 +7,10 @@
 
 const { __ } = wp.i18n; 
 const { registerBlockType } = wp.blocks; 
-const { SelectControl, ToggleControl } = wp.components;
-const { Component } = wp.element;
-const { RichText,  } = wp.editor;
+const { SelectControl, ToggleControl, Panel, PanelBody, PanelRow } = wp.components;
+const { Component, Fragment } = wp.element;
+const { RichText, InspectorControls, withColors, PanelColorSettings, getColorClassName  } = wp.editor;
+const { createHigherOrderComponent } = wp.compose;
 
 
 class mySelectPosts extends Component {
@@ -50,6 +51,8 @@ class mySelectPosts extends Component {
         this.getButtons = this.getButtons.bind(this);
         this.getButtonSegment = this.getButtonSegment.bind(this);
         this.getBookMedia = this.getBookMedia.bind(this);
+        this.onChangeTextColor = this.onChangeTextColor.bind(this);
+        this.onChangeBGColor = this.onChangeBGColor.bind(this);
     
     }
 
@@ -156,8 +159,19 @@ class mySelectPosts extends Component {
             this.props.setAttributes( { addTitlePrefix: true } );
         }
     }   
+    
+    onChangeTextColor( colorText ) {
+        this.props.setAttributes ( { colorText: colorText } );
+    }
+    onChangeBGColor( colorBG ) {
+        this.props.setAttributes ( { colorBG: colorBG } );
+    }
 
     getButtonsLabel() {
+        const blockStyle = {
+            backgroundColor: this.props.attributes.colorBG,
+            color: this.props.attributes.colorText
+        }
         return (
             this.props.attributes.buylinks &&
             this.props.attributes.customLabel ? (
@@ -170,7 +184,8 @@ class mySelectPosts extends Component {
                 keepPlaceholderOnFocus={true}
                 />
             ) : (
-                <h4 className="buttons-label noneditable">
+                <h4 className="buttons-label noneditable"
+                style={ blockStyle }>
                 { this.props.attributes.buttonsLabel }
                 </h4>
             
@@ -345,6 +360,16 @@ class mySelectPosts extends Component {
         let options = [ { value: 0, label: __( 'Select a Book' ) } ];
         let mbtActive = false;
         let previewClass = 'block-preview';
+        let blockStyle = {
+            backgroundColor: this.props.attributes.colorBG,
+            color: this.props.attributes.colorText
+        }
+        let textStyle = {
+            color: this.props.attributes.colorText,
+        }
+        let bgStyle = {
+            backgroundColor: this.props.attributes.colorBG
+        }
     
         this.props.className += ' loading';
 
@@ -369,11 +394,41 @@ class mySelectPosts extends Component {
             previewClass = 'block-preview active-preview';
         }
 
-        
     
 		return (
-		 
-            <div className={this.props.className }>
+
+            <div 
+            className={ this.props.className }
+            style={ blockStyle }>
+
+            <div>
+            <InspectorControls>   
+                
+                        <PanelColorSettings 
+                            title={ __('Colors', 'blueprint-blocks') }
+                            initialOpen={false}
+                            colorSettings= { [ 
+                                {
+                                value: this.props.attributes.colorText,
+                                onChange: this.onChangeTextColor,
+                                label: __('Text Color', 'blueprint-blocks'),
+                                },
+                                {
+                                value: this.props.attributes.colorBG,
+                                onChange: this.onChangeBGColor,
+                                label: __('Background Color', 'blueprint-blocks'),
+                                },
+                             ] }
+                        />
+    
+                       
+                    
+                    
+               
+                </InspectorControls>
+              </div>
+
+
             <div className="block-settings">
             {
                 this.props.attributes.title ? (
@@ -438,7 +493,8 @@ class mySelectPosts extends Component {
                 <div className="preview-right">
                    <div className="preview-right-top">
 
-                   <h2 className="preview-title is-flex">
+                   <h2 className="preview-title is-flex"
+                        style={ textStyle }>
                     {
                         this.props.attributes.titlePrefix &&
                         this.props.attributes.addTitlePrefix && (
@@ -548,7 +604,14 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
         titlePrefix: {
             type: 'string',
         },
-        
+        colorText: {
+            type: 'string',
+            default: 'inherit',
+        },
+        colorBG: {
+            type: 'string',
+            default: 'inherit',
+        },
 	  },
 
 	edit: mySelectPosts,

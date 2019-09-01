@@ -80,4 +80,25 @@ require_once plugin_dir_path( __FILE__ ) . 'mbt-book/index.php';
 require_once plugin_dir_path( __FILE__ ) . 'blueprint-author/index.php';
 
 
+add_action( 'rest_api_init', 'blueprint_register_api' );
 
+function blueprint_register_api() {
+  register_rest_route( 
+    'blueprint-mmk/v1', 
+    '/blueprint',
+    array(
+      'methods' => 'GET',
+      'callback' => 'blueprint_register_rest_route',
+    ) 
+  );
+}
+
+function blueprint_register_rest_route( WP_REST_Request $request ) {
+  /**
+   * Just creating the endpoint with filterable return so that 
+   * other segments can add to return.
+   */
+  $rest_fields = array();
+  $rest_fields = apply_filters( 'blueprint_rest_fields', $rest_fields );
+  return $rest_fields;
+}

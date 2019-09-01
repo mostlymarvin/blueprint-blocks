@@ -1,5 +1,7 @@
 .wp-block-blueprint-blocks-mbt-book {
+    padding: 40px 20px;
     margin-bottom:50px;
+    background-color: #F0F0F0;
     .is-flex.flex-row-reverse {
         flex-direction:row-reverse !important;
     }
@@ -8,7 +10,7 @@
         a.image-link {
             display:block;
             width:100%;
-            min-width:300px;
+            min-width:240px;
             margin:0 auto;
 
             img {
@@ -20,7 +22,7 @@
             text-align:center;
         }
         .cover-links span, .cover-links a  {            
-            font-size:13px !important;
+            font-size:11px !important;
             text-align:center;
             display:inline;
             font-style:italic;   
@@ -33,6 +35,10 @@
         flex-direction:column;
         justify-content:space-between;
     }
+    h2.preview-title {
+        font-size: 24px;
+        margin-bottom:25px;
+    }
     .preview-tagline {
         font-weight:bold;
         margin-bottom:12px;
@@ -40,6 +46,7 @@
     .preview-blurb {
         margin-bottom:20px;
         justify-self:flex-start;
+        font-size:18px;
     }
     .blurb-link, .blurb-text, .blurb-text p {
         display:inline;
@@ -104,5 +111,10 @@
                 padding-left:30px;
             }
         }
+    }
+}
+@media all and (min-width:960px ) {
+    .wp-block-blueprint-blocks-mbt-book {
+        padding:40px 50px;
     }
 }
