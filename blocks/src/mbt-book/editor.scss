@@ -3,7 +3,7 @@
     font-size:15px;
     padding:0;
 
-    .block-preview {
+    .block-preview.active-preview {
         padding: 40px 20px;
     }
     
@@ -75,25 +75,16 @@
     }
 
 }
-.editor-styles-wrapper span.blurb-link {
-    line-height:0;
 
-    a {
-        padding:1px 12px 0;
-        height:1.5em;
-        line-height:1.5em;
-        font-size: 10px;
-        letter-spacing:.01em;
-        text-shadow:none;
-        border-bottom:none;
-        box-shadow:none;
-    }
-}
 .book-select .components-base-control__field,
 .is-flex {
     display:flex;
     margin-bottom:20px;
     align-items:center;
+
+    .book-select & {
+        display:block;
+    }
 
     & .components-base-control__label {
         margin-bottom:0 !important;
@@ -131,7 +122,6 @@
 }
 .preview-tagline:focus,
 .custom-blurb:focus,
-h4.title-prefix,
 h4.buttons-label {
     background-color: #f4f4f4;
     color:#000;
@@ -148,9 +138,7 @@ h4.buttons-label {
         border:none;
     }
 }
-h4.title-prefix {
-    margin-left:12px;
-}
+
 h4.buttons-label {
     text-align:center;
     width:max-content;
@@ -160,19 +148,19 @@ h4.buttons-label {
     bottom:12px;
 }
 
-
-.components-toggle-control__label,
-.components-base-control__label {
+.block-settings .components-base-control__label {
     font-size:14px !important;
     font-weight:bold !important;
     text-transform:none !important;
     letter-spacing:0 !important;
     font-style:normal !important;
+}
+.components-toggle-control__label,
+.components-base-control__label {
 
     &.block-label {
         margin-bottom:8px !important;
     }
-    .add-title-prefix &,
     .custom-label &,
     .custom-button & {
         margin-bottom:0 !important;
@@ -184,19 +172,13 @@ h4.buttons-label {
 
     }
 }
-.components-base-control__help {
-    .add-title-prefix &,
-    .custom-label &,
-    .custom-button & {
-        padding-left:50px;
-        font-size:.9em;
-        margin-bottom:20px;
-    }
-}
+
 .add-title-prefix .components-base-control__field,
 .custom-label .components-base-control__field,
 .custom-button .components-base-control__field {
     margin-bottom:4px;
 }
 
-
+.components-panel__row.display-block {
+    display:block !important;
+}

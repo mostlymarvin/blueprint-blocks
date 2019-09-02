@@ -7,10 +7,10 @@
 
 const { __ } = wp.i18n; 
 const { registerBlockType } = wp.blocks; 
-const { SelectControl, ToggleControl, Panel, PanelBody, PanelRow } = wp.components;
+const { SelectControl, ToggleControl, TextControl, Panel, PanelBody, PanelRow } = wp.components;
 const { Component, Fragment } = wp.element;
-const { RichText, InspectorControls, withColors, PanelColorSettings, getColorClassName  } = wp.editor;
-const { createHigherOrderComponent } = wp.compose;
+const { RichText, InspectorControls, PanelColorSettings, getColorClassName  } = wp.editor;
+
 
 
 class mySelectPosts extends Component {
@@ -27,11 +27,13 @@ class mySelectPosts extends Component {
         super( ...arguments );
         
         this.state = this.constructor.getInitialState( this.props.attributes.selectedPost );
+
+        this.getBlueprintApi = this.getBlueprintApi.bind(this);
+        this.getBlueprintApi();
         
         this.getOptions = this.getOptions.bind(this);
         // Load posts.
         this.getOptions();
-
 
         this.onChangeSelectPost = this.onChangeSelectPost.bind(this);
         
@@ -39,7 +41,6 @@ class mySelectPosts extends Component {
         this.onChangeTagline = this.onChangeTagline.bind(this);
         
         this.onChangeFlexDirection = this.onChangeFlexDirection.bind(this);
-        this.onChangeCustomLabel = this.onChangeCustomLabel.bind(this);
         this.onChangeCustomBlurb = this.onChangeCustomBlurb.bind(this);
         this.onChangeButtonsLabel = this.onChangeButtonsLabel.bind(this);
         this.onChangeAddPrefix = this.onChangeAddPrefix.bind(this);
@@ -53,6 +54,21 @@ class mySelectPosts extends Component {
         this.getBookMedia = this.getBookMedia.bind(this);
         this.onChangeTextColor = this.onChangeTextColor.bind(this);
         this.onChangeBGColor = this.onChangeBGColor.bind(this);
+        this.getColorSettings = this.getColorSettings.bind(this);
+        this.getBlockSettings = this.getBlockSettings.bind(this);
+        this.getBookSelect = this.getBookSelect.bind(this); this.onChangeButtonBGColor = this.onChangeButtonBGColor.bind(this);
+        this.onChangeButtonColor = this.onChangeButtonColor.bind(this);
+        this.onChangeMoreLink = this.onChangeMoreLink.bind(this);
+        this.getMoreLinkToggle = this.getMoreLinkToggle.bind(this);
+        this.onChangeShowReadMore = this.onChangeShowReadMore.bind(this);
+        this.onChangeShowBuyLinks = this.onChangeShowBuyLinks.bind(this);
+        this.getButtonToggle = this.getButtonToggle.bind(this);
+        this.onChangeReadMoreLink = this.onChangeReadMoreLink.bind(this);
+        this.onChangeReadMoreText = this.onChangeReadMoreText.bind(this);
+        this.getSampleLinkToggle = this.getSampleLinkToggle.bind(this);
+        this.onChangeShowSampleLinks = this.onChangeShowSampleLinks.bind(this);
+        this.getSampleLinks = this.getSampleLinks.bind(this);
+        
     
     }
 
@@ -75,6 +91,7 @@ class mySelectPosts extends Component {
         
         const coverID = post.mbt_book_image_id[0];
         this.getBookMedia( coverID );
+
         
         // Set the attributes
         this.props.setAttributes( {
@@ -86,12 +103,13 @@ class mySelectPosts extends Component {
             blurb: blurb,
             audioSample: audioSample,
             bookSample: bookSample,
-            customLabel: false,
             buttonsLabel: 'Now Available From',
             titlePrefix: '',
             styleURL: styleURL,
             customBlurb: blurb,
             customTagline: tagLine,
+            readMoreLink: post.link,
+            showReadMore: true,
         } );
     }
 
@@ -111,6 +129,14 @@ class mySelectPosts extends Component {
     onChangeCustomBlurb( newValue ) {
         this.props.setAttributes( { customBlurb: newValue } );
     } 
+
+    onChangeReadMoreLink( newValue ) {
+        this.props.setAttributes( { readMoreLink: newValue });
+    }
+
+    onChangeReadMoreText( newValue ) {
+        this.props.setAttributes( { readMoreText: newValue });
+    }
 
     onChangeTagline( newValue ) {
         this.props.setAttributes( { customTagline: newValue } );
@@ -137,20 +163,6 @@ class mySelectPosts extends Component {
             );
         }
     }
-
-    onChangeCustomLabel() {
-        if ( this.props.attributes.customLabel ) {
-            this.props.setAttributes( { 
-                customLabel: false,
-                buttonsLabel: 'Now Available From',
-             } );
-        } else {
-            this.props.setAttributes( {
-                customLabel: true,
-                buttonsLabel: this.props.attributes.buttonsLabel
-            } );
-        }
-    }   
     
     onChangeAddPrefix() {
         if ( this.props.attributes.addTitlePrefix ) {
@@ -158,7 +170,31 @@ class mySelectPosts extends Component {
         } else {
             this.props.setAttributes( { addTitlePrefix: true } );
         }
+    } 
+
+    onChangeShowReadMore() {
+        if ( this.props.attributes.showReadMore ) {
+            this.props.setAttributes( { showReadMore: false } );
+        } else {
+            this.props.setAttributes( { showReadMore: true } );
+        }
     }   
+
+    onChangeShowBuyLinks() {
+        if ( this.props.attributes.showBuyLinks ) {
+            this.props.setAttributes( { showBuyLinks: false } );
+        } else {
+            this.props.setAttributes( { showBuyLinks: true } );
+        }
+    }  
+    
+    onChangeShowSampleLinks() {
+        if ( this.props.attributes.showSampleLinks ) {
+            this.props.setAttributes( { showSampleLinks: false } );
+        } else {
+            this.props.setAttributes( { showSampleLinks: true } );
+        }
+    }  
     
     onChangeTextColor( colorText ) {
         this.props.setAttributes ( { colorText: colorText } );
@@ -166,6 +202,47 @@ class mySelectPosts extends Component {
     onChangeBGColor( colorBG ) {
         this.props.setAttributes ( { colorBG: colorBG } );
     }
+    onChangeButtonColor( colorMoreLink ) {
+        this.props.setAttributes ( { colorMoreLink: colorMoreLink } );
+    }
+    onChangeButtonBGColor( colorMoreLinkBG ) {
+        this.props.setAttributes ( { colorMoreLinkBG: colorMoreLinkBG } );
+    }
+
+    onChangeMoreLink( newValue ) {
+        this.props.setAttributes ( { moreLink: newValue } );
+    }
+
+    getBlockSettings( options, message ) {
+        return(
+            
+        this.props.attributes.title ? (
+            null
+        ) : (
+            <div className="block-settings"> 
+            <div className="block-message">{message}</div>
+            { this.getBookSelect( options ) }
+            </div>
+        )
+            
+        );
+    }
+
+    getBookSelect( options ) {
+        return(   
+        
+        <SelectControl 
+        onChange={this.onChangeSelectPost} 
+        value={ this.props.attributes.selectedPost } 
+        label={ __( 'Select a Book' ) } 
+        options={ options } 
+        className="book-select"
+        />
+        
+        );
+    }
+
+   
 
     getButtonsLabel() {
         const blockStyle = {
@@ -173,23 +250,10 @@ class mySelectPosts extends Component {
             color: this.props.attributes.colorText
         }
         return (
-            this.props.attributes.buylinks &&
-            this.props.attributes.customLabel ? (
-                <RichText
-                tagName='h4'
-                placeholder= 'Now Available From'	
-                className="buttons-label"
-                value={ this.props.attributes.buttonsLabel }
-                onChange={ this.onChangeButtonsLabel }
-                keepPlaceholderOnFocus={true}
-                />
-            ) : (
-                <h4 className="buttons-label noneditable"
-                style={ blockStyle }>
-                { this.props.attributes.buttonsLabel }
-                </h4>
-            
-            )
+            <h4 className="buttons-label noneditable"
+            style={ blockStyle }>
+            { this.props.attributes.buttonsLabel }
+            </h4>
         );
     }
 
@@ -220,14 +284,51 @@ class mySelectPosts extends Component {
                     multiline='p'
                     placeholder='Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam id dolor id nibh ultricies vehicula ut id elit. Nulla vitae elit libero, a pharetra augue.'	
                     className="custom-blurb"
-                    value={ this.props.attributes.customBlurb }
+                    value={ this.props.attributes.customBlurb  }
                     onChange={ this.onChangeCustomBlurb }
                     keepPlaceholderOnFocus={true}
                 />
+                 { this.getReadMoreLink() }
             </div>
             ) : (
                 null
             )
+        );
+    }
+
+    getReadMoreLink() {
+        let buttonClass = 'button button-primary button-small bpb-more';
+        let buttonBG = this.props.attributes.colorMoreLinkBG;
+        let buttonColor = this.props.attributes.colorMoreLink;
+        let buttonStyle = null;
+
+        if( buttonBG ) {
+            buttonStyle = { backgroundColor: buttonBG }
+        }
+        if( buttonColor ) {
+            buttonStyle = { color: buttonColor }
+        }
+
+        if( buttonColor && buttonBG ) {
+            buttonStyle = {
+                backgroundColor: buttonBG,
+                color: buttonColor,
+            }
+        }
+        if( buttonBG || buttonColor ) {
+            buttonClass = 'button button-custom button-small bpb-more';
+        }
+
+        return(
+                this.props.attributes.showReadMore && (
+
+               <a className={ buttonClass }
+                  style={ buttonStyle }
+                  href={ this.props.attributes.readMoreLink }>
+                  { this.props.attributes.readMoreText }
+                  </a>
+
+                )  
         );
     }
 
@@ -256,16 +357,43 @@ class mySelectPosts extends Component {
         );
     }
 
+    getSampleLinks() {
+        return(
+            this.props.attributes.showSampleLinks && (
+            <div className="cover-links">
+                    {
+                        this.props.attributes.bookSample && (
+                            <span>View Book Sample</span>
+                        )   
+                    }
+                    {
+                        this.props.attributes.bookSample && this.props.attributes.audioSample && (
+                            <span className="divider">&nbsp;|&nbsp;</span>
+                        )
+                    }
+                    {
+                        this.props.attributes.audioSample && (
+                            <span>Hear Audiobook Sample</span>  
+                        )
+                    }
+            </div>
+            )
+
+        );
+    }
+
     getCoverToggle() {
         return (
-            this.props.attributes.title &&
             this.props.attributes.cover ? (
+            <PanelRow>
                 <ToggleControl
                 label="Reverse Cover Position"
+                help="Default displays cover to left"
                 checked={ !!this.props.attributes.flexReverse }
                 onChange={ this.onChangeFlexDirection }
                 className="flex-direction"
-            />
+                />
+            </PanelRow>
             ) : (
                 null
             )
@@ -276,57 +404,166 @@ class mySelectPosts extends Component {
     getButtonSegment() {
         return (
             this.props.attributes.title ? (
-            <div>
-                <ToggleControl
-                    label="Custom Label for Buttons Section"
-                    help="Defaults to 'Now Available From'"
-                    checked={ !!this.props.attributes.customLabel }
-                    onChange={ this.onChangeCustomLabel }
-                    className="custom-label"
-                    />
                 <div className="buylinks"> 
                     <this.getButtonsLabel/>
                     <this.getButtons/>
                 </div> 
-            </div>
+            
             ) : (
                 null
             )
         );
     }
 
-    getTitlePrefixToggle() {
+    getButtonToggle() {
         return (
-            this.props.attributes.title ? (
-            <div className="title-prefix-toggle is-flex">
-            <ToggleControl
-                label="Add Prefix to Title"
-                help="ie, 'Coming Soon' or 'Just Released', etc."
-                checked={ !!this.props.attributes.addTitlePrefix }
-                onChange={ this.onChangeAddPrefix }
-                className="add-title-prefix"
-            />
-            {
-                this.props.attributes.addTitlePrefix && (
-                    <RichText
-                    tagName='h4'
-                    placeholder= 'Coming Soon, etc.'	
-                    className="title-prefix"
-                    value={ this.props.attributes.titlePrefix }
-                    onChange={ this.onChangeTitlePrefix }
-                    keepPlaceholderOnFocus={true}
-                    withoutInteractiveFormatting={true}
+            
+            <PanelRow className="display-block">
+                <ToggleControl
+                    label="Show Buy Links?"
+                    checked={ !!this.props.attributes.showBuyLinks }
+                    onChange={ this.onChangeShowBuyLinks }
+                />
+                {
+                this.props.attributes.showBuyLinks && (
+                    <TextControl
+                        placeholder= 'Now Available From'	
+                        label="Buy Link Section Label"
+                        value={ this.props.attributes.buttonsLabel }
+                        onChange={ this.onChangeButtonsLabel }
+                        keepPlaceholderOnFocus={true}
                     />
                 )
-            }
-            </div>
-        ) : (
-            null
-        )
+                }
+            </PanelRow>
         );
     }
 
     
+    getTitlePrefixToggle() {
+        return (
+            
+            <PanelRow className="display-block">
+                <ToggleControl
+                    label="Add Prefix to Title"
+                    help="ie, 'Coming Soon' or 'Just Released', etc."
+                    checked={ !!this.props.attributes.addTitlePrefix }
+                    onChange={ this.onChangeAddPrefix }
+                />
+                {
+                    this.props.attributes.addTitlePrefix && (
+                        <TextControl
+                        placeholder= 'Coming Soon, etc.'	
+                        value={ this.props.attributes.titlePrefix }
+                        onChange={ this.onChangeTitlePrefix }
+                        keepPlaceholderOnFocus={true}
+                        />
+                    )
+                }
+
+            </PanelRow>
+        );
+    }
+
+    getSampleLinkToggle() {
+        return (
+            
+            <PanelRow className="display-block">
+                <ToggleControl
+                    label="Show Book Sample Links?"
+                    help="By default, shows audiobook and book sample links under the cover, if the links are available."
+                    checked={ !!this.props.attributes.showSampleLinks }
+                    onChange={ this.onChangeShowSampleLinks }
+                />
+            </PanelRow>
+        );
+    }
+
+    getMoreLinkToggle() {
+        return (
+            
+            <PanelRow className="display-block">
+                <ToggleControl
+                    label="Show 'Read More' Link?"
+                    checked={ !!this.props.attributes.showReadMore }
+                    onChange={ this.onChangeShowReadMore }
+                />
+                {
+                    this.props.attributes.showReadMore && (
+                    <PanelRow className="display-block">
+                    <TextControl
+                        placeholder= 'Read More'	
+                        value={ this.props.attributes.readMoreText }
+                        onChange={ this.onChangeReadMoreText }
+                        keepPlaceholderOnFocus={true}
+                    />
+                    <TextControl
+                        placeholder={ this.props.attributes.link }	
+                        value={ this.props.attributes.readMoreLink }
+                        onChange={ this.onChangeReadMoreLink }
+                        keepPlaceholderOnFocus={true}
+                        />
+                    </PanelRow>
+                    )
+                }
+                </PanelRow>
+            
+        );
+    }
+
+    getColorSettings() {
+        return(
+
+        <PanelColorSettings 
+            title={ __('Colors', 'blueprint-blocks') }
+            initialOpen={false}
+            colorSettings= { [ 
+                {
+                value: this.props.attributes.colorText,
+                onChange: this.onChangeTextColor,
+                label: __('Text Color', 'blueprint-blocks'),
+                },
+                {
+                value: this.props.attributes.colorBG,
+                onChange: this.onChangeBGColor,
+                label: __('Background Color', 'blueprint-blocks'),
+                },
+                {
+                value: this.props.attributes.colorMoreLinkBG,
+                onChange: this.onChangeButtonBGColor,
+                label: __('Read More Button Background Color', 'blueprint-blocks'),
+                },
+                {
+                value: this.props.attributes.colorMoreLink,
+                onChange: this.onChangeButtonColor,
+                label: __('Read More Button Text Color', 'blueprint-blocks'),
+                },
+                ] }
+        />
+        );
+    }
+
+    getBlueprintApi() {
+        const Blueprint = wp.api.models.Status.extend( {
+            urlRoot: wpApiSettings.root + 'blueprint-mmk/v1/blueprint',
+            defaults: {
+                type: 'blueprint',
+                },
+            } );
+        const Blueprints = wp.api.collections.Statuses.extend( {
+            url: wpApiSettings.root + 'blueprint-mmk/v1/blueprint',
+            } );
+
+        const theBlueprint = new Blueprints();
+
+        theBlueprint.fetch().then( ( blueprint ) => {
+            //console.log( blueprint.blueprint_social.links );
+            this.props.setAttributes( {
+                mbtActive: blueprint.mbt_active,
+            } );
+
+        });
+    }
 
     getOptions() {
         const Book = wp.api.models.Post.extend( {
@@ -343,6 +580,7 @@ class mySelectPosts extends Component {
         const theBooks = new Books();
         
         theBooks.fetch().then( ( posts ) => {
+
         
         if( posts && 0 !== this.state.selectedPost ) {
             // If we have a selected Post, find that post and add it.
@@ -357,8 +595,8 @@ class mySelectPosts extends Component {
     }
 	
     render() {
-        let options = [ { value: 0, label: __( 'Select a Book' ) } ];
-        let mbtActive = false;
+        let options = [ { value: 0, label: __( 'Select a Post' ) } ];
+        let message = '';
         let previewClass = 'block-preview';
         let blockStyle = {
             backgroundColor: this.props.attributes.colorBG,
@@ -367,9 +605,8 @@ class mySelectPosts extends Component {
         let textStyle = {
             color: this.props.attributes.colorText,
         }
-        let bgStyle = {
-            backgroundColor: this.props.attributes.colorBG
-        }
+        
+        
     
         this.props.className += ' loading';
 
@@ -378,12 +615,14 @@ class mySelectPosts extends Component {
             this.state.posts.forEach((post) => {
                 options.push({value:post.id, label:post.title.rendered});
             });
+
+        }  else {
+           message =  'No books found. Please create books first.';
+        }
         
-        } 
         // Checking if we have anything in the object
         if( this.state.post !== undefined && this.state.post.hasOwnProperty('title')) {
            
-            mbtActive = true;
             this.props.className += ' has-post';
 
         } else {
@@ -404,58 +643,46 @@ class mySelectPosts extends Component {
             <div>
             <InspectorControls>   
                 
-                        <PanelColorSettings 
-                            title={ __('Colors', 'blueprint-blocks') }
-                            initialOpen={false}
-                            colorSettings= { [ 
-                                {
-                                value: this.props.attributes.colorText,
-                                onChange: this.onChangeTextColor,
-                                label: __('Text Color', 'blueprint-blocks'),
-                                },
-                                {
-                                value: this.props.attributes.colorBG,
-                                onChange: this.onChangeBGColor,
-                                label: __('Background Color', 'blueprint-blocks'),
-                                },
-                             ] }
-                        />
-    
-                       
+                <this.getColorSettings/>
+            
+                <PanelBody 
+                title="Book Settings"
+                initialOpen={ true }
+                className="blueprint-panel-body">
+
+                    <PanelRow className="book-select">
+                        { this.getBookSelect( options ) }
+                    </PanelRow>
+                    <this.getCoverToggle/> 
+                    <this.getSampleLinkToggle/>
+                    <this.getTitlePrefixToggle/> 
+                    <this.getButtonToggle/>
+                    <this.getMoreLinkToggle/>
                     
-                    
-               
-                </InspectorControls>
-              </div>
+
+                </PanelBody>
+        
+            </InspectorControls>
+            </div>
 
 
-            <div className="block-settings">
+           
             {
-                this.props.attributes.title ? (
-                    <div className="block-message active">
-                    <h2>{ this.props.attributes.title }</h2>
-                    </div>
+                this.props.attributes.mbtActive ? (
+                    
+                     this.getBlockSettings( options, message ) 
+
                 ) : (
-                    <div className="block-message"><span>No books found, or MyBookTable is not active.</span><span> Please activate <a href="https://wordpress.org/plugins/mybooktable/" target="_blank">MyBookTable</a> or create books first.</span></div>
+
+                    <div className="block-settings"> 
+                    <div className="block-message">
+                    <span>MyBookTable is not active.</span>
+                    <span> Please activate <a href="https://wordpress.org/plugins/mybooktable/" target="_blank">MyBookTable</a> and create books first.</span>
+                    </div>
+                    </div>
                 )
             }
-
-            {
-            mbtActive && (
-            <SelectControl 
-                onChange={this.onChangeSelectPost} 
-                value={ this.props.attributes.selectedPost } 
-                label={ __( 'Select a Book' ) } 
-                options={ options } 
-                className="book-select"
-            />  
-            )
-            
-            }
-
-            <this.getCoverToggle/> 
-            <this.getTitlePrefixToggle/> 
-             </div>
+          
 
             <div className={ previewClass }>           
                 <div className={ "inner-preview is-flex " + this.props.attributes.flexClass }>
@@ -469,23 +696,9 @@ class mySelectPosts extends Component {
                         />
                         )
                     }
-                    <div className="cover-links">
-                    {
-                        this.props.attributes.bookSample && (
-                            <span>View Book Sample</span>
-                        )   
-                    }
-                    {
-                        this.props.attributes.bookSample && this.props.attributes.audioSample && (
-                            <span className="divider">&nbsp;|&nbsp;</span>
-                        )
-                    }
-                    {
-                        this.props.attributes.audioSample && (
-                            <span>Hear Audiobook Sample</span>  
-                        )
-                    }
-                    </div>
+
+                    <this.getSampleLinks/>
+                    
                 </div>
 
                 
@@ -493,7 +706,7 @@ class mySelectPosts extends Component {
                 <div className="preview-right">
                    <div className="preview-right-top">
 
-                   <h2 className="preview-title is-flex"
+                   <h2 className="preview-title"
                         style={ textStyle }>
                     {
                         this.props.attributes.titlePrefix &&
@@ -511,12 +724,17 @@ class mySelectPosts extends Component {
                         <this.getTagline/>
 
                     
-                        <this.getPreviewBlurb/>
-                        
+                         <this.getPreviewBlurb/>
+
                     
                     </div>
 
-                      <this.getButtonSegment/>
+                    {
+                        this.props.attributes.showBuyLinks && (
+                            <this.getButtonSegment/>
+                        )
+                    }
+                      
 
                           
                 </div>
@@ -536,10 +754,10 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
 		__( 'Book' ),
 	],
 	attributes: {
-      selectedPost: {
+        selectedPost: {
          type: 'number',
          default: null,
-     },
+        },
         addTitlePrefix: {
             type: 'boolean',
             default: false,
@@ -568,14 +786,6 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
         customBlurb: {
             type: 'string',
         },
-        customButton: {
-            type: 'boolean',
-            default: false,
-        },
-        customLabel : {
-            type: 'boolean',
-            default: false,
-        },
         customTagline: {
             type: 'string',
         },
@@ -591,7 +801,6 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
             type: 'string',
             selector: 'a'
         },
-        
         styleURL: {
             type: 'string'
         },
@@ -606,12 +815,41 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
         },
         colorText: {
             type: 'string',
-            default: 'inherit',
+            default: '#333333',
         },
         colorBG: {
             type: 'string',
-            default: 'inherit',
+            default: '#ffffff',
         },
+        colorMoreLink: {
+            type: 'string',
+        },
+        colorMoreLinkBG: {
+            type: 'string',
+        },
+        mbtActive: {
+            type: 'boolean',
+            default: 'true',
+        },
+        showReadMore: {
+            type: 'boolean',
+            default: true
+        },
+        showBuyLinks: {
+            type: 'boolean',
+            default: true
+        },
+        readMoreLink: {
+            type: 'string'
+        },
+        readMoreText: {
+            type: 'string',
+            default: 'Read More'
+        },
+        showSampleLinks: {
+            type: 'boolean',
+            default: true
+        }
 	  },
 
 	edit: mySelectPosts,

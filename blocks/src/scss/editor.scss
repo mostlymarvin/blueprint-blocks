@@ -1,3 +1,20 @@
 @import '../mbt-book/editor.scss';
 @import '../mbt-book/buttons.scss';
 @import '../blueprint-author/editor.scss';
+
+
+.blueprint-panel-body .components-panel__row  {
+   padding-top:20px;
+   padding-bottom:20px;
+   border-bottom:1px solid #eee;
+   margin-bottom:20px;
+
+   h3.section-title {
+
+   }
+
+   .components-base-control .components-base-control__field,
+   .edit-post-settings-sidebar__panel-block .components-panel__body .components-base-control {
+        margin-bottom:8px !important;;
+    }
+}
