@@ -287,6 +287,7 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
    $blockStyles = '';
 
    
+
    if( $colorBG || $colorText ) {
       $blockStyles = sprintf(
          'style="background-color:%1$s;color:%2$s;"',
@@ -394,7 +395,7 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
    foreach( $atts as $key => $value ) {
       $attsarray[] = $key;
    }
-   print_r( $attsarray );
+   print_r( $atts['displaySettings'] );
    
    /**
     * Strip 'p' tags from last paragraph of blurb so we can insert
