@@ -267,26 +267,31 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
    /**
     * Simple true/false vars
     */
-   $addTitlePrefix = !empty( $atts['addTitlePrefix'] ) ? true : false; 
    $audioSample = !empty( $atts['audioSample'] ) ? $atts['audioSample'] : false;
    $bookSample = !empty( $atts['bookSample'] ) ? $atts['bookSample'] : false;
    $buylinks = !empty( $atts['buylinks'] ) ? $atts["buylinks"] : array();
-   $cover = !empty( $atts['cover'] ) ? $atts["cover"] : false;
+   $buttonsLabel = !empty( $atts['buttonsLabel']) ? $atts['buttonsLabel'] : 'Now Available From';
    $colorBG = !empty( $atts['colorBG'] ) ? $atts['colorBG'] : '';
+   $colorReadMoreLink = !empty( $atts['colorReadMoreLink'] ) ? $atts['colorReadMoreLink'] : false;
+   $colorReadMoreLinkBG = !empty( $atts['colorReadMoreLinkBG'] ) ? $atts['colorReadMoreLinkBG'] : false;
    $colorText = !empty( $atts['colorText'] ) ? $atts['colorText'] : '';
-   $colorMoreLink = !empty( $atts['colorMoreLink'] ) ? $atts['colorMoreLink'] : false;
-   $colorMoreLinkBG = !empty( $atts['colorMoreText'] ) ? $atts['colorMoreText'] : false;
-
-   $link = !empty( $atts['link'] ) ? $atts["link"] : get_the_permalink( $selectedPost );
-   $tagline = !empty( $atts['customTagline'] ) ? $atts["customTagline"] : false;
-   $title = !empty( $atts['title'] ) ? $atts["title"] : false;
-   $titlePrefix = !empty( $atts['titlePrefix'] ) ? $atts['titlePrefix'] : false;
-   $readMoreLink = !empty( $atts['readMoreLink'] ) ? $atts['readMoreLink'] : $link;
+   $cover = !empty( $atts['cover'] ) ? $atts["cover"] : false;
+   $customBlurb = !empty( $atts['customBlurb'] ) ? $atts['customBlurb'] : get_the_excerpt( $selectedPost );
+   $flexReverse = !empty( $atts['flexReverse'] ) ? true : false; 
+   $mbtActive = !empty( $atts['mbtActive'] )  ? true : false;
+   $readMoreLink = !empty( $atts['readMoreLink'] ) ? $atts['readMoreLink'] : get_the_permalink( $selectedPost );
    $readMoreText = !empty( $atts['readMoreText'] ) ? $atts['readMoreText'] : 'Read More';
-   $showReadMore = !empty( $atts['showReadMore'] ) ? true : false; 
-   $blockStyles = '';
-
+   $tagline = !empty( $atts['customTagline'] ) ? $atts["customTagline"] : false;
+   $title = !empty( $atts['title'] ) ? $atts["title"] : get_the_title( $selectedPost );
+   $titlePrefix = !empty( $atts['titlePrefix'] ) ? $atts['titlePrefix'] : false;
+  
+   $display = !empty( $atts['displaySettings'] ) ? $atts['displaySettings'] : array();
+   $showBuylinks = ( !empty( $display['buylinks'] ) && $display['buylinks'] === 'show' )  ? true : false;
+   $showMoreLink = ( !empty( $display['moreLink'] ) && $display['moreLink'] === 'show' ) ? true : false; 
+   $showSampleLinks = ( !empty( $display['sampleLinks'] ) && $display['sampleLinks'] === 'show' ) ? true : false; 
    
+   //print_r( $display );
+   $blockStyles = '';
 
    if( $colorBG || $colorText ) {
       $blockStyles = sprintf(
@@ -298,15 +303,30 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
    /**
     * vars with defaults
     */
-   $buttonsLabel = !empty( $atts['buttonsLabel']) ? $atts['buttonsLabel'] : 'Now Available From';
-   $flexClass = !empty( $atts['flexClass'] ) ? $atts['flexClass'] : 'flex-row';
-   $customBlurb = !empty( $atts['customBlurb'] ) ? $atts['customBlurb'] : false;
-   $blurb = $customBlurb ? $customBlurb : get_the_excerpt( $selectedPost );
    
-
+   $flexClass = $flexReverse ? 'flex-row-reverse' : 'flex-row';
    $allowedTags = blueprint_blocks_get_allowed_tags();
+   
+   
+   /**
+    * Buylinks 
+    */
    $styleURL = blueprint_dynamic_get_mbt_style_url();
-   $buttons = blueprint_dynamic_render_mbt_buttons( $buylinks, $styleURL );
+   $buttons = '';
+   $buylinkSection = '';
+
+   if( $showBuylinks && $buylinks ) {
+      $buttons = blueprint_dynamic_render_mbt_buttons( $buylinks, $styleURL );
+
+      $buylinkSection = sprintf(
+         '<div class="buylinks"><h5 class="buttons-label" %1$s>%2$s</h5> <div class="mbt-book blueprint-mbt-book">
+         <div class="mbt-book-buybuttons">%3$s</div></div> </div>',
+         $blockStyles,
+         $buttonsLabel,
+         $buttons
+      );
+   }
+
 
    $class = 'wp-block-blueprint-blocks-mbt-book';
    $audioSampleLink = '';
@@ -342,7 +362,7 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
    }
 
 
-   if( $audioSample || $bookSample ) {
+   if( ( $audioSample || $bookSample ) && $showSampleLinks ) {
       $cover_links = sprintf(
          '<div class="cover-links special">%1$s %2$s %3$s</div>',
          $bookSampleLink,
@@ -355,34 +375,34 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
       $cover_markup = sprintf(
          '<a href="%1$s" class="image-link">
          <img src="%2$s" class="preview-cover" alt="%3$s"/></a>',
-         $link,
+         esc_url( $readMoreLink ),
          $cover,
          $title
       );
    }
 
    
-   if( $addTitlePrefix && $titlePrefix ) {
+   if( $titlePrefix ) {
       $title_prefix = '<span class="title-prefix">' . wp_kses_post( $titlePrefix ) . '</span>' ;
    }
 
    $readMoreClass = 'button button-primary button-small bpb-more';
 
-   if( $colorMoreLinkBG || $colorMoreLink ) :
+   if( $colorReadMoreLinkBG || $colorReadMoreLink ) :
       $readMoreClass = 'button button-small bpb-more';
       $readMoreStyle = 'style="';
 
-      if( $colorMoreLink ) {
-         $readMoreStyle .= 'color: ' . sanitize_hex_color( $colorMoreLink ) . '; ';
+      if( $colorReadMoreLink ) {
+         $readMoreStyle .= 'color: ' . sanitize_hex_color( $colorReadMoreLink ) . '; ';
       }
-      if( $colorMoreLinkBG ) {
-         $readMoreStyle .= 'background-color: ' . sanitize_hex_color( $colorMoreLinkBG ) . '; ';
+      if( $colorReadMoreLinkBG ) {
+         $readMoreStyle .= 'background-color: ' . sanitize_hex_color( $colorReadMoreLinkBG ) . '; ';
       }
 
-      $readMoreStyle .= '";';
+      $readMoreStyle .= '"';
    endif;
    
-   if( $showReadMore ) {
+   if( $showMoreLink ) {
       $read_more_link =  sprintf(
          '<a class="%1$s" href="%2$s" %4$s>%3$s</a>',
          $readMoreClass,
@@ -391,18 +411,13 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
          $readMoreStyle
       );
    }
-   $attsarray = array();
-   foreach( $atts as $key => $value ) {
-      $attsarray[] = $key;
-   }
-   print_r( $atts['displaySettings'] );
    
    /**
     * Strip 'p' tags from last paragraph of blurb so we can insert
     * an inline read-more link, reformat with 'p' tags.
     */
 
-   $paragraphs = explode( '<p>', $blurb );
+   $paragraphs = explode( '<p>', $customBlurb );
    
    $count = '';
    if( $paragraphs ) {
@@ -417,7 +432,7 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
 
 
    $html = sprintf(
-   '<div class="%1$s" %11$s>
+   '<div class="%1$s" %10$s>
    <div class="inner is-flex %2$s">
    <div class="preview-left">
    %3$s
@@ -425,11 +440,10 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
    </div>
    <div class="preview-right">
    <div class="preview-right-top">
-   <h2 class="preview-title" %11$s>%5$s %6$s</h2>
+   <h2 class="preview-title" %10$s>%5$s %6$s</h2>
    <div class="preview-tagline">%7$s</div>
    <div class="preview-blurb">%8$s</div></div>
-   <div class="buylinks"><h5 class="buttons-label" %11$s>%9$s</h5> <div class="mbt-book blueprint-mbt-book">
-   <div class="mbt-book-buybuttons">%10$s</div></div> </div>
+   %9$s
    </div></div></div>',
    esc_attr( $class ),
    esc_attr( $flexClass ),
@@ -439,8 +453,7 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
    wp_kses_post( $title ),
    wp_kses_post( $tagline ),
    wp_kses_post( $bestBlurb ),
-   $buttonsLabel,
-   $buttons,
+   $buylinkSection,
    $blockStyles
    );
 

@@ -369,7 +369,6 @@ class mbtSelectBook extends Component {
          this.props.setAttributes( { showBuyLinks: true } );
          this.updateDisplaySettings( 'buylinks', 'show'  );
       }
-   
    }
    onChangeShowReadMore() {
       if ( this.props.attributes.showReadMore ) {
@@ -674,7 +673,7 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
          type: 'boolean', 
          default: 'true'
       },
-         readMoreLink: {
+      readMoreLink: {
          type: 'string'
       },
       readMoreText: {
