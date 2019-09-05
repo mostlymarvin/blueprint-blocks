@@ -4,141 +4,66 @@
  * Author Profile + Photo and Social Links
  */
 
-const { __ } = wp.i18n; 
-const { registerBlockType } = wp.blocks; 
+const { __ } = wp.i18n;
+const { registerBlockType } = wp.blocks;
 const { SelectControl, ToggleControl } = wp.components;
 const { Component } = wp.element;
-const { RichText, MediaUpload  } = wp.editor;
+const { RichText, MediaUpload, InnerBlocks  } = wp.editor;
+
 
 
 class myAuthorEdit extends Component {
-    static getInitialState( selectedUser ) {
+    static getInitialState( selectedAuthor ) {
 		return {
-		  users: [],
-		  selectedUser: selectedUser,
-          user: {}, 
+          authors: [],
+          selectedAuthor: selectedAuthor,
+          author: {},
 		};
       }
-      
+
 
     constructor() {
         super( ...arguments );
-        
+
         this.state = this.constructor.getInitialState( this.props.attributes.selectedUser );
-        
-        this.getUsers = this.getUsers.bind(this);
-        // Load users.
-        this.getUsers();
+
+        this.getAuthors = this.getAuthors.bind(this);
+        this.getAuthors();
 
         this.getBlueprintApi = this.getBlueprintApi.bind(this);
         this.getBlueprintApi();
 
+        this.onChangeSelectAuthor = this.onChangeSelectAuthor.bind(this);
 
-        this.onChangeSelectUser = this.onChangeSelectUser.bind(this);
-        this.getSocialLinks = this.getSocialLinks.bind(this);
-        this.getSiteLinks = this.getSiteLinks.bind(this);
-        this.getUserLinks = this.getUserLinks.bind(this);
         this.onSelectImage = this.onSelectImage.bind(this);
-        this.getLinkTypeToggle = this.getLinkTypeToggle.bind(this);
-        this.onChangeLinkType = this.onChangeLinkType.bind(this);
         this.onChangeProfileTitle = this.onChangeProfileTitle.bind(this);
-    
-    }
-    onChangeSelectUser( value ) {
-        // Find the post
-        const user = this.state.users.find( ( item ) => { return item.id == parseInt( value ) } );
-        //console.log( parseInt( value ) );
-        // Set the state
-        this.setState( { selectedUser: parseInt( value ), user } );
-
-        const userName = user.profile_display_name ? user.profile_display_name[0] : null;
-        const userDescription = user.description ? user.description : null;
-        console.log( userDescription );
-        const amazon = user.amazon_link ? user.amazon_link : null;
-        const bookbub = user.bookbub_link ? user.bookbub_link : null;
-        const facebook = user.facebook_link ? user.facebook_link : null;
-        const instagram = user.instagram_link ? user.instagram_link : null;
-        const linkedin = user.linkedin_link ? user.linkedin_link : null;
-        const pinterest = user.pinterest_link ? user.pinterest_link : null;
-        const twitter = user.twitter_link ? user.twitter_link : null;
-
-        const socialLinks = [
-           {
-               name: 'amazon', 
-               link : amazon,
-           },
-           {
-               name: 'bookbub', 
-               link : bookbub,
-           },
-           {
-               name: 'facebook', 
-               link : facebook,
-           },
-           {
-               name: 'instagram', 
-               link : instagram,
-           },
-           {
-               name: 'linkedin', 
-               link : linkedin,
-           },
-           {
-               name: 'pinterest', 
-               link : pinterest,
-           },
-           {
-               name: 'twitter', 
-               link : twitter,
-           },
-        ];
-
-        // Set the attributes
-        this.props.setAttributes( {
-            selectedUser: parseInt( value ),
-            userName: userName,
-            userDescription: userDescription,
-            userLinks: socialLinks,
-            customTitle: this.props.attributes.customTitle ? this.props.attributes.customTitle : userName,
-        } );
     }
 
-     
+    getAuthors() {
 
-    onChangeProfileTitle( newValue ) {
-        this.props.setAttributes( { customTitle: newValue } );
-    } 
-
-    onChangeLinkType() {
-        
-        if ( this.props.attributes.useSiteLinks ) {
-            this.props.setAttributes( { 
-                useSiteLinks: false,
+        const Author = wp.api.models.Taxonomy.extend( {
+            urlRoot: wpApiSettings.root + 'wp/v2/mbt_author',
             } );
-           // console.log( this.props.attributes.whichLinks );
-        } else {
-            this.props.setAttributes( { 
-                useSiteLinks: true,
-             } );
-           // console.log( this.props.attributes.whichLinks );
-        }
-    
-    }   
+        const Authors = wp.api.collections.Taxonomies.extend( {
+            url: wpApiSettings.root + 'wp/v2/mbt_author',
+            } );
 
-    getUsers() {
+        const theAuthors = new Authors();
 
-        return ( new wp.api.collections.Users() ).fetch().then( ( users ) => {
-            if( users && 0 !== this.state.selectedUser ) {
-            
-              const user = users.find( ( item ) => { return item.id == this.state.selectedUser } );
-              
+        theAuthors.fetch().then( ( authors ) => {
 
-              this.setState( { user, users } );
+            if( authors && 0 !== this.state.selectedAuthor ) {
+                // If we have a selected Post, find that post and add it.
+                const author = authors.find( ( item ) => { return item.id == this.state.selectedAuthor } );
 
-            } else {
-              this.setState({ users });
-            }
-          });
+                this.setState( { author, authors } );
+
+                } else {
+                   this.setState({ authors });
+                }
+
+        });
+
     }
 
     getBlueprintApi() {
@@ -164,40 +89,39 @@ class myAuthorEdit extends Component {
         });
     }
 
-    getLinkTypeToggle() {
-        return (
-            <ToggleControl
-            label="Use site-wide social media links instead of user profile social links?"
-            checked={ !! this.props.attributes.useSiteLinks }
-            onChange={ this.onChangeLinkType }
-            className="link-type"
-            />
-        );
+    onChangeSelectAuthor( value ) {
+        // Find the author
+        const author = this.state.authors.find( ( item ) => { return item.id == parseInt( value ) } );
+
+        // Set the state
+        this.setState( { selectedAuthor: parseInt( value ), author } );
+
+        const authorName = author.name ? author.name : null;
+        console.log( authorName );
+
+        const authorDescription = author.description ? author.description : null;
+
+        const authorLink = author.link ? author.link : null;
+
+        // Set the attributes
+        this.props.setAttributes( {
+            selectedAuthor: parseInt( value ),
+            authorName: authorName,
+            authorDescription: authorDescription,
+            authorLink: authorLink,
+            profileTitle: authorName,
+        } );
     }
 
-    getUserLinks() {
-        return (
-            this.props.attributes.userLinks ? (
-               <div className="blueprint-profile-links user-links">
-               <ul>
-                { 
-                    this.props.attributes.userLinks.map( (item, key) =>
-                    {
-                        return <li className="profile-link">
-                        <a className={ item.name + ' icon-' + item.name }
-                            href={ item.link }>
-                            <span>{ item.name }</span>
-                        </a>
-                        </li>
-                    }
-                    )
-                }
-                </ul>
-               </div>
-            ) : (
-                null
-            )
-            );
+    onSelectImage( value ) {
+        //console.log( value );
+        this.props.setAttributes({
+            imgUrl: value.sizes.full.url,
+        })
+    }
+
+    onChangeProfileTitle( newValue ) {
+        this.props.setAttributes( { profileTitle: newValue } );
     }
 
     getSiteLinks() {
@@ -205,7 +129,7 @@ class myAuthorEdit extends Component {
             this.props.attributes.siteLinks ? (
             <div className="blueprint-profile-links site-links">
             <ul>
-            { 
+            {
                 this.props.attributes.siteLinks.map( (item, key) =>
                 {
                     return <li className="profile-link">
@@ -225,102 +149,84 @@ class myAuthorEdit extends Component {
         );
     }
 
-    getSocialLinks() {
-        return (
-            this.props.attributes.useSiteLinks ? (
-                <this.getSiteLinks/>
-            ) : (
-                <this.getUserLinks/>
-               
-            )
-        )
-    }
 
-    onSelectImage( value ) {
-        //console.log( value );
-        this.props.setAttributes({
-            imgUrl: value.sizes.full.url,
-        })
-    }
-
-    
     render() {
-        let options = [ { value: 0, label: __( 'Select a User' ) } ];
-        let output = 'Choose User';
-    
+        let options = [ { value: 0, label: __( 'Select an Author' ) } ];
+        let output = 'Choose Author';
+
         this.props.className += ' loading';
 
-        if( this.state.users.length > 0 ) {
-            this.state.users.forEach( ( user ) => {
-            options.push({ value:user.id, label:user.name });
+        if( this.state.authors.length > 0 ) {
+            this.state.authors.forEach( ( author ) => {
+            options.push({ value:author.id, label:author.name });
         });
-        
+
         } else {
-            output = __( 'No users found.' );
+            output = 'No authors found - please install MyBookTable or create author first.'
         }
         // Checking if we have anything in the object
-        if( this.state.user !== undefined && this.state.user.hasOwnProperty('name')) {
-            output = <div className="user">
-            <a href={ this.state.user.link }> 
-                { this.state.user.name }
+        if( this.state.author !== undefined && this.state.author.hasOwnProperty('name')) {
+            output = <div className="author">
+            <a href={ this.state.author.link }>
+                { this.state.author.name }
             </a>
             </div>;
-        
-            this.props.className += ' has-user';
+
+            this.props.className += ' has-author';
 
         } else {
-            this.props.className += ' no-user';
+            this.props.className += ' no-author';
         }
 
-        
-    
+
+
 		return (
-		 
             <div className={this.props.className }>
 
-            <SelectControl 
-                onChange={this.onChangeSelectUser} 
-                value={ this.props.attributes.selectedUser } 
-                label={ __( 'Select an Author' ) } 
-                options={ options } 
+            <SelectControl
+                onChange={this.onChangeSelectAuthor}
+                value={ this.props.attributes.selectedAuthor }
+                label={ __( 'Select an Author' ) }
+                options={ options }
                 className="author-select"
-            />  
-            <this.getLinkTypeToggle/>
+            />
+
             <div className="profile-preview">
 
             <h3 className="profile-title">
             <RichText
                 tagName='span'
-                placeholder= { this.props.attributes.customTitle }
+                placeholder= { this.props.attributes.authorName }
                 className="buttons-label"
-                value={ this.props.attributes.customTitle }
+                value={ this.props.attributes.profileTitle }
                 onChange={ this.onChangeProfileTitle }
                 keepPlaceholderOnFocus={true}
                 />
             </h3>
-            <div className="inner ">
+            <div className="inner is-flex">
             <div className="profile-main">
-           
-            <MediaUpload 
+
+            <MediaUpload
                 onSelect={this.onSelectImage}
                 render={ ({ open }) => {
                     return <div className="media">
                             <span className="dashicons dashicons-edit edit-media" onClick={ open }></span>
-                            <img 
+                            <img
                             src={ this.props.attributes.imgUrl }
                             onClick={ open }
                             /></div>;
                 }}
             />
-            
-            <div class="profile-data"> 
-                
+
+            <div class="profile-data">
+
                 <div class="profile-blurb">
                 { this.props.attributes.userDescription }
                 </div>
-                </div>      
             </div>
-                <this.getSocialLinks/>
+
+            </div>
+              <InnerBlocks />
             </div>
             </div>
             </div>
@@ -328,9 +234,11 @@ class myAuthorEdit extends Component {
 	}
 }
 
+
+
 registerBlockType( 'blueprint-blocks/blueprint-author', {
-	title: __( 'Author Profile' ), 
-	icon: 'admin-users', 
+	title: __( 'Author Profile' ),
+	icon: 'admin-users',
 	category: 'blueprint-blocks',
 	keywords: [
 		__( 'Author' ),
@@ -338,7 +246,7 @@ registerBlockType( 'blueprint-blocks/blueprint-author', {
         __( 'Profile' ),
 	],
 	attributes: {
-        selectedUser: {
+        selectedAuthor: {
             type: 'number',
             default: null,
         },
@@ -348,21 +256,11 @@ registerBlockType( 'blueprint-blocks/blueprint-author', {
         userDescription: {
             type: 'string',
         },
-        customTitle: {
-             type: 'string',   
+        userLink: {
+          type: 'string',
         },
-        useSiteLinks : {
-            type: 'boolean',
-            default: false
-        },
-        userLinks: {
-            type: 'array'
-        },
-        siteLinks: {
-            type: 'array',
-        },
-        siteLinkDisplay: {
-            type: 'array',
+        profileTitle: {
+             type: 'string',
         },
         imgUrl: {
             type: 'string',
@@ -373,34 +271,46 @@ registerBlockType( 'blueprint-blocks/blueprint-author', {
 	edit: myAuthorEdit,
 
 	save: function( props ) {
-		//console.log( props.attributes.buylinks );
+		let imgUrl = props.attributes.imgUrl;
+    let imgDefault = 'http://placehold.it/500';
+
+    if( imgUrl === imgDefault ) {
+      imgUrl = null;
+    }
 
 		return (
 			<div className={ props.className }>
-            
-            <h3 className="profile-title">
-                <span>{ props.attributes.customTitle }</span>
-            </h3>
 
-            <div className="inner is-flex">
+        <h3 className="profile-title">
+            <span>{ props.attributes.profileTitle }</span>
+        </h3>
+
+        <div className="inner is-flex">
+
             <div className="profile-main">
+            {
+              imgUrl && (
                 <div className="media">
                 <img src={ props.attributes.imgUrl }
                 className="profile-image"/>
                 </div>
-                <div className="profile-info">
-                    <RichText.Content
-                    className="profile-blurb"
-                    tagName='div'
-                    multiline='p'
-                    value={ props.attributes.userDescription }
-                   />
-                </div>
+              )
+            }
+
+            <div className="profile-info">
+              <RichText.Content
+                className="profile-blurb"
+                tagName='div'
+                multiline='p'
+                value={ props.attributes.userDescription }
+               />
             </div>
+            </div>
+
             <div className="blueprint-profile-links">
             <ul>
                 {
-                    props.attributes.useSiteLinks ? (
+                    props.attributes.useSiteLinks && (
                         props.attributes.siteLinks.map( (item, key) =>
                     {
                         return <li className="profile-link">
@@ -412,23 +322,15 @@ registerBlockType( 'blueprint-blocks/blueprint-author', {
                     }
                     )
 
-                    ) : (
-                    props.attributes.userLinks.map( (item, key) =>
-                    {
-                        return <li className="profile-link">
-                        <a className={ item.name + ' icon-' + item.name }
-                            href={ item.link }>
-                            <span>{ item.name }</span>
-                        </a>
-                        </li>
-                    }
-                    )
                     )
                 }
             </ul>
             </div>
-			</div>
-            </div>
+
+            <InnerBlocks.Content />
+
+        </div>
+      </div>
 		  );
 	},
 } );

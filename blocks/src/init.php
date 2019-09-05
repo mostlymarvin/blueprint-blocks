@@ -4,7 +4,7 @@
    */
 
 function my_plugin_block_categories( $categories, $post ) {
-    
+
   return array_merge(
         $categories,
         array(
@@ -15,7 +15,7 @@ function my_plugin_block_categories( $categories, $post ) {
             ),
         )
     );
-  
+
 }
 add_filter( 'block_categories', 'my_plugin_block_categories', 10, 2 );
 
@@ -29,22 +29,22 @@ add_filter( 'block_categories', 'my_plugin_block_categories', 10, 2 );
       plugins_url('/dist/blocks.build.js', dirname(__FILE__)),
       array('wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data')
     );
-  
-    // Register our block's base CSS  
+
+    // Register our block's base CSS
     wp_register_style(
       'blueprint-blocks-style',
       plugins_url( 'dist/blocks.style.build.css', dirname(__FILE__ )),
       array()
     );
-    
+
     // Register our block's editor-specific CSS
     wp_register_style(
       'blueprint-blocks-editor-style',
       plugins_url('/dist/blocks.editor.build.css', dirname(__FILE__)),
       array( 'wp-edit-blocks' )
-    );  
+    );
 
-    
+
     $blocks = array(
       array(
         'name' => 'mbt-book',
@@ -53,6 +53,9 @@ add_filter( 'block_categories', 'my_plugin_block_categories', 10, 2 );
       array(
         'name' => 'blueprint-author',
       ),
+      array(
+        'name' => 'social-links',
+      )
     );
 
     foreach( $blocks as $block ) {
@@ -67,12 +70,12 @@ add_filter( 'block_categories', 'my_plugin_block_categories', 10, 2 );
             'editor_script' => 'blueprint-blocks',
             'editor_style' => 'blueprint-blocks-editor-style',
             'render_callback' => $render_cb,
-        
+
         ));
     }
 
   }
-  
+
 add_action('init', 'blueprint_blocks_register_blocks', 2, 200);
 
 
@@ -83,19 +86,19 @@ require_once plugin_dir_path( __FILE__ ) . 'blueprint-author/index.php';
 add_action( 'rest_api_init', 'blueprint_register_api' );
 
 function blueprint_register_api() {
-  register_rest_route( 
-    'blueprint-mmk/v1', 
+  register_rest_route(
+    'blueprint-mmk/v1',
     '/blueprint',
     array(
       'methods' => 'GET',
       'callback' => 'blueprint_register_rest_route',
-    ) 
+    )
   );
 }
 
 function blueprint_register_rest_route( WP_REST_Request $request ) {
   /**
-   * Just creating the endpoint with filterable return so that 
+   * Just creating the endpoint with filterable return so that
    * other segments can add to return.
    */
   $rest_fields = array();
