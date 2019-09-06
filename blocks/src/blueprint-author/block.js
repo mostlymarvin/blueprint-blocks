@@ -12,7 +12,7 @@ const { RichText, MediaUpload, InnerBlocks  } = wp.editor;
 
 const TEMPLATE = [
 	['blueprint-blocks/social-link', {}, []],
-]
+];
 
 class myAuthorEdit extends Component {
     static getInitialState( selectedAuthor ) {
@@ -20,14 +20,14 @@ class myAuthorEdit extends Component {
           authors: [],
           selectedAuthor: selectedAuthor,
           author: {},
-		};
-      }
+		      };
+    }
 
 
     constructor() {
         super( ...arguments );
 
-        this.state = this.constructor.getInitialState( this.props.attributes.selectedUser );
+        this.state = this.constructor.getInitialState( this.props.attributes.selectedAuthor );
 
         this.getAuthors = this.getAuthors.bind(this);
         this.getAuthors();
@@ -39,6 +39,7 @@ class myAuthorEdit extends Component {
 
         this.onSelectImage = this.onSelectImage.bind(this);
         this.onChangeProfileTitle = this.onChangeProfileTitle.bind(this);
+        this.onChangeAuthorDescription = this.onChangeAuthorDescription.bind(this);
     }
 
     getAuthors() {
@@ -52,6 +53,7 @@ class myAuthorEdit extends Component {
 
         const theAuthors = new Authors();
 
+
         theAuthors.fetch().then( ( authors ) => {
 
             if( authors && 0 !== this.state.selectedAuthor ) {
@@ -63,9 +65,7 @@ class myAuthorEdit extends Component {
                 } else {
                    this.setState({ authors });
                 }
-
         });
-
     }
 
     getBlueprintApi() {
@@ -95,28 +95,23 @@ class myAuthorEdit extends Component {
         // Find the author
         const author = this.state.authors.find( ( item ) => { return item.id == parseInt( value ) } );
 
+
         // Set the state
-        this.setState( { selectedAuthor: parseInt( value ), author } );
+        this.setState( { selectedAuthor: parseInt( value ), author, } );
 
-        const authorName = author.name ? author.name : null;
-        console.log( authorName );
-
-        const authorDescription = author.description ? author.description : null;
-
-        const authorLink = author.link ? author.link : null;
 
         // Set the attributes
         this.props.setAttributes( {
             selectedAuthor: parseInt( value ),
-            authorName: authorName,
-            authorDescription: authorDescription,
-            authorLink: authorLink,
-            profileTitle: authorName,
+            authorName: author.name,
+            authorDescription: author.description,
+            authorLink: author.link,
+            profileTitle: author.name,
         } );
+
     }
 
     onSelectImage( value ) {
-        //console.log( value );
         this.props.setAttributes({
             imgUrl: value.sizes.full.url,
         })
@@ -124,6 +119,10 @@ class myAuthorEdit extends Component {
 
     onChangeProfileTitle( newValue ) {
         this.props.setAttributes( { profileTitle: newValue } );
+    }
+
+    onChangeAuthorDescription( newValue ) {
+      this.props.setAttributes( { authorDescription: newValue } );
     }
 
     getSiteLinks() {
@@ -155,6 +154,7 @@ class myAuthorEdit extends Component {
     render() {
         let options = [ { value: 0, label: __( 'Select an Author' ) } ];
         let output = 'Choose Author';
+        const placeholder = 'Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.';
 
         this.props.className += ' loading';
 
@@ -166,6 +166,7 @@ class myAuthorEdit extends Component {
         } else {
             output = 'No authors found - please install MyBookTable or create author first.'
         }
+
         // Checking if we have anything in the object
         if( this.state.author !== undefined && this.state.author.hasOwnProperty('name')) {
             output = <div className="author">
@@ -193,43 +194,59 @@ class myAuthorEdit extends Component {
 
             <div className="profile-preview">
 
-            <h3 className="profile-title">
-            <RichText
-                tagName='span'
-                placeholder= { this.props.attributes.authorName }
-                className="buttons-label"
-                value={ this.props.attributes.profileTitle }
-                onChange={ this.onChangeProfileTitle }
-                keepPlaceholderOnFocus={true}
-                />
-            </h3>
-            <div className="inner is-flex">
-            <div className="profile-main">
+            {
+              this.props.attributes.profileTitle && (
 
-            <MediaUpload
-                onSelect={this.onSelectImage}
-                render={ ({ open }) => {
-                    return <div className="media">
-                            <span className="dashicons dashicons-edit edit-media" onClick={ open }></span>
-                            <img
-                            src={ this.props.attributes.imgUrl }
-                            onClick={ open }
-                            /></div>;
-                }}
-            />
+                <h3 className="profile-title">
+                <RichText
+                    tagName='span'
+                    placeholder= { 'Author Name' }
+                    className="buttons-label"
+                    value={ this.props.attributes.profileTitle }
+                    onChange={ this.onChangeProfileTitle }
+                    keepPlaceholderOnFocus={true}
+                    />
+                </h3>
 
-            <div class="profile-data">
+              )
+            }
+            {
+              this.props.attributes.selectedAuthor && (
+                <div className="inner is-flex">
+                <div className="profile-main">
 
-                <div class="profile-blurb">
-                { this.props.attributes.userDescription }
+                <MediaUpload
+                    onSelect={this.onSelectImage}
+                    render={ ({ open }) => {
+                        return <div className="media">
+                                <span className="dashicons dashicons-edit edit-media" onClick={ open }></span>
+                                <img
+                                src={ this.props.attributes.imgUrl }
+                                onClick={ open }
+                                /></div>;
+                    }}
+                  />
+
+                  <div class="profile-blurb">
+                    <RichText
+                        tagName='div'
+                        placeholder='Short Description or Bio'
+                        className="author-blurb"
+                        value={ this.props.attributes.authorDescription }
+                        onChange={ this.onChangeAuthorDescription }
+                        keepPlaceholderOnFocus={ false }
+                        />
+                  </div>
                 </div>
-            </div>
 
-            </div>
-            <div className="social-icons">
-                <InnerBlocks allowedBlocks={['blueprint-blocks/social-link']} template={TEMPLATE} />
-              </div>
-            </div>
+                <div className="social-icons">
+                    <InnerBlocks
+                      allowedBlocks={['blueprint-blocks/social-link']} template={TEMPLATE} />
+                </div>
+
+                </div>
+              )
+            }
             </div>
             </div>
 		)
@@ -248,17 +265,21 @@ registerBlockType( 'blueprint-blocks/blueprint-author', {
         __( 'Profile' ),
 	],
 	attributes: {
+        authorList: {
+          type:'array',
+        },
         selectedAuthor: {
             type: 'number',
             default: null,
         },
-        userName: {
+        authorName: {
             type: 'string',
         },
-        userDescription: {
+        authorDescription: {
             type: 'string',
+            selector: 'author-blurb',
         },
-        userLink: {
+        authorLink: {
           type: 'string',
         },
         profileTitle: {
@@ -299,12 +320,12 @@ registerBlockType( 'blueprint-blocks/blueprint-author', {
               )
             }
 
-            <div className="profile-info">
+            <div className="profile-blurb">
               <RichText.Content
-                className="profile-blurb"
+                className="author-blurb"
                 tagName='div'
                 multiline='p'
-                value={ props.attributes.userDescription }
+                value={ props.attributes.authorDescription }
                />
             </div>
             </div>

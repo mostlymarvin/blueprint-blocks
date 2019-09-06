@@ -111,11 +111,9 @@ class editSocialLink extends Component {
 
   linkInputFocus() {
     this.setState({ unFocused: false });
-    console.log( 'Its Focused!');
   }
   linkInputBlur() {
     this.setState({ unFocused: true });
-    console.log( 'Its Not Focused!');
   }
 
   getInspectorControls( options ) {

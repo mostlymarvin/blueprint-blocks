@@ -1,15 +1,31 @@
 .wp-block-blueprint-blocks-blueprint-author {
     box-sizing: border-box;
-   
+
    .profile-preview {
        margin-top:40px;
+
+       .profile-main {
+         flex-basis:70%;
+         padding-right:2%;
+
+         & * {
+           max-width:100%;
+         }
+         & .components-autocomplete {
+           max-width:98%;
+         }
+      }
+
+       .social-icons {
+         flex-basis:28%;
+       }
    }
 
     .media {
         position: relative;
         background-color: rgba( #0085BA, .1 );
-    
-        
+
+
         span.edit-media {
             display:block;
             position:absolute;

@@ -7,6 +7,7 @@
    }
    .is-flex {
       display:flex;
+      align-items:flex-start;
    }
 
    .media {
@@ -29,7 +30,7 @@
       text-align:center;
       position:relative;
       margin-bottom:30px;
-      
+
       span {
          display:inline-block;
          padding:0 12px;
@@ -45,7 +46,7 @@
       clear:both;
    }
    .blueprint-profile-links ul{
-      
+
       li {
          list-style:none;
 
