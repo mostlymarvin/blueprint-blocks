@@ -178,7 +178,7 @@ class myAuthorEdit extends Component {
             this.props.className += ' no-author';
         }
 
-
+        console.log( InnerBlocks.Content );
 
 		return (
             <div className={this.props.className }>
@@ -226,7 +226,9 @@ class myAuthorEdit extends Component {
             </div>
 
             </div>
-              <InnerBlocks />
+            <div className="social-icons">
+                <InnerBlocks />
+              </div>
             </div>
             </div>
             </div>
@@ -308,26 +310,12 @@ registerBlockType( 'blueprint-blocks/blueprint-author', {
             </div>
 
             <div className="blueprint-profile-links">
-            <ul>
-                {
-                    props.attributes.useSiteLinks && (
-                        props.attributes.siteLinks.map( (item, key) =>
-                    {
-                        return <li className="profile-link">
-                        <a className={ item.network + ' icon-' + item.network }
-                            href={ item.url }>
-                            <span>{ item.network }</span>
-                        </a>
-                        </li>
-                    }
-                    )
-
-                    )
-                }
-            </ul>
+              <nav className="blueprint-social-wrap bpauthor-block-social">
+                <ul className="blueprint-social">
+                  <InnerBlocks.Content />
+                </ul>
+              </nav>
             </div>
-
-            <InnerBlocks.Content />
 
         </div>
       </div>

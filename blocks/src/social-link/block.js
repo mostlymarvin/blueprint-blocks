@@ -31,6 +31,13 @@ class editSocialLink extends Component {
       this.getInspectorControls = this.getInspectorControls.bind(this);
 
       this.onChangeSelectNetwork = this.onChangeSelectNetwork.bind(this);
+
+      this.onChangeSocialLink = this.onChangeSocialLink.bind(this);
+
+      this.onChangeButtonColor = this.onChangeButtonColor.bind(this);
+      this.onChangeButtonBG = this.onChangeButtonBG.bind(this);
+      this.onChangeButtonHovColor = this.onChangeButtonHovColor.bind(this);
+      this.onChangeButtonBGHov = this.onChangeButtonBGHov.bind(this);
     }
 
     getOptions() {
@@ -48,32 +55,33 @@ class editSocialLink extends Component {
 
       theBlueprint.fetch().then( ( blueprint ) => {
 
+         const style = blueprint.blueprint_social.display;
+         const bgColor = style.background ? style.background : '#4b4b4b';
+         const color  = style.color ? style.color : '#f4f4f4';
+         const colorHov  = style.hover_color ? style.hover_color : '#f4f4f4';
+         const bgColorHov  = style.hover_background ? style.hover_background : '#4b4b4b';
+         const borderRadius = style.border_radius ? style.border_radius : '0';
+
+         console.log( bgColorHov );
          this.props.setAttributes( {
             bpSocialStatus: blueprint.blueprint_social.status,
             networks: blueprint.blueprint_social.networks,
-            display: blueprint.blueprint_social.display,
+            bgColor: bgColor,
+            color: color,
+            bgColorHov: bgColorHov,
+            colorHov: colorHov,
+            borderRadius: borderRadius,
+            imgDir: blueprint.img_dir,
          } );
 
          this.setState( { networks: blueprint.blueprint_social.networks });
 
-
-
-         //if( blueprint && null !== this.state.selectedNetwork ) {
-            //If we have a selected Network, find that Network and add it.
-          //  const networks = this.props.attributes.networks;
-          //  const network = networks.find( ( item )
-          //  => { return item.tag == this.state.selectedNetwork } );
-
-          //  this.setState( { network, networks } );
-          //} else {
-          //  this.setState( { networks } );
-          //}
       });
     }
 
     onChangeSelectNetwork( value ) {
 
-        const network = this.state.networks.find(function (element) {
+        const network = this.state.networks.find( function (element) {
           return element.tag == value;
         });
 
@@ -82,9 +90,21 @@ class editSocialLink extends Component {
             networkName: network.name,
         } );
 
-        console.log( network.name );
+        //console.log( network.name );
     }
 
+  onChangeButtonColor( newColor ) {
+    this.props.setAttributes({ color : newColor });
+    }
+  onChangeButtonBG( newbgColor ) {
+    this.props.setAttributes({ bgColor : newbgColor });
+    }
+  onChangeButtonHovColor( newColorHov ) {
+    this.props.setAttributes({ colorHov : newColorHov });
+    }
+  onChangeButtonBGHov( newbgColorHov ) {
+    this.props.setAttributes({ bgColorHov : newbgColorHov });
+    }
 
 
   getInspectorControls( options ) {
@@ -97,24 +117,24 @@ class editSocialLink extends Component {
            initialOpen={false}
            colorSettings= { [
            {
-           value: this.props.attributes.colorText,
-           onChange:  this.onChangeTextColor,
-           label: __('Text Color', 'blueprint-blocks'),
+           value: this.props.attributes.color,
+           onChange:  this.onChangeButtonColor,
+           label: __('Button: Icon Color', 'blueprint-blocks'),
            },
            {
-           value: this.props.attributes.colorBG,
-           onChange: this.onChangeBGColor,
-           label: __('Background Color', 'blueprint-blocks'),
+           value: this.props.attributes.bgColor,
+           onChange: this.onChangeButtonBG,
+           label: __('Button: Background Color', 'blueprint-blocks'),
            },
            {
-           value: this.props.attributes.colorReadMoreLinkBG,
-           onChange: this.onChangeReadMoreLinkBGColor,
-           label: __('Read More Button Background Color', 'blueprint-blocks'),
+           value: this.props.attributes.colorHov,
+           onChange: this.onChangeButtonHovColor,
+           label: __('Button Hover: Icon Color', 'blueprint-blocks'),
            },
            {
-           value: this.props.attributes.colorReadMoreLink,
-           onChange: this.onChangeReadMoreLinkColor,
-           label: __('Read More Button Text Color', 'blueprint-blocks'),
+           value: this.props.attributes.bgColorHov,
+           onChange: this.onChangeButtonBGHov,
+           label: __('Button Hover: Background Color', 'blueprint-blocks'),
            },
            ] }
            />
@@ -133,10 +153,26 @@ class editSocialLink extends Component {
               className="network-select"
            />
            </PanelRow>
+
+           <PanelRow className="display-block">
+           <TextControl
+              label={ this.props.attributes.selectedNetwork + " link" }
+              help={ "Full URL to " + this.props.attributes.selectedNetwork + " profile" }
+              placeholder={ "https://" + this.props.attributes.selectedNetwork + ".com" }
+              value={ this.props.attributes.socialLink }
+              onChange={ this.onChangeSocialLink }
+              keepPlaceholderOnFocus={true}
+           />
+           </PanelRow>
+
            </PanelBody>
            </InspectorControls>
         </div>
      );
+  }
+
+  onChangeSocialLink( newValue ) {
+    this.props.setAttributes( { socialLink: newValue });
   }
 
   render() {
@@ -175,12 +211,39 @@ class editSocialLink extends Component {
         previewClass = 'block-preview active-preview';
      }
 
+     let backgroundImage = this.props.attributes.imgDir + 'icons/' + this.props.attributes.selectedNetwork + '.svg';
+
+     let linkbg = {
+       backgroundColor: this.props.attributes.bgColor,
+       borderRadius: this.props.attributes.borderRadius,
+     }
+     let iconStyle = {
+       backgroundColor: this.props.attributes.color,
+       maskImage: ' url( ' + backgroundImage + ')',
+       webkitMaskImage: ' url( ' + backgroundImage + ')',
+     }
+
      return (
 
           <div
           className={ this.props.className }>
-          Hello!
+
           { this.getInspectorControls( options ) }
+
+          {
+            this.props.attributes.selectedNetwork &&
+            this.props.attributes.socialLink ? (
+              <a href={ this.props.attributes.socialLink }
+              className={ this.props.attributes.selectedNetwork + " social-link icon-" + this.props.attributes.selectedNetwork }
+              style={ linkbg } >
+              <span className="editor-icon" style={iconStyle}></span>
+              </a>
+            ) : (
+              <div className="social-setup">
+              Choose social network and add URL at right.
+              </div>
+            )
+          }
           </div>
         )
     }
@@ -196,6 +259,7 @@ registerBlockType( 'blueprint-blocks/social-link', {
         __( 'Link' ),
         __( 'Facebook' ),
 	],
+  parent: ['blueprint-blocks/blueprint-author'],
 	attributes: {
         selectedNetwork: {
             type: 'string',
@@ -208,18 +272,33 @@ registerBlockType( 'blueprint-blocks/social-link', {
           type: 'array',
           default: [],
         },
+        imgDir: {
+          type: 'string',
+        },
         socialLink: {
             type: 'string',
         },
         socialClass: {
             type: 'string',
         },
-        backgroundColor: {
-            type: 'string',
+        bgColor: {
+          type: 'string',
+          default: '#4b4b4b',
         },
         color: {
           type: 'string',
-        }
+          default: '#fff',
+        },
+        bgColorHov : {
+          type: 'string',
+        },
+        colorHov: {
+          type: 'string',
+        },
+        borderRadius: {
+          type: 'string'
+        },
+
 	  },
 
 	edit: editSocialLink,
@@ -227,7 +306,19 @@ registerBlockType( 'blueprint-blocks/social-link', {
 	save: function( props ) {
 
 		return (
-		    null
+      <div className={ props.className }>
+		    {
+
+          props.attributes.selectedNetwork &&
+          props.attributes.socialLink && (
+            <a href={ props.attributes.socialLink }
+            className={ props.attributes.selectedNetwork + " icon-" + props.attributes.selectedNetwork }>
+            <span>{ props.attributes.networkName }</span>
+            </a>
+
+          )
+        }
+        </div>
 		  );
 	},
 } );

@@ -101,7 +101,14 @@ function blueprint_register_rest_route( WP_REST_Request $request ) {
    * Just creating the endpoint with filterable return so that
    * other segments can add to return.
    */
+
   $rest_fields = array();
   $rest_fields = apply_filters( 'blueprint_rest_fields', $rest_fields );
+  return $rest_fields;
+}
+add_filter( 'blueprint_rest_fields', 'blueprint_add_image_base_url' );
+function blueprint_add_image_base_url( $rest_fields ) {
+  $imagePath = plugins_url() . '/blueprint-blocks/blocks/dist/assets/';
+  $rest_fields['img_dir'] = $imagePath;
   return $rest_fields;
 }

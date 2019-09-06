@@ -2,7 +2,7 @@
  /**
   * Block: Blueprint Author
   */
-   
+
 
 /**
  * Adds social links to user profile
@@ -20,7 +20,7 @@ function blueprint_author_social_links( $user_contact ) {
    $user_contact['linkedin'] = __('LinkedIn Link', 'blueprint-blocks');
    $user_contact['pinterest'] = __('Pinterest Link', 'blueprint-blocks');
    $user_contact['twitter'] = __('Twitter Link', 'blueprint-blocks');
-   
+
    return $user_contact;
 }
 add_filter('user_contactmethods', 'blueprint_author_social_links');
@@ -38,9 +38,9 @@ function blueprint_blocks_create_api_user_fields() {
       )
       );
 
-   register_rest_field( 
-      'user', 
-      'profile_display_name', 
+   register_rest_field(
+      'user',
+      'profile_display_name',
       array(
       'get_callback' => 'blueprint_blocks_mbt_get_profile_display_name',
       )
@@ -78,9 +78,9 @@ function blueprint_blocks_create_api_user_fields() {
    );
 
    foreach( $social_links as $social_link ) {
-      register_rest_field( 
-         'user', 
-         $social_link['name'] . '_link', 
+      register_rest_field(
+         'user',
+         $social_link['name'] . '_link',
          array(
          'get_callback' => $social_link['callback'],
          )

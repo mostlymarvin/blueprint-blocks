@@ -20,7 +20,7 @@ module.exports = {
          },
          {
             test: /\.scss$/,
-            use: [  
+            use: [
                {
                   loader: 'file-loader',
                   options: {
@@ -41,6 +41,10 @@ module.exports = {
                }
             ]
       },
+      {
+        test: /\.svg$/,
+        loader: 'svg-inline-loader'
+      }
       ],
    },
 };
