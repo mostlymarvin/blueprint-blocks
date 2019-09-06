@@ -10,7 +10,9 @@ const { SelectControl, ToggleControl } = wp.components;
 const { Component } = wp.element;
 const { RichText, MediaUpload, InnerBlocks  } = wp.editor;
 
-
+const TEMPLATE = [
+	['blueprint-blocks/social-link', {}, []],
+]
 
 class myAuthorEdit extends Component {
     static getInitialState( selectedAuthor ) {
@@ -178,8 +180,6 @@ class myAuthorEdit extends Component {
             this.props.className += ' no-author';
         }
 
-        console.log( InnerBlocks.Content );
-
 		return (
             <div className={this.props.className }>
 
@@ -227,7 +227,7 @@ class myAuthorEdit extends Component {
 
             </div>
             <div className="social-icons">
-                <InnerBlocks />
+                <InnerBlocks allowedBlocks={['blueprint-blocks/social-link']} template={TEMPLATE} />
               </div>
             </div>
             </div>

@@ -20,78 +20,81 @@ class editSocialLink extends Component {
 		  };
     }
 
-    constructor() {
-      super( ...arguments );
+  constructor() {
+    super( ...arguments );
 
-      this.state = this.constructor.getInitialState( this.props.attributes.selectedNetwork );
+    this.state = this.constructor.getInitialState( this.props.attributes.selectedNetwork );
 
-      this.getOptions = this.getOptions.bind(this);
-      this.getOptions();
+    this.getOptions = this.getOptions.bind(this);
+    this.getOptions();
 
-      this.getInspectorControls = this.getInspectorControls.bind(this);
+    this.getInspectorControls = this.getInspectorControls.bind(this);
 
-      this.onChangeSelectNetwork = this.onChangeSelectNetwork.bind(this);
+    this.onChangeSelectNetwork = this.onChangeSelectNetwork.bind(this);
 
-      this.onChangeSocialLink = this.onChangeSocialLink.bind(this);
+    this.onChangeSocialLink = this.onChangeSocialLink.bind(this);
+    this.linkInputFocus = this.linkInputFocus.bind(this);
+    this.linkInputBlur = this.linkInputBlur.bind(this);
 
-      this.onChangeButtonColor = this.onChangeButtonColor.bind(this);
-      this.onChangeButtonBG = this.onChangeButtonBG.bind(this);
-      this.onChangeButtonHovColor = this.onChangeButtonHovColor.bind(this);
-      this.onChangeButtonBGHov = this.onChangeButtonBGHov.bind(this);
-    }
+    this.onChangeButtonColor = this.onChangeButtonColor.bind(this);
+    this.onChangeButtonBG = this.onChangeButtonBG.bind(this);
+    this.onChangeButtonHovColor = this.onChangeButtonHovColor.bind(this);
+    this.onChangeButtonBGHov = this.onChangeButtonBGHov.bind(this);
+  }
 
-    getOptions() {
-      const Blueprint = wp.api.models.Status.extend( {
-         urlRoot: wpApiSettings.root + 'blueprint-mmk/v1/blueprint',
-         defaults: {
-            type: 'blueprint',
-            },
-         } );
-      const Blueprints = wp.api.collections.Statuses.extend( {
-         url: wpApiSettings.root + 'blueprint-mmk/v1/blueprint',
-         } );
+  getOptions() {
+    const Blueprint = wp.api.models.Status.extend( {
+       urlRoot: wpApiSettings.root + 'blueprint-mmk/v1/blueprint',
+       defaults: {
+          type: 'blueprint',
+          },
+       } );
+    const Blueprints = wp.api.collections.Statuses.extend( {
+       url: wpApiSettings.root + 'blueprint-mmk/v1/blueprint',
+       } );
 
-      const theBlueprint = new Blueprints();
+    const theBlueprint = new Blueprints();
 
-      theBlueprint.fetch().then( ( blueprint ) => {
+    theBlueprint.fetch().then( ( blueprint ) => {
 
-         const style = blueprint.blueprint_social.display;
-         const bgColor = style.background ? style.background : '#4b4b4b';
-         const color  = style.color ? style.color : '#f4f4f4';
-         const colorHov  = style.hover_color ? style.hover_color : '#f4f4f4';
-         const bgColorHov  = style.hover_background ? style.hover_background : '#4b4b4b';
-         const borderRadius = style.border_radius ? style.border_radius : '0';
+       const style = blueprint.blueprint_social.display;
+       const bgColor = style.background ? style.background : '#4b4b4b';
+       const color  = style.color ? style.color : '#f4f4f4';
+       const colorHov  = style.hover_color ? style.hover_color : '#f4f4f4';
+       const bgColorHov  = style.hover_background ? style.hover_background : '#4b4b4b';
+       const borderRadius = style.border_radius ? style.border_radius : '0';
 
-         console.log( bgColorHov );
-         this.props.setAttributes( {
-            bpSocialStatus: blueprint.blueprint_social.status,
-            networks: blueprint.blueprint_social.networks,
-            bgColor: bgColor,
-            color: color,
-            bgColorHov: bgColorHov,
-            colorHov: colorHov,
-            borderRadius: borderRadius,
-            imgDir: blueprint.img_dir,
-         } );
+       this.props.setAttributes( {
+          bpSocialStatus: blueprint.blueprint_social.status,
+          networks: blueprint.blueprint_social.networks,
+          bgColor: bgColor,
+          color: color,
+          bgColorHov: bgColorHov,
+          colorHov: colorHov,
+          borderRadius: borderRadius,
+          imgDir: blueprint.img_dir,
+       } );
 
-         this.setState( { networks: blueprint.blueprint_social.networks });
+       this.setState( { networks: blueprint.blueprint_social.networks });
 
+    });
+  }
+
+  onChangeSelectNetwork( value ) {
+
+      const network = this.state.networks.find( function (element) {
+        return element.tag == value;
       });
-    }
 
-    onChangeSelectNetwork( value ) {
+      this.props.setAttributes( {
+          selectedNetwork: value,
+          networkName: network.name,
+      } );
+  }
 
-        const network = this.state.networks.find( function (element) {
-          return element.tag == value;
-        });
-
-        this.props.setAttributes( {
-            selectedNetwork: value,
-            networkName: network.name,
-        } );
-
-        //console.log( network.name );
-    }
+  onChangeSocialLink( newValue ) {
+    this.props.setAttributes( { socialLink: newValue });
+  }
 
   onChangeButtonColor( newColor ) {
     this.props.setAttributes({ color : newColor });
@@ -106,6 +109,14 @@ class editSocialLink extends Component {
     this.props.setAttributes({ bgColorHov : newbgColorHov });
     }
 
+  linkInputFocus() {
+    this.setState({ unFocused: false });
+    console.log( 'Its Focused!');
+  }
+  linkInputBlur() {
+    this.setState({ unFocused: true });
+    console.log( 'Its Not Focused!');
+  }
 
   getInspectorControls( options ) {
      return(
@@ -171,10 +182,6 @@ class editSocialLink extends Component {
      );
   }
 
-  onChangeSocialLink( newValue ) {
-    this.props.setAttributes( { socialLink: newValue });
-  }
-
   render() {
      let options = [ { value: null, label: __( 'Select a Network' ) } ];
      let message = '';
@@ -231,17 +238,38 @@ class editSocialLink extends Component {
           { this.getInspectorControls( options ) }
 
           {
+            this.state.unFocused &&
             this.props.attributes.selectedNetwork &&
             this.props.attributes.socialLink ? (
+
               <a href={ this.props.attributes.socialLink }
               className={ this.props.attributes.selectedNetwork + " social-link icon-" + this.props.attributes.selectedNetwork }
               style={ linkbg } >
               <span className="editor-icon" style={iconStyle}></span>
               </a>
+
             ) : (
+
               <div className="social-setup">
-              Choose social network and add URL at right.
+                <SelectControl
+                  onChange={ this.onChangeSelectNetwork }
+                  value={ this.props.attributes.selectedNetwork }
+                  label={ __( 'Select a Social Network' ) }
+                  options={ options }
+                  className="network-select"
+                />
+                <TextControl
+                  label={ this.props.attributes.selectedNetwork + " link" }
+                  help={ "Full URL to " + this.props.attributes.selectedNetwork + " profile" }
+                  placeholder={ "https://" + this.props.attributes.selectedNetwork + ".com" }
+                  value={ this.props.attributes.socialLink }
+                  onChange={ this.onChangeSocialLink }
+                  keepPlaceholderOnFocus={true}
+                  onFocus={ this.linkInputFocus }
+                  onBlur={ this.linkInputBlur }
+                />
               </div>
+
             )
           }
           </div>
@@ -298,7 +326,10 @@ registerBlockType( 'blueprint-blocks/social-link', {
         borderRadius: {
           type: 'string'
         },
-
+        allSet: {
+          type: 'boolean',
+          default: false,
+        },
 	  },
 
 	edit: editSocialLink,
