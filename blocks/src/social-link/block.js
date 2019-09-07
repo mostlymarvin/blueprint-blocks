@@ -71,7 +71,6 @@ class editSocialLink extends Component {
 
        this.props.setAttributes( {
           bpSocialStatus: blueprint.blueprint_social.status,
-          networks: blueprint.blueprint_social.networks,
           bgColor: bgColor,
           color: color,
           bgColorHov: bgColorHov,
@@ -346,10 +345,6 @@ registerBlockType( 'blueprint-blocks/social-link', {
         networkName: {
           type: 'string',
         },
-        networks: {
-          type: 'array',
-          default: [],
-        },
         imgDir: {
           type: 'string',
         },
@@ -375,10 +370,6 @@ registerBlockType( 'blueprint-blocks/social-link', {
         },
         borderRadius: {
           type: 'string'
-        },
-        allSet: {
-          type: 'boolean',
-          default: false,
         },
 	  },
 

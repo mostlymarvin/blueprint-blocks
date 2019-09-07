@@ -6,7 +6,7 @@
     .block-preview.active-preview {
         padding: 40px 20px;
     }
-    
+
     .preview-left {
         min-width:45%;
 
@@ -18,7 +18,7 @@
             font-family:'serif';
         }
     }
-    
+
     .block-message {
         margin: 20px auto 0;
         background-color:#f4f4f4;
@@ -43,11 +43,11 @@
         color:#000;
         padding:20px 20px 20px;
     }
-    
+
     .buylinks {
 
         padding: 0 20px 10px;
-    
+
         .mbt-book-buybuttons.blueprint {
             display:flex;
             flex-wrap:wrap;
@@ -69,7 +69,7 @@
                         object-fit:contain;
                     }
                 }
-              
+
             }
         }
     }
@@ -181,4 +181,14 @@ h4.buttons-label {
 
 .components-panel__row.display-block {
     display:block !important;
+}
+
+.components-panel__row.width-control .components-range-control .components-base-control__field {
+  flex-wrap:wrap;
+
+  label{
+    flex-basis:100% !important;
+    max-width:100% !important;
+    width:100% !important;
+  }
 }

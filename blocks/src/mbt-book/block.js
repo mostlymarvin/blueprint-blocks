@@ -7,7 +7,7 @@
 
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
-const { SelectControl, ToggleControl, TextControl, Panel, PanelBody, PanelRow } = wp.components;
+const { SelectControl, ToggleControl, TextControl, Panel, PanelBody, PanelRow, RangeControl } = wp.components;
 const { Component, Fragment } = wp.element;
 const { RichText, InspectorControls, PanelColorSettings, getColorClassName } = wp.editor;
 
@@ -53,6 +53,7 @@ class mbtSelectBook extends Component {
       this.onChangeTagline = this.onChangeTagline.bind(this);
       this.onChangeTextColor = this.onChangeTextColor.bind(this);
       this.onChangeTitlePrefix = this.onChangeTitlePrefix.bind(this);
+      this.onChangeMaxWidthInner = this.onChangeMaxWidthInner.bind(this);
    }
 
    getBlueprintApi() {
@@ -175,6 +176,21 @@ class mbtSelectBook extends Component {
             </PanelRow>
             )
             }
+            {
+              this.props.attributes.align === 'full' && (
+                <PanelRow
+                  className="width-control">
+                <RangeControl
+                 label="Max width of Inner Content"
+                 help="maximum width in px, defaults to 1020, applies only to blocks set to display Full Width"
+                 value={ this.props.attributes.maxWidthInner }
+                 onChange={ this.onChangeMaxWidthInner }
+                 min={ 0 }
+                 max={ 2000 }
+                />
+              </PanelRow>
+              )
+            }
 
             <PanelRow className="display-block">
             <ToggleControl
@@ -186,7 +202,7 @@ class mbtSelectBook extends Component {
             </PanelRow>
 
 
-            <PanelRow className="display-block">
+            <PanelRow className="display-block parent">
             <TextControl
                label="Add Prefix to Title"
                help="ie, 'Coming Soon' or 'Just Released', etc."
@@ -198,7 +214,7 @@ class mbtSelectBook extends Component {
             </PanelRow>
 
 
-            <PanelRow className="display-block">
+            <PanelRow className="display-block parent">
             <ToggleControl
                label="Show Buy Links?"
                checked={ !!this.props.attributes.showBuyLinks }
@@ -218,7 +234,7 @@ class mbtSelectBook extends Component {
             </PanelRow>
 
 
-            <PanelRow className="display-block">
+            <PanelRow className="display-block parent">
             <ToggleControl
                label="Show 'Read More' Link?"
                checked={ !!this.props.attributes.showReadMore }
@@ -226,7 +242,7 @@ class mbtSelectBook extends Component {
             />
             {
             this.props.attributes.showReadMore && (
-            <PanelRow className="display-block">
+            <PanelRow className="display-block parent">
             <TextControl
                placeholder= 'Read More'
                value={ this.props.attributes.readMoreText }
@@ -243,6 +259,7 @@ class mbtSelectBook extends Component {
             )
             }
             </PanelRow>
+
             </PanelBody>
             </InspectorControls>
          </div>
@@ -398,9 +415,13 @@ class mbtSelectBook extends Component {
       this.props.setAttributes( { titlePrefix: newValue } );
    }
 
+   onChangeMaxWidthInner( newValue) {
+     this.props.setAttributes( { maxWidthInner: newValue });
+   }
+
 
    render() {
-      let options = [ { value: 0, label: __( 'Select a Post' ) } ];
+      let options = [ { value: 0, label: __( 'Select a Book' ) } ];
       let message = '';
       let previewClass = 'block-preview';
       let blockStyle = {
@@ -711,6 +732,10 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
       titlePrefix: {
          type: 'string'
       },
+      maxWidthInner: {
+        type: 'integer',
+        default: 1020,
+      },
       displaySettings: {
          buylinks: {
             type: 'string',
@@ -723,7 +748,7 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
          sampleLinks: {
             type: 'string',
             default: 'show'
-         }
+         },
       }
 	},
 
