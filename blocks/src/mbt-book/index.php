@@ -126,7 +126,7 @@ function blueprint_blocks_mbt_get_tagline( $object ) {
 }
 
 function blueprint_blocks_mbt_editor_style( $object ) {
-   $style_url = plugins_url( 'blueprint-blocks/blocks/src/mbt-book/buttons/' );
+   $style_url = plugins_url( 'blueprint-blocks/blocks/dist/assets/buttons/' );
 	return $style_url;
 }
 
@@ -267,6 +267,7 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
    /**
     * Simple true/false vars
     */
+   $align = !empty( $atts['align'] ) ? 'align' .  $atts['align'] : '';
    $audioSample = !empty( $atts['audioSample'] ) ? $atts['audioSample'] : false;
    $bookSample = !empty( $atts['bookSample'] ) ? $atts['bookSample'] : false;
    $buylinks = !empty( $atts['buylinks'] ) ? $atts["buylinks"] : array();
@@ -329,6 +330,7 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
 
 
    $class = 'wp-block-blueprint-blocks-mbt-book';
+   if( $align ) { $class .= ' ' . $align; }
    $audioSampleLink = '';
    $bookSampleLink = '';
    $cover_links = '';

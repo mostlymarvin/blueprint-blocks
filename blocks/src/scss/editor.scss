@@ -3,19 +3,44 @@
 @import '../blueprint-author/editor.scss';
 @import '../social-link/editor.scss';
 
+.editor-block-list-item-blueprint-blocks-mbt-book,
+.editor-block-list-item-blueprint-blocks-blueprint-author,
+.editor-block-list-item-blueprint-blocks-social-link {
+  svg.dashicon{
+    fill: #49A5C3 !important;
+  }
+}
 
+.editor-block-list-item-blueprint-blocks-blueprint-author  {
+
+  .block-editor-block-types-list__item-icon,
+  .block-editor-block-types-list__item-icon > *
+  {
+    box-shadow:none !important;
+  }
+  .block-editor-block-types-list__item-icon {
+    top:0 !important;
+  }
+  &:hover,
+  &:hover .block-editor-block-types-list__item-icon {
+    background-color: #f4f4f4;
+  }
+}
 .blueprint-panel-body .components-panel__row  {
    padding-top:20px;
    padding-bottom:20px;
    border-bottom:1px solid #eee;
    margin-bottom:20px;
 
-   h3.section-title {
+   &.parent {
+     border-bottom:none;
+     margin-bottom:0;
+     padding-bottom:0;
 
    }
 
    .components-base-control .components-base-control__field,
    .edit-post-settings-sidebar__panel-block .components-panel__body .components-base-control {
-        margin-bottom:8px !important;;
+        margin-bottom:8px !important;
     }
 }

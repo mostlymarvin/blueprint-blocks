@@ -5,12 +5,11 @@
  * customized to work with Blueprint Theme / Blueprint Child themes.
  */
 
-const { __ } = wp.i18n; 
-const { registerBlockType } = wp.blocks; 
+const { __ } = wp.i18n;
+const { registerBlockType } = wp.blocks;
 const { SelectControl, ToggleControl, TextControl, Panel, PanelBody, PanelRow } = wp.components;
 const { Component, Fragment } = wp.element;
-const { RichText, InspectorControls, PanelColorSettings, getColorClassName  } = wp.editor;
-
+const { RichText, InspectorControls, PanelColorSettings, getColorClassName } = wp.editor;
 
 
 class mbtSelectBook extends Component {
@@ -19,10 +18,10 @@ class mbtSelectBook extends Component {
 		return {
 		  posts: [],
 		  selectedPost: selectedPost,
-          post: {}, 
+          post: {},
 		};
       }
-      
+
    constructor() {
       super( ...arguments );
 
@@ -38,7 +37,7 @@ class mbtSelectBook extends Component {
       this.getBlockSettings = this.getBlockSettings.bind(this);
       this.getBookMedia = this.getBookMedia.bind(this);
       this.updateDisplaySettings = this.updateDisplaySettings.bind(this);
-      
+
       this.onChangeBGColor = this.onChangeBGColor.bind(this);
       this.onChangeBlurb = this.onChangeBlurb.bind(this);
       this.onChangeButtonsLabel = this.onChangeButtonsLabel.bind(this);
@@ -50,7 +49,7 @@ class mbtSelectBook extends Component {
       this.onChangeSelectBook = this.onChangeSelectBook.bind(this);
       this.onChangeShowBuyLinks = this.onChangeShowBuyLinks.bind(this);
       this.onChangeShowReadMore = this.onChangeShowReadMore.bind(this);
-      this.onChangeShowSampleLinks = this.onChangeShowSampleLinks.bind(this);  
+      this.onChangeShowSampleLinks = this.onChangeShowSampleLinks.bind(this);
       this.onChangeTagline = this.onChangeTagline.bind(this);
       this.onChangeTextColor = this.onChangeTextColor.bind(this);
       this.onChangeTitlePrefix = this.onChangeTitlePrefix.bind(this);
@@ -100,11 +99,11 @@ class mbtSelectBook extends Component {
          const post = posts.find( ( item ) => { return item.id == this.state.selectedPost } );
 
          this.setState( { post, posts } );
-         
+
          } else {
             this.setState({ posts });
          }
-      } );  
+      } );
    }
 
    getBookMedia( coverID ) {
@@ -115,16 +114,16 @@ class mbtSelectBook extends Component {
               } );
       } );
    }
- 
+
    getInspectorControls( options ) {
       return(
          <div>
-            <InspectorControls>   
+            <InspectorControls>
 
-            <PanelColorSettings 
+            <PanelColorSettings
             title={ __('Colors', 'blueprint-blocks') }
             initialOpen={false}
-            colorSettings= { [ 
+            colorSettings= { [
             {
             value: this.props.attributes.colorText,
             onChange:  this.onChangeTextColor,
@@ -148,17 +147,17 @@ class mbtSelectBook extends Component {
             ] }
             />
 
-            <PanelBody 
+            <PanelBody
             title="Book Settings"
             initialOpen={ true }
             className="blueprint-panel-body">
 
             <PanelRow className="book-select">
-            <SelectControl 
-               onChange={this.onChangeSelectBook} 
-               value={ this.props.attributes.selectedPost } 
-               label={ __( 'Select a Book' ) } 
-               options={ options } 
+            <SelectControl
+               onChange={this.onChangeSelectBook}
+               value={ this.props.attributes.selectedPost }
+               label={ __( 'Select a Book' ) }
+               options={ options }
                className="book-select"
             />
             </PanelRow>
@@ -191,7 +190,7 @@ class mbtSelectBook extends Component {
             <TextControl
                label="Add Prefix to Title"
                help="ie, 'Coming Soon' or 'Just Released', etc."
-               placeholder= 'Coming Soon, etc.'	
+               placeholder= 'Coming Soon, etc.'
                value={ this.props.attributes.titlePrefix }
                onChange={ this.onChangeTitlePrefix }
                keepPlaceholderOnFocus={true}
@@ -208,7 +207,7 @@ class mbtSelectBook extends Component {
             {
             this.props.attributes.showBuyLinks && (
             <TextControl
-               placeholder= 'Now Available From'	
+               placeholder= 'Now Available From'
                label="Buy Link Section Label"
                value={ this.props.attributes.buttonsLabel }
                onChange={ this.onChangeButtonsLabel }
@@ -229,13 +228,13 @@ class mbtSelectBook extends Component {
             this.props.attributes.showReadMore && (
             <PanelRow className="display-block">
             <TextControl
-               placeholder= 'Read More'	
+               placeholder= 'Read More'
                value={ this.props.attributes.readMoreText }
                onChange={ this.onChangeReadMoreText }
                keepPlaceholderOnFocus={true}
             />
             <TextControl
-               placeholder={ this.props.attributes.link }	
+               placeholder={ this.props.attributes.link }
                value={ this.props.attributes.readMoreLink }
                onChange={ this.onChangeReadMoreLink }
                keepPlaceholderOnFocus={true}
@@ -252,23 +251,23 @@ class mbtSelectBook extends Component {
 
    getBlockSettings( options, message ) {
       return(
-         
+
       this.props.attributes.title ? (
          null
-         
+
          ) : (
-            <div className="block-settings"> 
+            <div className="block-settings">
             <div className="block-message">{message}</div>
-            <SelectControl 
-               onChange={this.onChangeSelectBook} 
-               value={ this.props.attributes.selectedPost } 
-               label={ __( 'Select a Book' ) } 
-               options={ options } 
+            <SelectControl
+               onChange={this.onChangeSelectBook}
+               value={ this.props.attributes.selectedPost }
+               label={ __( 'Select a Book' ) }
+               options={ options }
                className="book-select"
                   />
             </div>
          )
-         
+
       );
    }
 
@@ -276,7 +275,7 @@ class mbtSelectBook extends Component {
       let buylinks = this.props.attributes.displaySettings.buylinks;
       let moreLink = this.props.attributes.displaySettings.moreLink;
       let sampleLinks = this.props.attributes.displaySettings.sampleLinks;
-      
+
       if( setting === 'buylinks' ) {  buylinks = newValue; }
       if( setting === 'moreLink' ) {  moreLink = newValue; }
       if( setting === 'sampleLinks' ) { sampleLinks = newValue; }
@@ -285,7 +284,7 @@ class mbtSelectBook extends Component {
          displaySettings: {
             buylinks: buylinks,
             moreLink: moreLink,
-            sampleLinks:sampleLinks, 
+            sampleLinks:sampleLinks,
          }
       });
    }
@@ -295,10 +294,10 @@ class mbtSelectBook extends Component {
    }
    onChangeBlurb( newValue ) {
       this.props.setAttributes( { customBlurb: newValue } );
-   } 
+   }
    onChangeButtonsLabel( newValue ) {
       this.props.setAttributes( { buttonsLabel: newValue } );
-   } 
+   }
    onChangeFlexDirection() {
       if ( this.props.attributes.flexReverse ) {
          this.props.setAttributes( { flexReverse: false } );
@@ -329,7 +328,7 @@ class mbtSelectBook extends Component {
       const tagLine = post.mbt_book_teaser[0];
       const customBlurb = post.excerpt.rendered;
       const audioSample = post.mbt_sample_audio[0];
-      const bookASIN = post.mbt_unique_id_asin;	
+      const bookASIN = post.mbt_unique_id_asin;
       const bookSample = bookASIN[0];
       const booklinks = post.mbt_buybuttons[0];
       const styleURL = post.mbt_editor_style_url;
@@ -383,7 +382,7 @@ class mbtSelectBook extends Component {
       if ( this.props.attributes.showSampleLinks ) {
          this.props.setAttributes( { showSampleLinks: false });
          this.updateDisplaySettings( 'sampleLinks', 'hide'  );
-            
+
       } else {
          this.props.setAttributes( { showSampleLinks: true } );
          this.updateDisplaySettings( 'sampleLinks', 'show'  );
@@ -397,7 +396,7 @@ class mbtSelectBook extends Component {
    }
    onChangeTitlePrefix( newValue ) {
       this.props.setAttributes( { titlePrefix: newValue } );
-   } 
+   }
 
 
    render() {
@@ -411,7 +410,7 @@ class mbtSelectBook extends Component {
       let textStyle = {
          color: this.props.attributes.colorText,
       }
-      
+
       let buttonClass = 'button button-primary button-small bpb-more';
       let buttonBG = this.props.attributes.colorReadMoreLinkBG;
       let buttonColor = this.props.attributes.colorReadMoreLink;
@@ -443,7 +442,7 @@ class mbtSelectBook extends Component {
       this.props.className += ' loading';
 
       if( this.state.posts.length > 0 ) {
-         
+
          this.state.posts.forEach((post) => {
                options.push({value:post.id, label:post.title.rendered});
          });
@@ -451,10 +450,10 @@ class mbtSelectBook extends Component {
       }  else {
          message =  'No books found. Please create books first.';
       }
-      
+
       // Checking if we have anything in the object
       if( this.state.post !== undefined && this.state.post.hasOwnProperty('title')) {
-         
+
          this.props.className += ' has-post';
 
       } else {
@@ -467,7 +466,7 @@ class mbtSelectBook extends Component {
 
 		return (
 
-         <div 
+         <div
          className={ this.props.className }
          style={ blockStyle }>
 
@@ -475,12 +474,12 @@ class mbtSelectBook extends Component {
 
          {
          this.props.attributes.mbtActive ? (
-               
-            this.getBlockSettings( options, message ) 
+
+            this.getBlockSettings( options, message )
 
             ) : (
 
-            <div className="block-settings"> 
+            <div className="block-settings">
             <div className="block-message">
             <span>MyBookTable is not active.</span>
             <span> Please activate <a href="https://wordpress.org/plugins/mybooktable/" target="_blank">MyBookTable</a> and create books first.</span>
@@ -491,15 +490,15 @@ class mbtSelectBook extends Component {
 
          {
          this.props.attributes.title && (
-         
-         <div className={ previewClass }>           
+
+         <div className={ previewClass }>
          <div className={ "inner-preview is-flex " + flexClass }>
          <div className="preview-left">
             {
                this.props.attributes.cover && (
-               <img 
-               src={ this.props.attributes.cover } 
-               className="preview-cover" 
+               <img
+               src={ this.props.attributes.cover }
+               className="preview-cover"
                />
                )
             }
@@ -511,7 +510,7 @@ class mbtSelectBook extends Component {
                {
                   this.props.attributes.bookSample && (
                      <span>View Book Sample</span>
-                  )   
+                  )
                }
                {
                   this.props.attributes.bookSample && this.props.attributes.audioSample && (
@@ -520,7 +519,7 @@ class mbtSelectBook extends Component {
                }
                {
                   this.props.attributes.audioSample && (
-                     <span>Hear Audiobook Sample</span>  
+                     <span>Hear Audiobook Sample</span>
                   )
                }
                </div>
@@ -532,15 +531,15 @@ class mbtSelectBook extends Component {
          <div className="preview-right">
             <div className="preview-right-top">
 
-               <h2 
+               <h2
                className="preview-title"
                style={ textStyle }>
 
                {
                this.props.attributes.titlePrefix && (
-                  <span className="title-prefix"> 
+                  <span className="title-prefix">
                      {this.props.attributes.titlePrefix}&nbsp;
-                  </span> 
+                  </span>
                   )
                }
                <span className="title">
@@ -550,32 +549,32 @@ class mbtSelectBook extends Component {
 
                <RichText
                   tagName='div'
-                  placeholder= 'Lorem Ipsum Dolor Sunt...'	
+                  placeholder= 'Lorem Ipsum Dolor Sunt...'
                   className='preview-tagline'
                   value={ this.props.attributes.customTagline }
                   onChange={ this.onChangeTagline }
                   keepPlaceholderOnFocus={true}
-                  /> 
+                  />
 
 
                <div class="preview-blurb">
                <RichText
                   tagName='div'
                   multiline='p'
-                  placeholder='Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam id dolor id nibh ultricies vehicula ut id elit. Nulla vitae elit libero, a pharetra augue.'	
+                  placeholder='Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam id dolor id nibh ultricies vehicula ut id elit. Nulla vitae elit libero, a pharetra augue.'
                   className="custom-blurb"
                   value={ this.props.attributes.customBlurb  }
                   onChange={ this.onChangeBlurb }
                   keepPlaceholderOnFocus={true}
                />
-               { 
+               {
                this.props.attributes.showReadMore && (
                   <a className={ buttonClass }
                   style={ buttonStyle }
                   href={ this.props.attributes.readMoreLink }>
                   { this.props.attributes.readMoreText }
                   </a>
-                  )  
+                  )
                }
                </div>
             </div>
@@ -583,30 +582,30 @@ class mbtSelectBook extends Component {
          {
          this.props.attributes.showBuyLinks &&
          this.props.attributes.buylinks && (
-            <div className="buylinks"> 
-               <h4 
+            <div className="buylinks">
+               <h4
                className="buttons-label noneditable"
                style={ blockStyle }>
                { this.props.attributes.buttonsLabel }
                </h4>
 
                <div className="mbt-book-buybuttons blueprint">
-               { 
+               {
                this.props.attributes.buylinks.map( (item, key) =>
                   {
                   return <div className="mbt-book-buybutton">
                   <a className="image-link"
                         href={item.url}>
                         <img className="image-link"
-                        src={this.props.attributes.styleURL + item.store + '_button.png'} 
-                        alt={ 'buy from ' + item.store }/> 
+                        src={this.props.attributes.styleURL + item.store + '_button.png'}
+                        alt={ 'buy from ' + item.store }/>
                         </a>
                   </div>
                   }
                   )
                }
                </div>
-            </div> 
+            </div>
          )
          }
 
@@ -621,29 +620,36 @@ class mbtSelectBook extends Component {
 }
 
 registerBlockType( 'blueprint-blocks/mbt-book', {
-	title: __( 'Book Preview' ), 
-	icon: 'book', 
+	title: __( 'Book Preview' ),
+	icon: 'book',
 	category: 'blueprint-blocks',
 	keywords: [
 		__( 'blueprint-blocks — mbt-book' ),
 		__( 'Book' ),
 	],
+  supports: {
+    align: [ 'center', 'wide', 'full'  ],
+    anchor: true,
+  },
 	attributes: {
       audioSample: {
-         type: 'string' 
+         type: 'string'
       },
       bookSample: {
-         type: 'string' 
+         type: 'string'
       },
       buttonsLabel: {
-         type: 'string', 
+         type: 'string',
          default: 'Now Available From'
       },
       buylinks: {
          type: 'array'
       },
+      className: {
+        type: 'string',
+      },
       colorBG: {
-         type: 'string', 
+         type: 'string',
          default: '#ffffff'
       },
       colorReadMoreLink: {
@@ -653,7 +659,7 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
          type: 'string'
       },
       colorText: {
-         type: 'string', 
+         type: 'string',
          default: '#333333'
       },
       cover: {
@@ -666,34 +672,34 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
          type: 'string'
       },
       flexReverse: {
-         type: 'boolean', 
+         type: 'boolean',
          default: false
       },
       mbtActive: {
-         type: 'boolean', 
+         type: 'boolean',
          default: 'true'
       },
       readMoreLink: {
          type: 'string'
       },
       readMoreText: {
-         type: 'string', 
+         type: 'string',
          default: 'Read More'
       },
       selectedPost: {
-         type: 'number', 
+         type: 'number',
          default: null
       },
       showBuyLinks: {
-         type: 'boolean', 
+         type: 'boolean',
          default: true
       },
       showReadMore: {
-         type: 'boolean', 
+         type: 'boolean',
          default: true
       },
       showSampleLinks: {
-         type: 'boolean', 
+         type: 'boolean',
          default: true
       },
       styleURL: {

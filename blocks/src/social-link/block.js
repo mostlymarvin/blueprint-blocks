@@ -30,6 +30,10 @@ class editSocialLink extends Component {
 
     this.getInspectorControls = this.getInspectorControls.bind(this);
 
+    this.getLinkLabel = this.getLinkLabel.bind(this);
+    this.getLinkHelp = this.getLinkHelp.bind(this);
+    this.getLinkPlaceholder = this.getLinkPlaceholder.bind(this);
+
     this.onChangeSelectNetwork = this.onChangeSelectNetwork.bind(this);
 
     this.onChangeSocialLink = this.onChangeSocialLink.bind(this);
@@ -40,6 +44,7 @@ class editSocialLink extends Component {
     this.onChangeButtonBG = this.onChangeButtonBG.bind(this);
     this.onChangeButtonHovColor = this.onChangeButtonHovColor.bind(this);
     this.onChangeButtonBGHov = this.onChangeButtonBGHov.bind(this);
+
   }
 
   getOptions() {
@@ -79,6 +84,44 @@ class editSocialLink extends Component {
 
     });
   }
+  getLinkPlaceholder() {
+    let linkPlaceholder = 'https://website.com';
+    if( this.props.attributes.selectedNetwork && this.props.attributes.selectedNetwork === 'email') {
+        linkPlaceholder = "you@your-name.com";
+
+      } else if( this.props.attributes.selectedNetwork ) {
+        linkPlaceholder = "https://" + this.props.attributes.selectedNetwork + ".com";
+    }
+
+    return(
+      linkPlaceholder
+    );
+  }
+
+  getLinkHelp() {
+    let linkHelp = "";
+    if( this.props.attributes.selectedNetwork && this.props.attributes.selectedNetwork !== 'email') {
+        linkHelp = "Full URL to " + this.props.attributes.selectedNetwork + " profile";
+    }
+
+    return(
+      linkHelp
+    );
+  }
+
+  getLinkLabel() {
+    let linkLabel = 'Enter Profile URL';
+    if( this.props.attributes.selectedNetwork && this.props.attributes.selectedNetwork === 'email') {
+        linkLabel = 'Email Address';
+
+      } else if( this.props.attributes.selectedNetwork ) {
+        linkLabel = this.props.attributes.selectedNetwork + " link";
+      }
+
+      return(
+        linkLabel
+      );
+  }
 
   onChangeSelectNetwork( value ) {
 
@@ -117,6 +160,12 @@ class editSocialLink extends Component {
   }
 
   getInspectorControls( options ) {
+    const linkLabel = this.getLinkLabel();
+    const linkHelp = this.getLinkHelp();
+    const linkPlaceholder = this.getLinkPlaceholder();
+    console.log(linkLabel);
+    console.log(linkHelp);
+    console.log(linkPlaceholder);
      return(
         <div>
            <InspectorControls>
@@ -149,11 +198,11 @@ class editSocialLink extends Component {
            />
 
            <PanelBody
-           title="Book Settings"
+           title="Link Settings"
            initialOpen={ true }
            className="blueprint-panel-body">
 
-           <PanelRow className="book-select">
+           <PanelRow className="select">
            <SelectControl
               onChange={ this.onChangeSelectNetwork }
               value={ this.props.attributes.selectedNetwork }
@@ -165,9 +214,9 @@ class editSocialLink extends Component {
 
            <PanelRow className="display-block">
            <TextControl
-              label={ this.props.attributes.selectedNetwork + " link" }
-              help={ "Full URL to " + this.props.attributes.selectedNetwork + " profile" }
-              placeholder={ "https://" + this.props.attributes.selectedNetwork + ".com" }
+              label={ linkLabel }
+              help={ linkHelp }
+              placeholder={ linkPlaceholder }
               value={ this.props.attributes.socialLink }
               onChange={ this.onChangeSocialLink }
               keepPlaceholderOnFocus={true}
@@ -181,52 +230,55 @@ class editSocialLink extends Component {
   }
 
   render() {
-     let options = [ { value: null, label: __( 'Select a Network' ) } ];
-     let message = '';
-     let previewClass = 'block-preview';
+    const linkLabel = this.getLinkLabel();
+    const linkHelp = this.getLinkHelp();
+    const linkPlaceholder = this.getLinkPlaceholder();
+   let options = [ { value: null, label: __( 'Select a Network' ) } ];
+   let message = '';
+   let previewClass = 'block-preview';
 
-     this.props.className += ' loading';
+   this.props.className += ' loading';
 
-     if( this.state.networks.length > 0 ) {
+   if( this.state.networks.length > 0 ) {
 
-        this.state.networks.forEach( ( network ) => {
-              options.push({
-                value:network.tag,
-                label:network.name,
-              })
-          });
-      //  });
-      message = 'hello';
+      this.state.networks.forEach( ( network ) => {
+            options.push({
+              value:network.tag,
+              label:network.name,
+            })
+        });
+    //  });
+    message = 'hello';
 
 
-     }  else {
-        message =  'No Networks found. Please install or activate Blueprint Social';
-     }
+    }  else {
+      message =  'No Networks found. Please install or activate Blueprint Social';
+    }
 
-     // Checking if we have anything in the object
-     if( this.state.network !== undefined && this.state.network.hasOwnProperty('name')) {
+    // Checking if we have anything in the object
+    if( this.state.network !== undefined && this.state.network.hasOwnProperty('name')) {
 
-        this.props.className += ' has-network';
+      this.props.className += ' has-network';
 
-     } else {
-        this.props.className += ' no-network';
-     }
+    } else {
+      this.props.className += ' no-network';
+    }
 
-     if( this.props.attributes.network !== undefined ) {
-        previewClass = 'block-preview active-preview';
-     }
+    if( this.props.attributes.network !== undefined ) {
+      previewClass = 'block-preview active-preview';
+    }
 
-     let backgroundImage = this.props.attributes.imgDir + 'icons/' + this.props.attributes.selectedNetwork + '.svg';
+    let backgroundImage = this.props.attributes.imgDir + 'icons/' + this.props.attributes.selectedNetwork + '.svg';
 
-     let linkbg = {
-       backgroundColor: this.props.attributes.bgColor,
-       borderRadius: this.props.attributes.borderRadius,
-     }
-     let iconStyle = {
-       backgroundColor: this.props.attributes.color,
-       maskImage: ' url( ' + backgroundImage + ')',
-       webkitMaskImage: ' url( ' + backgroundImage + ')',
-     }
+    let linkbg = {
+      backgroundColor: this.props.attributes.bgColor,
+      borderRadius: this.props.attributes.borderRadius,
+    }
+    let iconStyle = {
+      backgroundColor: this.props.attributes.color,
+      maskImage: ' url( ' + backgroundImage + ')',
+      webkitMaskImage: ' url( ' + backgroundImage + ')',
+    }
 
      return (
 
@@ -257,9 +309,9 @@ class editSocialLink extends Component {
                   className="network-select"
                 />
                 <TextControl
-                  label={ this.props.attributes.selectedNetwork + " link" }
-                  help={ "Full URL to " + this.props.attributes.selectedNetwork + " profile" }
-                  placeholder={ "https://" + this.props.attributes.selectedNetwork + ".com" }
+                  label={ linkLabel }
+                  help={ linkHelp }
+                  placeholder={ linkPlaceholder }
                   value={ this.props.attributes.socialLink }
                   onChange={ this.onChangeSocialLink }
                   keepPlaceholderOnFocus={true}

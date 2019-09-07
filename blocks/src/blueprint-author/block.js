@@ -6,13 +6,15 @@
 
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
-const { SelectControl, ToggleControl } = wp.components;
+const { SelectControl, ToggleControl, RangeControl, TextControl, Panel, PanelBody, PanelRow } = wp.components;
 const { Component } = wp.element;
-const { RichText, MediaUpload, InnerBlocks  } = wp.editor;
+const { RichText, MediaUpload, InnerBlocks, InspectorControls, PanelColorSettings  } = wp.editor;
+
 
 const TEMPLATE = [
 	['blueprint-blocks/social-link', {}, []],
 ];
+
 
 class myAuthorEdit extends Component {
     static getInitialState( selectedAuthor ) {
@@ -35,11 +37,23 @@ class myAuthorEdit extends Component {
         this.getBlueprintApi = this.getBlueprintApi.bind(this);
         this.getBlueprintApi();
 
+        this.getInspectorControls = this.getInspectorControls.bind(this);
         this.onChangeSelectAuthor = this.onChangeSelectAuthor.bind(this);
 
         this.onSelectImage = this.onSelectImage.bind(this);
         this.onChangeProfileTitle = this.onChangeProfileTitle.bind(this);
         this.onChangeAuthorDescription = this.onChangeAuthorDescription.bind(this);
+        this.onChangeTextColor = this.onChangeTextColor.bind(this);
+        this.onChangeBGColor = this.onChangeBGColor.bind(this);
+        this.onChangeCircleImage = this.onChangeCircleImage.bind(this);
+        this.onChangeImgBorder = this.onChangeImgBorder.bind(this);
+        this.onChangeBorderWidth = this.onChangeBorderWidth.bind(this);
+        this.nChangeImageBorderColor = this.nChangeImageBorderColor.bind(this);
+        this.onChangeShowReadMore = this.onChangeShowReadMore.bind(this);
+        this.onChangeReadMoreText = this.onChangeReadMoreText.bind(this);
+        this.onChangeReadMoreLink = this.onChangeReadMoreLink.bind(this);
+        this.onChangeButtonColor = this.onChangeButtonColor.bind(this);
+        this.onChangeButtonBGColor = this.onChangeButtonBGColor.bind(this);
     }
 
     getAuthors() {
@@ -91,6 +105,144 @@ class myAuthorEdit extends Component {
         });
     }
 
+    getInspectorControls( options ) {
+       return(
+          <InspectorControls>
+            <PanelBody
+            title="Profile Settings"
+            initialOpen={ true }
+            className="blueprint-panel-body">
+
+          <PanelRow className="author-select">
+            <SelectControl
+            onChange={this.onChangeSelectAuthor}
+            value={ this.props.attributes.selectedAuthor }
+            label={ __( 'Select an Author' ) }
+            options={ options }
+            className="author-select"
+            />
+          </PanelRow>
+
+          <PanelRow className="display-block parent">
+            <ToggleControl
+            label="Show 'Read More' Link?"
+            checked={ !!this.props.attributes.showReadMore }
+            onChange={ this.onChangeShowReadMore }
+            />
+
+          {
+          this.props.attributes.showReadMore && (
+            <PanelRow
+            className="display-block parent">
+            <TextControl
+            placeholder= 'Read More'
+            value={ this.props.attributes.readMoreText }
+            onChange={ this.onChangeReadMoreText }
+            keepPlaceholderOnFocus={true}
+            />
+
+            <TextControl
+            placeholder={ this.props.attributes.link }
+            value={ this.props.attributes.readMoreLink }
+            onChange={ this.onChangeReadMoreLink }
+            keepPlaceholderOnFocus={true}
+            />
+            </PanelRow>
+            )
+          }
+          </PanelRow>
+
+          <PanelRow className="display-block parent">
+            <ToggleControl
+            label="Circular Profile Image"
+            checked={ !!this.props.attributes.circleImage }
+            onChange={ this.onChangeCircleImage }
+            className="circle-image"
+            />
+          </PanelRow>
+
+          <PanelRow className="display-block parent">
+            <ToggleControl
+            label="Image Border"
+            checked={ !!this.props.attributes.imgBorder }
+            onChange={ this.onChangeImgBorder }
+            className="image-border"
+            />
+          {
+          this.props.attributes.imgBorder && (
+            <RangeControl
+             label="Border Width"
+             value={ this.props.attributes.imgBorderWidth }
+             onChange={ this.onChangeBorderWidth }
+             min={ 0 }
+             max={ 20 }
+            />
+          )
+          }
+          </PanelRow>
+          </PanelBody>
+
+
+          <PanelColorSettings
+            title={ __('Block Colors', 'blueprint-blocks') }
+            initialOpen={false}
+            colorSettings= { [
+            {
+              value: this.props.attributes.colorText,
+              onChange:  this.onChangeTextColor,
+              label: __('Text Color', 'blueprint-blocks'),
+            },
+            {
+              value: this.props.attributes.colorBG,
+              onChange: this.onChangeBGColor,
+              label: __('Background Color', 'blueprint-blocks'),
+            },
+          ] }
+          />
+
+          {
+          this.props.attributes.showReadMore && (
+            <PanelColorSettings
+              title={ __('Button Colors', 'blueprint-blocks') }
+              initialOpen={false}
+              className="parent"
+              colorSettings={ [
+              {
+                value: this.props.attributes.buttonColor,
+                onChange: this.onChangeButtonColor,
+                label: __('Read More Button Color', 'blueprint-blocks'),
+              },
+              {
+                value: this.props.attributes.buttonBG,
+                onChange: this.onChangeButtonBGColor,
+                label: __('Button Background Color', 'blueprint-blocks'),
+              },
+            ] }
+            />
+          )
+          }
+
+          {
+          this.props.attributes.imgBorder && (
+
+            <PanelColorSettings
+              title={ __('Image Border Color', 'blueprint-blocks') }
+              initialOpen={false}
+              colorSettings= { [
+              {
+                value: this.props.attributes.imgBorderColor,
+                onChange: this.onChangeImageBorderColor,
+                label: __('Image Border Color', 'blueprint-blocks'),
+              },
+            ] }
+            />
+          )
+          }
+
+          </InspectorControls>
+       );
+    }
+
     onChangeSelectAuthor( value ) {
         // Find the author
         const author = this.state.authors.find( ( item ) => { return item.id == parseInt( value ) } );
@@ -124,6 +276,63 @@ class myAuthorEdit extends Component {
     onChangeAuthorDescription( newValue ) {
       this.props.setAttributes( { authorDescription: newValue } );
     }
+
+    onChangeTextColor( newValue) {
+        this.props.setAttributes( { colorText: newValue });
+    }
+
+    onChangeBGColor( newValue) {
+      this.props.setAttributes( { colorBG: newValue });
+    }
+
+    onChangeCircleImage( newValue) {
+      if ( this.props.attributes.circleImage ) {
+         this.props.setAttributes( { circleImage: false } );
+      } else {
+         this.props.setAttributes( { circleImage: true } );
+      }
+    }
+
+    onChangeImgBorder( newValue) {
+      if ( this.props.attributes.imgBorder ) {
+         this.props.setAttributes( { imgBorder: false } );
+      } else {
+         this.props.setAttributes( { imgBorder: true } );
+      }
+    }
+
+    onChangeBorderWidth( newValue) {
+      this.props.setAttributes( { imgBorderWidth: newValue });
+    }
+
+    nChangeImageBorderColor( newValue) {
+      this.props.setAttributes( { imgBorderColor: newValue });
+    }
+
+    onChangeShowReadMore( newValue) {
+      if ( this.props.attributes.showReadMore ) {
+         this.props.setAttributes( { showReadMore: false } );
+      } else {
+         this.props.setAttributes( { showReadMore: true } );
+      }
+    }
+
+    onChangeReadMoreText( newValue) {
+      this.props.setAttributes( { readMoreText: newValue });
+    }
+
+    onChangeReadMoreLink( newValue) {
+      this.props.setAttributes( { readMoreLink: newValue });
+    }
+
+    onChangeButtonColor( newValue) {
+      this.props.setAttributes( { buttonColor: newValue });
+    }
+
+    onChangeButtonBGColor( newValue) {
+      this.props.setAttributes( { buttonBG: newValue });
+    }
+
 
     getSiteLinks() {
         return (
@@ -184,6 +393,8 @@ class myAuthorEdit extends Component {
 		return (
             <div className={this.props.className }>
 
+            { this.getInspectorControls(options) }
+
             <SelectControl
                 onChange={this.onChangeSelectAuthor}
                 value={ this.props.attributes.selectedAuthor }
@@ -201,7 +412,7 @@ class myAuthorEdit extends Component {
                 <RichText
                     tagName='span'
                     placeholder= { 'Author Name' }
-                    className="buttons-label"
+                    className="author-name"
                     value={ this.props.attributes.profileTitle }
                     onChange={ this.onChangeProfileTitle }
                     keepPlaceholderOnFocus={true}
@@ -223,6 +434,7 @@ class myAuthorEdit extends Component {
                                 <img
                                 src={ this.props.attributes.imgUrl }
                                 onClick={ open }
+                                className="profile-image"
                                 /></div>;
                     }}
                   />
@@ -240,8 +452,11 @@ class myAuthorEdit extends Component {
                 </div>
 
                 <div className="social-icons">
+                  <h5 className="label">Social Media Links</h5>
                     <InnerBlocks
-                      allowedBlocks={['blueprint-blocks/social-link']} template={TEMPLATE} />
+                      allowedBlocks={['blueprint-blocks/social-link']}
+                      template={TEMPLATE}
+                    />
                 </div>
 
                 </div>
@@ -261,34 +476,81 @@ registerBlockType( 'blueprint-blocks/blueprint-author', {
 	category: 'blueprint-blocks',
 	keywords: [
 		__( 'Author' ),
-        __( 'Blueprint' ),
-        __( 'Profile' ),
+    __( 'Blueprint' ),
+    __( 'Profile' ),
 	],
+  supports: {
+    align: [ 'center', 'wide', 'full'  ],
+    anchor: true,
+  },
 	attributes: {
-        authorList: {
-          type:'array',
-        },
         selectedAuthor: {
-            type: 'number',
-            default: null,
+          type: 'number',
+          default: null,
         },
         authorName: {
-            type: 'string',
+          type: 'string',
         },
         authorDescription: {
-            type: 'string',
-            selector: 'author-blurb',
+          type: 'string',
+          selector: '.author-blurb',
+          source: 'html',
         },
         authorLink: {
           type: 'string',
         },
         profileTitle: {
-             type: 'string',
+          type: 'string',
+          selector: '.author-name',
+          source: 'html',
         },
         imgUrl: {
+          type: 'string',
+          default: 'http://placehold.it/500',
+          selector: 'img'
+        },
+        buttonBG: {
             type: 'string',
-            default: 'http://placehold.it/500',
-        }
+        },
+        buttonColor: {
+            type: 'string',
+        },
+        circleImage: {
+            type: 'boolean',
+            default: false,
+        },
+        colorBG: {
+            type: 'string',
+            default: '',
+        },
+        colorText: {
+            type: 'string',
+            default: '',
+        },
+        imgBorderColor: {
+            type: 'string',
+            default: '',
+        },
+        imgBorder: {
+            type: 'boolean',
+            default: false,
+        },
+        imgBorderWidth: {
+            type: 'integer',
+            default: 0,
+        },
+        readMoreLink: {
+            type: 'string',
+            default: '',
+        },
+        readMoreText: {
+            type: 'string',
+            default: '',
+        },
+        showReadMore: {
+            type: 'boolean',
+            default: false,
+        },
 	  },
 
 	edit: myAuthorEdit,
@@ -305,7 +567,11 @@ registerBlockType( 'blueprint-blocks/blueprint-author', {
 			<div className={ props.className }>
 
         <h3 className="profile-title">
-            <span>{ props.attributes.profileTitle }</span>
+        <RichText.Content
+            tagName='span'
+            className="author-name"
+            value={ props.attributes.profileTitle }
+            />
         </h3>
 
         <div className="inner is-flex">
@@ -331,11 +597,7 @@ registerBlockType( 'blueprint-blocks/blueprint-author', {
             </div>
 
             <div className="blueprint-profile-links">
-              <nav className="blueprint-social-wrap bpauthor-block-social">
-                <ul className="blueprint-social">
-                  <InnerBlocks.Content />
-                </ul>
-              </nav>
+                <InnerBlocks.Content />
             </div>
 
         </div>
