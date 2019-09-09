@@ -13,7 +13,7 @@ function blueprint_blocks_add_api_to_mbt_book( $args, $post_type ) {
       $args['show_in_rest'] = true;
 
       // Optionally customize the rest_base or rest_controller_class
-      $args['rest_base']             = 'mbt_book';
+      $args['rest_base']  = 'mbt_book';
       $args['rest_controller_class'] = 'WP_REST_Posts_Controller';
       $args['supports'][] = 'excerpt';
    }
@@ -21,8 +21,14 @@ function blueprint_blocks_add_api_to_mbt_book( $args, $post_type ) {
    return $args;
 }
 
-add_action( 'rest_api_init', 'blueprint_blocks_create_api_meta_fields' );
 
+
+add_action( 'rest_api_init', 'blueprint_blocks_create_api_meta_fields' );
+/**
+ * Add mbt book fields to rest api so we can access them within the block editor
+ * @method blueprint_blocks_create_api_meta_fields
+ * @return [null] [returns fields to api]
+ */
 function blueprint_blocks_create_api_meta_fields() {
 
    register_rest_field(
@@ -126,7 +132,7 @@ function blueprint_blocks_mbt_get_tagline( $object ) {
 }
 
 function blueprint_blocks_mbt_editor_style( $object ) {
-   $style_url = plugins_url( 'blueprint-blocks/blocks/dist/assets/buttons/' );
+   $style_url = plugins_url( 'blueprint-blocks/extras/assets/button-packs/blueprint-buttons/' );
 	return $style_url;
 }
 
@@ -157,7 +163,7 @@ function blueprint_blocks_get_allowed_tags() {
 }
 
 function blueprint_dynamic_get_mbt_style_url() {
-   $style_url = plugins_url( 'blueprint-blocks/blocks/src/mbt-book/buttons/' );
+   $style_url = plugins_url( 'blueprint-blocks/extras/assets/button-packs/blueprint-buttons/' );
 
    if( function_exists( 'mbt_current_style_url') ) {
         $style_url =  mbt_current_style_url( null );
@@ -167,33 +173,25 @@ function blueprint_dynamic_get_mbt_style_url() {
 
 }
 
+/**
+ * [If the user changes the button style set in MBT then we want to reflect
+ * that change in the front end, without making extra work for the user. ]
+ * @method blueprint_dynamic_render_mbt_buttons
+ * @param  [array]  $buylinks [array of buylinks for book]
+ * @param  [string] $styleURL [set in block attrubutes]
+ * @return [html]  returns formatted buttons using current styles.
+ */
+
 function blueprint_dynamic_render_mbt_buttons( $buylinks, $styleURL ) {
    $compliantStyle = false;
    $buttons = '';
 
    $settings = get_option( 'mbt_settings', array() );
-   $style = !empty( $settings['style_pack'] ) ? $settings['style_pack'] : 'blueprint_custom';
+   $style = !empty( $settings['style_pack'] ) ? $settings['style_pack'] : 'blueprint-buttons';
 
    /**
-    * Not actually using this part yet but might need it later
-    */
-   $default_style_packs = array(
-   'blue_flat_compli',
-   'blue_flat',
-   'gold_flat_compli',
-   'gold_flat',
-   'golden_compli',
-   'golden',
-   'green_flat_compli',
-   'green_flat',
-   'grey_flat',
-   'grey_flat_compli',
-   'orange_flat',
-   'orange_flat_compli',
-   'silver_compli',
-   'silver',
-   );
-
+   * Default style packs which have compliant buttons
+   */
    $compliant_style_packs = array(
    'blue_flat_compli',
    'gold_flat_compli',
@@ -229,6 +227,14 @@ function blueprint_dynamic_render_mbt_buttons( $buylinks, $styleURL ) {
             $compliantButton = true;
             $class .= ' compliant-buttons';
          }
+
+         /**
+          * Compliant buttons are a mini-set of buttons, and don't
+          * contain all the shop buttons. So, if the compliant pack
+          * is in use, but the button in question is not for one of the 3 compliant
+          * vendors, we'll strip the _compli from the image link and grab the image
+          * from the parent button set.
+          */
          if( $compliantStyle && !$compliantButton ) {
             $imageURL = str_replace( '_compli', '', $styleURL );
          }
@@ -267,8 +273,10 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
    /**
     * Simple true/false vars
     */
-   $align = !empty( $atts['align'] ) ? 'align' .  $atts['align'] : '';
+   $className = !empty( $atts['className'] ) ? $atts['className'] : false;
+   $align = !empty( $atts['align'] ) ? 'align' .  $atts['align'] : false;
    $audioSample = !empty( $atts['audioSample'] ) ? $atts['audioSample'] : false;
+   $anchor = !empty( $atts['anchor'] ) ? $atts['anchor'] : false;
    $bookSample = !empty( $atts['bookSample'] ) ? $atts['bookSample'] : false;
    $buylinks = !empty( $atts['buylinks'] ) ? $atts["buylinks"] : array();
    $buttonsLabel = !empty( $atts['buttonsLabel']) ? $atts['buttonsLabel'] : 'Now Available From';
@@ -279,6 +287,7 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
    $cover = !empty( $atts['cover'] ) ? $atts["cover"] : false;
    $customBlurb = !empty( $atts['customBlurb'] ) ? $atts['customBlurb'] : get_the_excerpt( $selectedPost );
    $flexReverse = !empty( $atts['flexReverse'] ) ? true : false;
+   $maxWidthInner = !empty( $atts['maxWidthInner'] ) ? $atts['maxWidthInner'] : '1020';
    $mbtActive = !empty( $atts['mbtActive'] )  ? true : false;
    $readMoreLink = !empty( $atts['readMoreLink'] ) ? $atts['readMoreLink'] : get_the_permalink( $selectedPost );
    $readMoreText = !empty( $atts['readMoreText'] ) ? $atts['readMoreText'] : 'Read More';
@@ -291,22 +300,28 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
    $showMoreLink = ( !empty( $display['moreLink'] ) && $display['moreLink'] === 'show' ) ? true : false;
    $showSampleLinks = ( !empty( $display['sampleLinks'] ) && $display['sampleLinks'] === 'show' ) ? true : false;
 
-   //print_r( $display );
-   $blockStyles = '';
-
-   if( $colorBG || $colorText ) {
-      $blockStyles = sprintf(
-         'style="background-color:%1$s;color:%2$s;"',
-         sanitize_hex_color( $colorBG ),
-         sanitize_hex_color( $colorText)
-      );
-   }
-   /**
-    * vars with defaults
-    */
-
    $flexClass = $flexReverse ? 'flex-row-reverse' : 'flex-row';
    $allowedTags = blueprint_blocks_get_allowed_tags();
+
+   /**
+    * Block Styles
+    */
+    $blockStyles = 'style="';
+
+    if( $colorBG || $colorText ) {
+       $blockStyles .= sprintf(
+          'background-color:%1$s;color:%2$s;',
+          sanitize_hex_color( $colorBG ),
+          sanitize_hex_color( $colorText)
+       );
+    }
+    $blockStyles .= '"';
+
+    $blockInnerStyle = '';
+    if( $align === 'alignfull' ) {
+      $blockInnerStyle .= 'style="width:' . absint( $maxWidthInner ) . 'px;"';
+    }
+
 
 
    /**
@@ -328,9 +343,6 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
       );
    }
 
-
-   $class = 'wp-block-blueprint-blocks-mbt-book';
-   if( $align ) { $class .= ' ' . $align; }
    $audioSampleLink = '';
    $bookSampleLink = '';
    $cover_links = '';
@@ -404,7 +416,15 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
       $readMoreStyle .= '"';
    endif;
 
-   if( $showMoreLink ) {
+   /**
+    * Determine if the readMoreLink is the same as the permalink_link
+    * If they are the same AND MBT is inactive, then the permalink will go to a 404 error
+    * so we won't display the read more button. If they are not the same, or if MBT is active,
+    * then we can safely display the button.
+    */
+   $moreLinkIsPermalink = $readMoreLink === get_the_permalink( $selectedPost );
+
+   if( $showMoreLink && ( $mbtActive || !$moreLinkIsPermalink ) ) {
       $read_more_link =  sprintf(
          '<a class="%1$s" href="%2$s" %4$s>%3$s</a>',
          $readMoreClass,
@@ -432,10 +452,25 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
 
    $bestBlurb = implode( '<p>', $paragraphs );
 
+   /**
+    *Figure out block class and idea
+    */
 
+   $class = 'wp-block-blueprint-blocks-mbt-book';
+   if( $className ) { $class .= ' ' . $className; }
+   if( $align ) { $class .= ' ' . $align; }
+
+   $id = '';
+   if( $anchor ) { $id = 'id="' . esc_attr( $anchor ) . '"'; }
+
+
+  /**
+   * [$html : block output]
+   *
+   */
    $html = sprintf(
    '<div class="%1$s" %10$s>
-   <div class="inner is-flex %2$s">
+   <div class="inner is-flex %2$s" %11$s>
    <div class="preview-left">
    %3$s
    %4$s
@@ -456,50 +491,9 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
    wp_kses_post( $tagline ),
    wp_kses_post( $bestBlurb ),
    $buylinkSection,
-   $blockStyles
+   $blockStyles,
+   $blockInnerStyle
    );
 
    return $html;
 }
-
-function blueprint_maybe_render_button_styles() {
-
-   $load_blueprint_styles  = true;
-
-   $settings = get_option( 'mbt_settings', array() );
-   $style = $settings['style_pack'];
-
-   $default_style_packs = array(
-     'blue_flat_compli',
-     'blue_flat',
-     'gold_flat_compli',
-     'gold_flat',
-     'golden_compli',
-     'golden',
-     'green_flat_compli',
-     'green_flat',
-     'grey_flat',
-     'grey_flat_compli',
-     'orange_flat',
-     'orange_flat_compli',
-     'silver_compli',
-     'silver',
-   );
-
-   if( in_array( $style, $default_style_packs ) ) {
-     $load_blueprint_styles = false;
-   }
-
-   wp_register_style(
-     'blueprint-blocks-mbt-buttons-style',
-     plugins_url('blueprint-blocks/blocks/dist/css/blocks.buttons.build.css'),
-     array()
-   );
-
-   if( !defined( 'MBT_VERSION' ) || $load_blueprint_styles ) {
-     wp_enqueue_style( 'blueprint-blocks-mbt-buttons-style' );
-   }
-}
-add_action('wp_enqueue_scripts', 'blueprint_maybe_render_button_styles');
-add_action('enqueue_block_editor_assets','blueprint_maybe_render_button_styles');
-add_action('enqueue_block_assets','blueprint_maybe_render_button_styles');

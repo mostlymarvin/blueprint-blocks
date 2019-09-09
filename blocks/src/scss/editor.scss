@@ -3,6 +3,28 @@
 @import '../blueprint-author/editor.scss';
 @import '../social-link/editor.scss';
 
+
+
+.blueprint-block-message {
+    margin: 20px auto 0;
+    background-color:#f4f4f4;
+    padding:0 10px 20px;
+    text-align:center;
+    font-weight:bold;
+
+    span {
+        display:block;
+    }
+
+    a {
+        color:#11A0D2;
+    }
+}
+.blueprint-block-settings {
+    background-color:#f4f4f4;
+    color:#000;
+    padding:20px 20px 20px;
+}
 .editor-block-list-item-blueprint-blocks-mbt-book,
 .editor-block-list-item-blueprint-blocks-blueprint-author,
 .editor-block-list-item-blueprint-blocks-social-link {
@@ -32,6 +54,11 @@
    border-bottom:1px solid #eee;
    margin-bottom:20px;
 
+   &.no-top-space {
+     margin-top:0;
+     padding-top:0;
+   }
+   
    &.parent {
      border-bottom:none;
      margin-bottom:0;
@@ -43,4 +70,13 @@
    .edit-post-settings-sidebar__panel-block .components-panel__body .components-base-control {
         margin-bottom:8px !important;
     }
+}
+.components-panel__row.width-control .components-range-control .components-base-control__field {
+  flex-wrap:wrap;
+
+  label{
+    flex-basis:100% !important;
+    max-width:100% !important;
+    width:100% !important;
+  }
 }

@@ -1,11 +1,19 @@
 .wp-block-blueprint-blocks-blueprint-author {
     box-sizing: border-box;
 
+    .button {
+      text-shadow:none !important;
+      box-shadow:none !important;
+    }
+
+    .wp-block.editor-block-list__block.block-editor-block-list__block {
+      width:max-content;
+    }
    .profile-preview {
        margin-top:40px;
 
        .profile-main {
-         flex-basis:70%;
+         padding-top:20px;
          padding-right:2%;
 
          & * {
@@ -17,14 +25,28 @@
       }
 
        .social-icons {
-         flex-basis:28%;
+         flex-basis:max-content;
        }
    }
-
+   .profile-main {
+     text-align:left;
     .media {
         position: relative;
         background-color: rgba( #0085BA, .1 );
+        z-index:1;
+        float:left;
+        margin-right:12px !important;
 
+        &.circle {
+          border-radius:50%;
+          shape-outside:circle();
+          -webkit-shape-outside:circle();
+        }
+        &.circle img{
+          border-radius:50%;
+          width:200px;
+          height:200px;
+        }
 
         span.edit-media {
             display:block;
@@ -54,8 +76,16 @@
                 height: 100%;
                 pointer-events: none;
                 background-color: rgba( #0085BA, .1 );
-                border-radius:50%;
+                z-index:0;
             }
+            &.circle:after{
+              border-radius:50%;
+            }
+          }
         }
-    }
+      }
+
+      .social-icons {
+        padding-left:20px;
+      }
 }

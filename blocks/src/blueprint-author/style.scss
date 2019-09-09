@@ -1,63 +1,150 @@
 .wp-block-blueprint-blocks-blueprint-author {
+  padding: 0;
+  box-sizing:border-box;
 
-   &:after {
-      content:'';
-      display:table;
-      clear:both;
-   }
-   .is-flex {
-      display:flex;
-      align-items:flex-start;
-   }
+  &.has-background-color  {
+    padding:50px 20px 30px;
+  }
 
-   .media {
-      max-width:100%;
-      float:left;
-      width:200px;
-      max-width:30%;
-      margin-right:30px;
-      border-radius:50%;
-      -webkit-shape-outside:circle();
-      shape-outside:circle();
+  .inner-wrap {
+    margin:0 auto;
+    max-width:100%;
+  }
 
-      img {
-         display:block;
-         object-fit:cover;
-         border-radius:50%;
+  h3.profile-title {
+     border-bottom: 1px solid;
+     text-align:center;
+     position:relative;
+     margin-bottom:30px;
+
+     span {
+        display:inline-block;
+        padding:0 12px;
+        background-color:#fff;
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+
+     }
+  }
+
+  .profile-main {
+
+    .media {
+      width:max-content;
+      margin:0 auto 20px;
+    }
+
+    img {
+       display:block;
+       object-fit:cover;
+    }
+
+    &.circle-left {
+      .media {
+        border-radius:50%;
+
+        img {
+          border-radius: 50%;
+          width:250px;
+          height:250px;
+        }
       }
-   }
-   h3.profile-title {
-      border-bottom: 1px solid;
-      text-align:center;
-      position:relative;
-      margin-bottom:30px;
+    }
 
-      span {
-         display:inline-block;
-         padding:0 12px;
-         background-color:#fff;
-         position:absolute;
-         top:50%;
-         left:50%;
-         transform:translate(-50%, -50%);
+    .bpb-more-link{
+        display:block;
+        margin-top:30px;
 
+      &.btn-center {
+        text-align:center;
       }
-   }
-   .blueprint-profile-links {
-      clear:both;
-   }
-   .blueprint-profile-links ul{
-
-      li {
-         list-style:none;
-
-         a {
-            border-bottom:none !important;
-
-            span {
-               //display:none;
-            }
-         }
+      &.btn-right {
+        text-align:right;
       }
-   }
+      &.btn-left {
+        text-align:left;
+      }
+    }
+  }
+
+
+  .blueprint-profile-links {
+    display:flex;
+    width:100%;
+    justify-content:center;
+    margin-top:60px;
+
+    & > div {
+      margin:0 8px;
+    }
+
+  }
+}
+
+
+@media all and (min-width: 600px ) {
+.wp-block-blueprint-blocks-blueprint-author {
+
+  .is-flex {
+    display:block;
+  }
+  .profile-main {
+    .media {
+      margin-right: 30px;
+    }
+
+    &.circle-left {
+      .media {
+        float:left;
+        -webkit-shape-outside:circle();
+        shape-outside:circle();
+        }
+      }
+    }
+  }
+
+}
+
+@media all and (min-width: 768px ) {
+  .wp-block-blueprint-blocks-blueprint-author {
+
+    .is-flex {
+       display:flex;
+       align-items:flex-start;
+    }
+
+    .blueprint-profile-links {
+      flex-direction:column;
+      justify-content:flex-start;
+      width:max-content;
+      padding-left:30px;
+      margin-top:0;
+    }
+
+    &.alignfull {
+      .blueprint-profile-links {
+        padding-left:40px;
+      }
+    }
+
+}
+}
+
+@media all and (min-width: 960px ) {
+  .wp-block-blueprint-blocks-blueprint-author {
+
+    .blueprint-profile-links {
+      padding-left:40px;
+      margin-top:0;
+    }
+
+    &.alignfull {
+      .blueprint-profile-links {
+        padding-left:60px;
+      }
+    }
+
+}
 }

@@ -1,6 +1,6 @@
 module.exports = {
    context: __dirname,
-   entry: './blocks/src/blocks.js',
+   entry: './blocks/src/blocks.js', 
    mode: 'production',
    output: {
       path: __dirname + '/blocks/dist/',

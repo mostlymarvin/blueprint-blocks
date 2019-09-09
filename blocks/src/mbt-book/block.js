@@ -70,7 +70,6 @@ class mbtSelectBook extends Component {
       const theBlueprint = new Blueprints();
 
       theBlueprint.fetch().then( ( blueprint ) => {
-         //console.log( blueprint.blueprint_social.links );
          this.props.setAttributes( {
             mbtActive: blueprint.mbt_active,
          } );
@@ -273,8 +272,8 @@ class mbtSelectBook extends Component {
          null
 
          ) : (
-            <div className="block-settings">
-            <div className="block-message">{message}</div>
+            <div className="blueprint-block-settings">
+            <div className="blueprint-block-message">{message}</div>
             <SelectControl
                onChange={this.onChangeSelectBook}
                value={ this.props.attributes.selectedPost }
@@ -500,8 +499,8 @@ class mbtSelectBook extends Component {
 
             ) : (
 
-            <div className="block-settings">
-            <div className="block-message">
+            <div className="blueprint-block-settings">
+            <div className="blueprint-block-message">
             <span>MyBookTable is not active.</span>
             <span> Please activate <a href="https://wordpress.org/plugins/mybooktable/" target="_blank">MyBookTable</a> and create books first.</span>
             </div>
@@ -653,6 +652,12 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
     anchor: true,
   },
 	attributes: {
+      anchor: {
+          type: 'string',
+          source: 'attribute',
+          attribute: 'id',
+          selector: '*',
+      },
       audioSample: {
          type: 'string'
       },
@@ -665,9 +670,6 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
       },
       buylinks: {
          type: 'array'
-      },
-      className: {
-        type: 'string',
       },
       colorBG: {
          type: 'string',
@@ -698,7 +700,7 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
       },
       mbtActive: {
          type: 'boolean',
-         default: 'true'
+         default: true
       },
       readMoreLink: {
          type: 'string'

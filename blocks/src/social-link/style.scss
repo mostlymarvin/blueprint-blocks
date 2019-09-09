@@ -1,6 +1,30 @@
-.wp-block-blueprint-blocks-social-link a {
-  border-bottom:none !important;
-  span:not(.editor-icon) {
-    display:none;
+.wp-block-blueprint-blocks-social-link {
+    a {
+      border-bottom:none !important;
+      display:inline-block;
+      margin-bottom:10px;
+      height:30px;
+      width:30px;
+      opacity:1;
+      transition: all .5s;
+      transform: scale( 1, 1);
+
+      &:hover {
+        opacity:.7;
+        transform: scale( 1.1, 1.1);
+      }
+
+    span:not(.editor-icon) {
+      display:none;
+    }
   }
+
+  [class^="icon-"]::before, [class*=" icon-"]::before {
+    font-size:19px !important;
+    line-height:30px;
+    width:30px;
+    text-align:center;
+  }
+
+
 }

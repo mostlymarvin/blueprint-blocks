@@ -1,0 +1,128 @@
+/*
+* Styles for Outline MBT Buttons
+* Colors can be customized in theme customizer
+* Custom CSS can be added
+*/
+
+.blueprint-extras {
+  .mbt-featured-book-widget,
+  .mbt-book,
+  .mbt-book-archive .mbt-book,
+  .buylinks {
+
+    .mbt-book-buybuttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+
+     .mbt-book-buybutton {
+        background: #3c3d42;
+        border: 2px solid #3c3d42;
+        color: #fff;
+        display: block;
+        font-family: Futura, Trebuchet MS, Arial, sans-serif;
+        text-transform: uppercase;
+        font-size: 12px;
+        font-weight: bold;
+        margin: 0.40625rem 0.8125rem 0.40625rem 0;
+        overflow: hidden;
+        //padding: 0 44px 0 0;
+        position: relative;
+        -moz-transition: all .5s;
+        -webkit-transition: all .5s;
+        transition: all .5s;
+        width: 180px;
+        float: none !important;
+
+        a {
+          background-color: white;
+          display:block;
+          border: none;
+          color: inherit;
+          line-height: 0;
+          width: 100%;
+          text-align: center;
+          -moz-transition: none;
+          -webkit-transition: none;
+          transition: none;
+          vertical-align: middle;
+
+          &:hover {
+            border-bottom: none;
+          }
+
+          img{
+            border: none;
+            border-bottom-right-radius: 0;
+            border-top-right-radius: 0;
+            -webkit-filter: inherit;
+            filter: inherit;
+            width: auto;
+            height: 36px;
+            vertical-align: initial;
+            object-fit:contain;
+          }
+        }
+      }
+    }
+  }
+}
+
+.blueprint-extras.blueprint-buttons {
+  .mbt-featured-book-widget,
+  .mbt-book,
+  .mbt-book-archive .mbt-book,
+  .buylinks {
+
+    .mbt-book-buybuttons {
+
+     .mbt-book-buybutton {
+
+        padding: 0 44px 0 0;
+
+        &:after {
+          content: 'Buy \00000a Now';
+          line-height: 12px;
+          position: absolute;
+          right: 0;
+          text-align: center;
+          -moz-transition: none;
+          -webkit-transition: none;
+          transition: none;
+          top: 6px;
+          width: 40px;
+        }
+      }
+    }
+  }
+}
+
+
+.blueprint-extras.blueprint-simple-buttons {
+  .mbt-featured-book-widget,
+  .mbt-book,
+  .mbt-book-archive .mbt-book,
+  .buylinks {
+
+    .mbt-book-buybuttons {
+
+
+     .mbt-book-buybutton {
+       padding:0;
+       width:135px;
+
+        a {
+          width:100%;
+          height:100%;
+          background-color:white;
+
+          img{
+            height:30px;
+            width:auto;
+            
+          }
+        }
+      }
+    }
+  }
+}

@@ -2,13 +2,14 @@
 ul.blueprint-social .editor-inner-blocks .editor-block-list__layout{
   width:60px
 }
-.social-link{
-    display:block;
-    height:30px;
-    width:30px;
-    border-bottom:none !important;
-    padding:3px 3px;
-    box-sizing:border-box;
+.wp-block-blueprint-blocks-social-link a {
+  display:block;
+  height:30px;
+  width:30px;
+  border-bottom:none !important;
+  padding:3px 3px;
+  box-sizing:border-box;
+  margin-bottom:0;
 
 }
 .social-link span {
@@ -19,4 +20,8 @@ ul.blueprint-social .editor-inner-blocks .editor-block-list__layout{
   mask-repeat: no-repeat;
   mask-position:center;
   box-sizing:border-box;
+}
+
+.editor-inner-blocks .components-drop-zone {
+  float:right;
 }
