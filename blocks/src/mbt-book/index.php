@@ -288,8 +288,8 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
    $customBlurb = !empty( $atts['customBlurb'] ) ? $atts['customBlurb'] : get_the_excerpt( $selectedPost );
    $flexReverse = !empty( $atts['flexReverse'] ) ? true : false;
    $maxWidthInner = !empty( $atts['maxWidthInner'] ) ? $atts['maxWidthInner'] : '1020';
-   $mbtActive = !empty( $atts['mbtActive'] )  ? true : false;
-   $readMoreLink = !empty( $atts['readMoreLink'] ) ? $atts['readMoreLink'] : get_the_permalink( $selectedPost );
+   $mbtActive = ( defined( 'MBT_VERSION' ) )  ? true : false;
+   $readMoreLink = !empty( $atts['readMoreLink'] ) ? $atts['readMoreLink'] : false ;
    $readMoreText = !empty( $atts['readMoreText'] ) ? $atts['readMoreText'] : 'Read More';
    $tagline = !empty( $atts['customTagline'] ) ? $atts["customTagline"] : false;
    $title = !empty( $atts['title'] ) ? $atts["title"] : get_the_title( $selectedPost );
@@ -417,14 +417,10 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
    endif;
 
    /**
-    * Determine if the readMoreLink is the same as the permalink_link
-    * If they are the same AND MBT is inactive, then the permalink will go to a 404 error
-    * so we won't display the read more button. If they are not the same, or if MBT is active,
-    * then we can safely display the button.
+    * If MBT is not active, hide the "read more" button because it will likely go to a 404 page.
     */
-   $moreLinkIsPermalink = $readMoreLink === get_the_permalink( $selectedPost );
 
-   if( $showMoreLink && ( $mbtActive || !$moreLinkIsPermalink ) ) {
+    if( $showMoreLink && $mbtActive ) {
       $read_more_link =  sprintf(
          '<a class="%1$s" href="%2$s" %4$s>%3$s</a>',
          $readMoreClass,
