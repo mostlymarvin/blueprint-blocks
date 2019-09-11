@@ -599,7 +599,7 @@ class myAuthorEdit extends Component {
 
 
 
-registerBlockType( 'blueprint-blocks/blueprint-author', {
+registerBlockType( 'blueprint-blocks/author-profile', {
 	title: __( 'Author Profile' ),
 	icon: 'admin-users',
 	category: 'blueprint-blocks',
@@ -669,7 +669,7 @@ registerBlockType( 'blueprint-blocks/blueprint-author', {
         },
         maxWidthInner: {
           type: 'integer',
-          default: 1020,
+          default: 1400,
         },
         mbtActive: {
           type: 'boolean',
@@ -711,7 +711,7 @@ registerBlockType( 'blueprint-blocks/blueprint-author', {
 
     if( props.attributes.align === 'full' ) {
       innerStyle = {
-        width: props.attributes.maxWidthInner,
+        //width: props.attributes.maxWidthInner,
       }
     }
 

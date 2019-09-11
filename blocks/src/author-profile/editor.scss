@@ -1,4 +1,4 @@
-.wp-block-blueprint-blocks-blueprint-author {
+.wp-block-blueprint-blocks-author-profile {
     box-sizing: border-box;
 
     .button {
@@ -30,22 +30,27 @@
    }
    .profile-main {
      text-align:left;
+
     .media {
         position: relative;
         background-color: rgba( #0085BA, .1 );
         z-index:1;
         float:left;
-        margin-right:12px !important;
+        margin-right:22px !important;
+        width:150px;
+      
 
         &.circle {
           border-radius:50%;
           shape-outside:circle();
           -webkit-shape-outside:circle();
+          height:150px;
         }
         &.circle img{
           border-radius:50%;
-          width:200px;
-          height:200px;
+          width:150px;
+          height:150px;
+          object-fit:cover;
         }
 
         span.edit-media {

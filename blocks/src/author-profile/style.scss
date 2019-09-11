@@ -1,4 +1,4 @@
-.wp-block-blueprint-blocks-blueprint-author {
+.wp-block-blueprint-blocks-author-profile {
   padding: 0;
   box-sizing:border-box;
 
@@ -85,7 +85,7 @@
 
 
 @media all and (min-width: 600px ) {
-.wp-block-blueprint-blocks-blueprint-author {
+.wp-block-blueprint-blocks-author-profile {
 
   .is-flex {
     display:block;
@@ -108,7 +108,7 @@
 }
 
 @media all and (min-width: 768px ) {
-  .wp-block-blueprint-blocks-blueprint-author {
+  .wp-block-blueprint-blocks-author-profile {
 
     .is-flex {
        display:flex;
@@ -133,7 +133,7 @@
 }
 
 @media all and (min-width: 960px ) {
-  .wp-block-blueprint-blocks-blueprint-author {
+  .wp-block-blueprint-blocks-author-profile {
 
     .blueprint-profile-links {
       padding-left:40px;

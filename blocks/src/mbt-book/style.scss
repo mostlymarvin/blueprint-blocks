@@ -1,15 +1,28 @@
+
+
 .wp-block-blueprint-blocks-mbt-book {
-    padding: 40px 20px;
+    padding: 0 20px;
     margin-bottom:50px;
 
+    &.has-background-color {
+      padding: 40px 20px;
+    }
+
+    .is-flex {
+      display:flex;
+      flex-wrap:wrap;
+      justify-content: center;
+    }
     .is-flex.flex-row-reverse {
         flex-direction:row-reverse !important;
     }
     .inner {
       max-width:100%;
       margin: 0 auto;
+      width:100%;
     }
     .preview-left {
+      width:100%;
 
         a.image-link {
             display:block;
@@ -26,12 +39,11 @@
             text-align:center;
         }
         .cover-links span, .cover-links a  {
-            font-size:11px !important;
+            font-size:12px;
             text-align:center;
             display:inline;
             font-style:italic;
-        }
-
+          }
         }
 
     .preview-right {
@@ -49,31 +61,43 @@
         margin-bottom:12px;
     }
     .preview-blurb {
-        margin-bottom:40px;
+        margin-bottom:30px;
         justify-self:flex-start;
         font-size:18px;
+    }
 
+    &.gutenberg-render span.btn-left,
+    &.gutenberg-render span.btn-right,
+    &.gutenberg-render span.btn-center {
+      display:block;
+      margin-top:20px;
+      text-align:center;
     }
-    .blurb-link, .blurb-text, .blurb-text p {
-        display:inline;
-    }
+    &.gutenberg-render  span.btn-left { text-align: left; }
+    &.gutenberg-render  span.btn-right { text-align: right; }
+
 
     h5.buttons-label {
         text-align:center;
-        position:relative;
         margin:0 auto;
-        width:max-content;
         background-color:#fff;
         padding:0 20px;
-        bottom:38px;
+        position:absolute;
+        top:0;
+        left:50%;
+        transform: translate( -50%, -50%);
     }
     .buylinks {
-        padding:30px 10px 20px;
+        padding:16px 20px 0;
         border:1px solid #999;
         justify-self:flex-end;
+        position:relative;
 
         &:empty {
             border:none;
+        }
+        .mbt-book {
+          padding-bottom:0;
         }
         .mbt-book .mbt-book-buybuttons {
           display:flex;
@@ -85,7 +109,9 @@
           margin-bottom:16px;
         }
     }
-
+    &.gutenberg-render .buylinks {
+      padding-bottom:16px;
+    }
 }
 
 @media all and (min-width: 600px ) {
@@ -93,10 +119,9 @@
 
         .preview-left {
             padding-right:30px;
+            margin-right:32px;
+            width:max-content;
 
-            a.image-link {
-              margin-right:32px;
-            }
 
             .cover-links {
                 margin-bottom:0;
@@ -123,11 +148,21 @@
         }
     }
 }
+@media all and ( min-width:768px ) {
+  .wp-block-blueprint-blocks-mbt-book {
 
-
+      .is-flex {
+        flex-wrap:nowrap;
+      }
+    }
+}
 @media all and (min-width:960px ) {
     .wp-block-blueprint-blocks-mbt-book {
-        padding:40px 50px;
+        padding:0 50px;
+
+        &.has-background-color {
+          padding: 40px 50px;
+        }
 
         .mbt-book .mbt-book-buybuttons .mbt-book-buybutton {
           flex-basis:unset;

@@ -1,6 +1,6 @@
 @import '../mbt-book/editor.scss';
 @import '../mbt-book/buttons.scss';
-@import '../blueprint-author/editor.scss';
+@import '../author-profile/editor.scss';
 @import '../social-link/editor.scss';
 
 
@@ -26,14 +26,14 @@
     padding:20px 20px 20px;
 }
 .editor-block-list-item-blueprint-blocks-mbt-book,
-.editor-block-list-item-blueprint-blocks-blueprint-author,
+.editor-block-list-item-blueprint-blocks-author-profile,
 .editor-block-list-item-blueprint-blocks-social-link {
   svg.dashicon{
     fill: #49A5C3 !important;
   }
 }
 
-.editor-block-list-item-blueprint-blocks-blueprint-author  {
+.editor-block-list-item-blueprint-blocks-author-profile  {
 
   .block-editor-block-types-list__item-icon,
   .block-editor-block-types-list__item-icon > *
@@ -49,22 +49,16 @@
   }
 }
 .blueprint-panel-body .components-panel__row  {
-   padding-top:20px;
-   padding-bottom:20px;
-   border-bottom:1px solid #eee;
-   margin-bottom:20px;
 
-   &.no-top-space {
-     margin-top:0;
-     padding-top:0;
-   }
-   
-   &.parent {
-     border-bottom:none;
-     margin-bottom:0;
-     padding-bottom:0;
+    div.components-base-control{
+      width:100%;
+    }
 
-   }
+    &.parent {
+      padding-bottom:20px;
+    }
+
+
 
    .components-base-control .components-base-control__field,
    .edit-post-settings-sidebar__panel-block .components-panel__body .components-base-control {
@@ -79,4 +73,7 @@
     max-width:100% !important;
     width:100% !important;
   }
+}
+.components-panel__row.display-block {
+    display:block !important;
 }

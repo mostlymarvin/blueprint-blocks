@@ -1,140 +1,9 @@
 <?php
-   /*
-   Block: MBT Book
-   * Functions to add mbt fields to Rest API
+   /**
+   * Block: MBT Book
+   * Functions to render dynamic block
    */
 
-
-add_filter( 'register_post_type_args', 'blueprint_blocks_add_api_to_mbt_book', 10, 2 );
-
-function blueprint_blocks_add_api_to_mbt_book( $args, $post_type ) {
-
-   if ( 'mbt_book' === $post_type ) {
-      $args['show_in_rest'] = true;
-
-      // Optionally customize the rest_base or rest_controller_class
-      $args['rest_base']  = 'mbt_book';
-      $args['rest_controller_class'] = 'WP_REST_Posts_Controller';
-      $args['supports'][] = 'excerpt';
-   }
-
-   return $args;
-}
-
-
-
-add_action( 'rest_api_init', 'blueprint_blocks_create_api_meta_fields' );
-/**
- * Add mbt book fields to rest api so we can access them within the block editor
- * @method blueprint_blocks_create_api_meta_fields
- * @return [null] [returns fields to api]
- */
-function blueprint_blocks_create_api_meta_fields() {
-
-   register_rest_field(
-      'mbt_book',
-      'mbt_buybuttons',
-      array(
-      'get_callback' => 'blueprint_blocks_mbt_get_book_buylinks',
-      )
-      );
-
-   register_rest_field(
-      'mbt_book',
-      'mbt_sample_audio',
-      array(
-      'get_callback' =>  'blueprint_blocks_mbt_get_sample_audio',
-      )
-      );
-
-   register_rest_field(
-      'mbt_book',
-      'mbt_sample_url',
-         array(
-         'get_callback' => 'blueprint_blocks_mbt_get_sample_url',
-         )
-      );
-
-   register_rest_field(
-      'mbt_book',
-      'mbt_book_image_id',
-         array(
-         'get_callback' => 'blueprint_blocks_mbt_get_cover',
-         )
-      );
-
-   register_rest_field(
-   'mbt_book',
-   'mbt_unique_id_asin',
-         array(
-         'get_callback' => 'blueprint_blocks_mbt_get_asin',
-         )
-   );
-
-   register_rest_field(
-   'mbt_book',
-   'mbt_book_teaser',
-      array(
-         'get_callback' => 'blueprint_blocks_mbt_get_tagline',
-      )
-   );
-   register_rest_field(
-      'mbt_book',
-      'mbt_editor_style_url',
-         array(
-         'get_callback' => 'blueprint_blocks_mbt_editor_style',
-         )
-   );
-
- }
-
-add_filter( 'blueprint_rest_fields', 'blueprint_blocks_mbt_get_mbt_status' );
-
-function blueprint_blocks_mbt_get_mbt_status( $object ) {
-   $status = false;
-
-   if( defined( 'MBT_VERSION' ) ) {
-      $status = true;
-   }
-	return array(
-      'mbt_active' => $status
-   );
-}
-
-function blueprint_blocks_mbt_get_book_buylinks( $object ) {
-	$meta = get_post_meta( $object['id'], 'mbt_buybuttons' );
-	return $meta;
-}
-
-function blueprint_blocks_mbt_get_sample_url( $object ) {
-	$meta = get_post_meta( $object['id'], 'mbt_sample_url' );
-	return $meta;
-
-}
-function blueprint_blocks_mbt_get_sample_audio( $object ) {
-	$meta = get_post_meta( $object['id'], 'mbt_sample_audio' );
-	return $meta;
-
-}
-function blueprint_blocks_mbt_get_cover( $object ) {
-  $cover_id = get_post_meta( $object['id'], 'mbt_book_image_id' );
-  return $cover_id;
-}
-
-function blueprint_blocks_mbt_get_asin( $object ) {
-	$meta = get_post_meta( $object['id'], 'mbt_unique_id_asin' );
-	return $meta;
-}
-
-function blueprint_blocks_mbt_get_tagline( $object ) {
-	$meta = get_post_meta( $object['id'], 'mbt_book_teaser' );
-	return $meta;
-}
-
-function blueprint_blocks_mbt_editor_style( $object ) {
-   $style_url = plugins_url( 'blueprint-blocks/extras/assets/button-packs/blueprint-buttons/' );
-	return $style_url;
-}
 
 function blueprint_blocks_get_allowed_tags() {
    $allowed_atts = array(
@@ -261,6 +130,15 @@ function blueprint_dynamic_render_mbt_buttons( $buylinks, $styleURL ) {
 
 function blueprint_dynamic_render_mbt_book_block( $atts ) {
 
+  $blocks = parse_blocks( get_the_content() );
+  //print_r( $blocks );
+  $thisContent = [];
+  foreach( $blocks as $block ) {
+    if(  'blueprint-blocks/mbt-book' === $block['blockName'] ) {
+      $thisContent[] = $block;
+    }
+  }
+  print_r( $thisContent );
    $selectedPost = !empty( $atts['selectedPost'] ) ? $atts["selectedPost"] : false;
 
    /**
@@ -275,6 +153,7 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
     */
    $className = !empty( $atts['className'] ) ? $atts['className'] : false;
    $align = !empty( $atts['align'] ) ? 'align' .  $atts['align'] : false;
+   $alignReadMore = !empty( $atts['alignReadMore'] ) ? $atts['alignReadMore'] : 'btn-inline';
    $audioSample = !empty( $atts['audioSample'] ) ? $atts['audioSample'] : false;
    $anchor = !empty( $atts['anchor'] ) ? $atts['anchor'] : false;
    $bookSample = !empty( $atts['bookSample'] ) ? $atts['bookSample'] : false;
@@ -284,14 +163,17 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
    $colorReadMoreLink = !empty( $atts['colorReadMoreLink'] ) ? $atts['colorReadMoreLink'] : false;
    $colorReadMoreLinkBG = !empty( $atts['colorReadMoreLinkBG'] ) ? $atts['colorReadMoreLinkBG'] : false;
    $colorText = !empty( $atts['colorText'] ) ? $atts['colorText'] : '';
+   $colorTitle = !empty( $atts['colorTitle'] ) ? $atts['colorTitle'] : false;
+   $colorTitlePrefix = !empty( $atts['colorTitlePrefix'] ) ? $atts['colorTitlePrefix'] : false;
    $cover = !empty( $atts['cover'] ) ? $atts["cover"] : false;
    $customBlurb = !empty( $atts['customBlurb'] ) ? $atts['customBlurb'] : get_the_excerpt( $selectedPost );
    $flexReverse = !empty( $atts['flexReverse'] ) ? true : false;
-   $maxWidthInner = !empty( $atts['maxWidthInner'] ) ? $atts['maxWidthInner'] : '1020';
+   $maxWidthInner = !empty( $atts['maxWidthInner'] ) ? $atts['maxWidthInner'] : '1400';
    $mbtActive = ( defined( 'MBT_VERSION' ) )  ? true : false;
    $readMoreLink = !empty( $atts['readMoreLink'] ) ? $atts['readMoreLink'] : false ;
    $readMoreText = !empty( $atts['readMoreText'] ) ? $atts['readMoreText'] : 'Read More';
    $tagline = !empty( $atts['customTagline'] ) ? $atts["customTagline"] : false;
+   $titleFontSize = !empty( $atts['titleFontSize'] ) ? $atts['titleFontSize'] : '24';
    $title = !empty( $atts['title'] ) ? $atts["title"] : get_the_title( $selectedPost );
    $titlePrefix = !empty( $atts['titlePrefix'] ) ? $atts['titlePrefix'] : false;
 
@@ -314,14 +196,47 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
           sanitize_hex_color( $colorBG ),
           sanitize_hex_color( $colorText)
        );
+     }
+
+    if( $colorBG ) {
+      $className .= ' has-background-color';
     }
+
     $blockStyles .= '"';
 
     $blockInnerStyle = '';
-    if( $align === 'alignfull' ) {
+    if( $align === 'alignfull' || $align === 'alignwide') {
       $blockInnerStyle .= 'style="width:' . absint( $maxWidthInner ) . 'px;"';
     }
 
+    /**
+     * Set Title Style
+     * @var [type]
+     */
+    $blockTitleStyle = sprintf(
+       'style="font-size:%1$spx;"',
+       intval( $titleFontSize )
+    );
+
+    $titleColor = $colorTitle ? $colorTitle : $colorText;
+
+    if( $titleColor ) {
+      $blockTitleStyle = sprintf(
+         'style="font-size:%1$spx; color:%2$s;"',
+         intval( $titleFontSize ),
+         sanitize_hex_color( $titleColor )
+      );
+    }
+
+    /**
+     * Set Title Prefix Style if specified;
+     * @var string
+     */
+    $prefixStyle = '';
+
+    if( $colorTitlePrefix ) {
+      $prefixStyle = 'style="color:' . sanitize_hex_color( $colorTitlePrefix ) . '";';
+    }
 
 
    /**
@@ -395,9 +310,15 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
       );
    }
 
-
    if( $titlePrefix ) {
       $title_prefix = '<span class="title-prefix">' . wp_kses_post( $titlePrefix ) . '</span>' ;
+   }
+   if( $titlePrefix ) {
+     $title_prefix = sprintf(
+       '<span class="title-prefix" %1$s>%2$s</span>',
+       $prefixStyle,
+       wp_kses_post( $titlePrefix )
+     );
    }
 
    $readMoreClass = 'button button-primary button-small bpb-more';
@@ -473,7 +394,7 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
    </div>
    <div class="preview-right">
    <div class="preview-right-top">
-   <h2 class="preview-title" %10$s>%5$s %6$s</h2>
+   <h2 class="preview-title" %12$s>%5$s %6$s</h2>
    <div class="preview-tagline">%7$s</div>
    <div class="preview-blurb">%8$s</div></div>
    %9$s
@@ -488,7 +409,8 @@ function blueprint_dynamic_render_mbt_book_block( $atts ) {
    wp_kses_post( $bestBlurb ),
    $buylinkSection,
    $blockStyles,
-   $blockInnerStyle
+   $blockInnerStyle,
+   $blockTitleStyle
    );
 
    return $html;

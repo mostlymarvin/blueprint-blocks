@@ -1,6 +1,7 @@
 .wp-block-blueprint-blocks-mbt-book {
     font-size:15px;
     padding:0;
+    font-weight: normal;
 
     .block-preview.active-preview {
         padding: 40px 20px;
@@ -12,16 +13,29 @@
         .cover-links span {
             display:inline;
             font-style:italic;
-            font-size:12px;
+            font-size:14px;
             line-height:1em;
             font-family:'serif';
         }
+    }
+    .preview-tagline, .preview-tagline:focus {
+      margin-bottom:16px;
+    }
+    .custom-blurb {
+      line-height:1.3em;
+      padding:0;
+
+      &:focus {
+        line-height:1.3em;
+        padding:0;
+      }
     }
     .button.bpb-more.button-primary,
     .button.bpb-more.button-custom {
       text-shadow:none !important;
       box-shadow:none !important;
     }
+    
 
     .buylinks {
 
@@ -178,8 +192,4 @@ h4.buttons-label {
 .custom-label .components-base-control__field,
 .custom-button .components-base-control__field {
     margin-bottom:4px;
-}
-
-.components-panel__row.display-block {
-    display:block !important;
 }

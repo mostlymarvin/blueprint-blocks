@@ -1,4 +1,4 @@
-Style Pack Name: Blueprint Simple Buttons
+Style Pack Name: Blueprint Simple (logos only, no text, custom colors)
 Style Pack URI: http://www.memphismckay.com/
 Author: Memphis McKay
 Author URI: http://www.memphismckay.com
