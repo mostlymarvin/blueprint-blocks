@@ -9,7 +9,7 @@ const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 const { SelectControl, ToggleControl, TextControl, Panel, PanelBody, PanelRow, RangeControl, FontSizePicker } = wp.components;
 const { Component, Fragment } = wp.element;
-const { RichText, InspectorControls, PanelColorSettings, getColorClassName, InnerBlocks} = wp.editor;
+const { RichText, InspectorControls, PanelColorSettings, getColorClassName } = wp.editor;
 
 
 class mbtSelectBook extends Component {
@@ -647,10 +647,6 @@ class mbtSelectBook extends Component {
       }
 
       this.props.className += ' gutenberg-render';
-
-
-
-
 		return (
 
          <div
@@ -779,17 +775,24 @@ class mbtSelectBook extends Component {
                style={ blockStyle }>
                { this.props.attributes.buttonsLabel }
                </h4>
-               <InnerBlocks
-                 allowedBlocks={ ['blueprint-blocks/mbt-buylinks'] }
-                 template={ [
-                   ['blueprint-blocks/mbt-buylinks', {
-                     buylinks: this.props.attributes.buylinks,
-                     styleURL: this.props.attributes.styleURL },
-                     []],
-                 ] }
-                 templateLock='all'
-               />
 
+               <div className="mbt-book-buybuttons blueprint">
+               {
+               this.props.attributes.buylinks.map( (item, key) =>
+                  {
+                  return <div className="mbt-book-buybutton"
+                    key={item.store}>
+                  <a className="image-link"
+                        href={item.url}>
+                        <img className="image-link"
+                        src={this.props.attributes.styleURL + item.store + '_button.png'}
+                        alt={ 'buy from ' + item.store }/>
+                        </a>
+                  </div>
+                  }
+                  )
+               }
+               </div>
             </div>
          )
          }
@@ -1182,7 +1185,23 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
             style={ blockStyle }>
             { props.attributes.buttonsLabel }
           </h5>
-            <InnerBlocks.Content/>
+
+            <div className="mbt-book-buybuttons blueprint">
+            {
+            props.attributes.buylinks.map( (item, key) =>
+               {
+               return <div className="mbt-book-buybutton"
+                 key={item.store}>
+               <a className="image-link"
+                     href={ item.url }>
+                     <img src={ props.attributes.styleURL + item.store + '_button.png'}
+                     alt={ 'buy from ' + item.store }/>
+                     </a>
+               </div>
+               }
+               )
+            }
+            </div>
          </div>
       )
       }

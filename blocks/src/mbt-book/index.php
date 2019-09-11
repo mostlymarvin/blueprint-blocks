@@ -51,12 +51,17 @@ function blueprint_dynamic_get_mbt_style_url() {
  * @return [html]  returns formatted buttons using current styles.
  */
 
-function blueprint_dynamic_render_mbt_buttons( $buylinks, $styleURL ) {
-   $compliantStyle = false;
-   $buttons = '';
+function blueprint_dynamic_render_mbt_buttons( $atts ) {
 
-   $settings = get_option( 'mbt_settings', array() );
-   $style = !empty( $settings['style_pack'] ) ? $settings['style_pack'] : 'blueprint-buttons';
+  $buylinks = !empty( $atts['buylinks'] ) ? $atts['buylinks'] : array();
+  $styleURL = blueprint_dynamic_get_mbt_style_url();
+
+  
+  $compliantStyle = false;
+  $buttons = '<div class="mbt-book-buybuttons">';
+
+  $settings = get_option( 'mbt_settings', array() );
+  $style = !empty( $settings['style_pack'] ) ? $settings['style_pack'] : 'blueprint-buttons';
 
    /**
    * Default style packs which have compliant buttons
@@ -124,21 +129,23 @@ function blueprint_dynamic_render_mbt_buttons( $buylinks, $styleURL ) {
       }
    endif;
 
+   $buttons .= '</div>';
+
    return $buttons;
 }
 
 
 function blueprint_dynamic_render_mbt_book_block( $atts ) {
 
-  $blocks = parse_blocks( get_the_content() );
-  //print_r( $blocks );
-  $thisContent = [];
-  foreach( $blocks as $block ) {
-    if(  'blueprint-blocks/mbt-book' === $block['blockName'] ) {
-      $thisContent[] = $block;
-    }
-  }
-  print_r( $thisContent );
+  //$blocks = parse_blocks( get_the_content() );
+  ////print_r( $blocks );
+  //$thisContent = [];
+  //foreach( $blocks as $block ) {
+    //if(  'blueprint-blocks/mbt-book' === $block['blockName'] ) {
+      //$thisContent[] = $block;
+    //}
+  //}
+  //print_r( $thisContent );
    $selectedPost = !empty( $atts['selectedPost'] ) ? $atts["selectedPost"] : false;
 
    /**
