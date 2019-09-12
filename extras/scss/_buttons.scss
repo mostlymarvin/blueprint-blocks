@@ -8,10 +8,10 @@
   .mbt-featured-book-widget,
   .mbt-book,
   .mbt-book-archive .mbt-book,
-  .buylinks {
+  .buylinks .mbt-book {
 
     .mbt-book-buybuttons {
-      display: flex;
+      display: flex !important;
       justify-content: center;
       flex-wrap: wrap;
 
@@ -22,16 +22,13 @@
         display: block;
         font-family: Futura, Trebuchet MS, Arial, sans-serif;
         text-transform: uppercase;
-        font-size: 12px;
         font-weight: bold;
         margin: 0.40625rem;
         overflow: hidden;
-        //padding: 0 44px 0 0;
         position: relative;
         -moz-transition: all .5s;
         -webkit-transition: all .5s;
         transition: all .5s;
-        width: 180px;
         float: none !important;
 
         a {
@@ -72,13 +69,9 @@
   .mbt-featured-book-widget,
   .mbt-book,
   .mbt-book-archive .mbt-book,
-  .buylinks {
+  .buylinks .mbt-book {
 
-    .mbt-book-buybuttons {
-
-     .mbt-book-buybutton {
-
-        padding: 0 44px 0 0;
+     .mbt-book-buybuttons  .mbt-book-buybutton {
 
         &:after {
           content: 'Buy \00000a Now';
@@ -88,41 +81,181 @@
           text-align: center;
           -moz-transition: none;
           -webkit-transition: none;
+          top:50%;
+          transform:translateY(-50%);
           transition: none;
-          top: 6px;
           width: 40px;
         }
       }
     }
   }
+
+  .blueprint-extras.blueprint-buttons.mbt-btn-size-small{
+    .mbt-book,
+    .mbt-book-archive .mbt-book,
+    .buylinks .mbt-book {
+    .mbt-book-buybuttons  .mbt-book-buybutton {
+      padding: 0 38px 0 0;
+      width:144px;
+      font-size:9px;
+
+      &:after {
+        width:34px;
+      }
+
+      a img { height:25px }
+    }
+  }
 }
+
+  .blueprint-extras.blueprint-buttons.mbt-btn-size-medium{
+    .mbt-book,
+    .mbt-book-archive .mbt-book,
+    .buylinks .mbt-book {
+    .mbt-book-buybuttons  .mbt-book-buybutton {
+      padding: 0 44px 0 0;
+      width:172px;
+      font-size:11px;
+
+      &:after {
+        width:40px;
+      }
+      a img { height:30px }
+    }
+  }
+}
+
+  .blueprint-extras.blueprint-buttons.mbt-btn-size-large{
+    .mbt-book,
+    .mbt-book-archive .mbt-book,
+    .buylinks .mbt-book {
+    .mbt-book-buybuttons  .mbt-book-buybutton {
+      padding: 0 52px 0 0;
+      width:201px;
+      font-size:12px;
+
+      &:after {
+      width:48px;
+      }
+
+      a img { height:35px }
+    }
+  }
+}
+
 
 
 .blueprint-extras.blueprint-simple-buttons {
   .mbt-featured-book-widget,
   .mbt-book,
   .mbt-book-archive .mbt-book,
-  .buylinks {
+  .buylinks .mbt-book {
 
-    .mbt-book-buybuttons {
-
-
-     .mbt-book-buybutton {
+     .mbt-book-buybuttons .mbt-book-buybutton {
        padding:0;
        width:135px;
 
-        a {
-          width:100%;
-          height:100%;
-          background-color:white;
+      a {
+        width:100%;
+        height:100%;
+        background-color:white;
 
-          img{
-            height:30px;
-            width:auto;
+        img{
+          width:auto;
 
-          }
         }
       }
     }
   }
+}
+.blueprint-extras.blueprint-simple-buttons.mbt-btn-size-small {
+  .mbt-book,
+  .mbt-book-archive .mbt-book,
+  .buylinks .mbt-book {
+
+    .mbt-book-buybuttons  .mbt-book-buybutton {
+      width: 120px;
+
+      a img {
+        height: 25px;
+      }
+    }
+  }
+}
+
+.blueprint-extras.blueprint-simple-buttons.mbt-btn-size-medium {
+  .mbt-book,
+  .mbt-book-archive .mbt-book,
+  .buylinks .mbt-book {
+    .mbt-book-buybuttons  .mbt-book-buybutton {
+      width:135px;
+
+      a img {
+        height: 30px;
+      }
+    }
+  }
+}
+
+.blueprint-extras.blueprint-simple-buttons.mbt-btn-size-large{
+  .mbt-book,
+  .mbt-book-archive .mbt-book,
+  .buylinks .mbt-book {
+
+  .mbt-book-buybuttons  .mbt-book-buybutton {
+    width:152px;
+
+    a img {
+        height:35px;
+
+      }
+    }
+  }
+}
+
+
+/** Widgets*/
+.blueprint-extras.blueprint-buttons.mbt-btn-size-small,
+.blueprint-extras.blueprint-buttons.mbt-btn-size-medium,
+.blueprint-extras.blueprint-buttons.mbt-btn-size-large{
+  .mbt-featured-book-widget {
+    .mbt-book-buybuttons  .mbt-book-buybutton {
+      padding: 0 31px 0 0 !important;
+      width:120px !important;
+      font-size:8px !important;
+
+      &:after {
+        width:28px !important;
+      }
+
+      a img {
+        height: 25px !important;
+      }
+    }
+
+  }
+}
+.blueprint-extras.blueprint-simple-buttons.mbt-btn-size-small,
+.blueprint-extras.blueprint-simple-buttons.mbt-btn-size-medium,
+.blueprint-extras.blueprint-simple-buttons.mbt-btn-size-large {
+  .mbt-featured-book-widget {
+    .mbt-book-buybuttons  .mbt-book-buybutton {
+      width: 120px !important;
+
+      a img {
+        height: 25px !important;
+      }
+    }
+  }
+}
+
+.blueprint-extras {
+  .mbt-book .mbt-primary-button,
+  .mbt-book .mbt-primary-button:link,
+  .mbt-book .mbt-primary-button:visited {
+    //need to set color in custom css
+    //need to set border radius in custom css
+    border-bottom:none !important;
+  }
+
 }

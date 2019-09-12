@@ -11,7 +11,7 @@ var $color;
   wp.customize("blueprint_extras[button_background]", function( value ) {
     value.bind( function( newval ) {
       $background = newval;
-      $( '.blueprint-extras .mbt-featured-book-widget .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .mbt-book-archive .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .buylinks .mbt-book-buybuttons .mbt-book-buybutton' ).css({
+      $( '.blueprint-extras .mbt-book .mbt-primary-button, .blueprint-extras .mbt-book .mbt-book-sections .mbt-primary-button, .blueprint-extras .mbt-featured-book-widget .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .mbt-book-archive .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .buylinks .mbt-book-buybuttons .mbt-book-buybutton' ).css({
         'background-color' : newval,
         'border-color' : newval
          });
@@ -22,7 +22,7 @@ var $color;
   wp.customize( "blueprint_extras[button_text_color]", function( value ) {
     value.bind( function( newval ) {
       $color = newval;
-      $( '.blueprint-extras .mbt-featured-book-widget .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .mbt-book-archive .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .buylinks .mbt-book-buybuttons .mbt-book-buybutton' ).css({
+      $( '.blueprint-extras .mbt-book .mbt-primary-button, .blueprint-extras .mbt-book .mbt-book-sections .mbt-primary-button, .blueprint-extras .mbt-featured-book-widget .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .mbt-book-archive .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .buylinks .mbt-book-buybuttons .mbt-book-buybutton' ).css({
         'color' : newval
          });
     } );
@@ -31,7 +31,7 @@ var $color;
   //Hover?
   wp.customize( 'blueprint_extras[button_hover_background]', function( value ) {
     value.bind( function( newval ) {
-      $( '.blueprint-extras .mbt-featured-book-widget .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .mbt-book-archive .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .buylinks .mbt-book-buybuttons .mbt-book-buybutton' ).hover(function() {
+      $( '.blueprint-extras .mbt-book .mbt-primary-button, .blueprint-extras .mbt-book .mbt-book-sections .mbt-primary-button, .blueprint-extras .mbt-featured-book-widget .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .mbt-book-archive .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .buylinks .mbt-book-buybuttons .mbt-book-buybutton' ).hover(function() {
         $(this).css({
         'background-color' : newval,
         'border-color' : newval
@@ -47,7 +47,7 @@ var $color;
 
   wp.customize( 'blueprint_extras[button_hover_text_color]', function( value ) {
     value.bind( function( newval ) {
-      $( '.blueprint-extras .mbt-featured-book-widget .mbt-book-buybuttons .mbt-book-buybutton, .blueprint-extras .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .mbt-book-archive .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .buylinks .mbt-book-buybuttons .mbt-book-buybutton' ).hover(function() {
+      $( '.blueprint-extras .mbt-book .mbt-primary-button, .blueprint-extras .mbt-book .mbt-book-sections .mbt-primary-button, .blueprint-extras .mbt-featured-book-widget .mbt-book-buybuttons .mbt-book-buybutton, .blueprint-extras .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .mbt-book-archive .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .buylinks .mbt-book-buybuttons .mbt-book-buybutton' ).hover(function() {
         $(this).css({
         'color' : newval,
          });
@@ -62,7 +62,7 @@ var $color;
   // Preview the MBT Button Border Radius
   wp.customize( 'blueprint_extras[border_radius]', function( value ) {
     value.bind( function( newval ) {
-      $( '.blueprint-extras .mbt-featured-book-widget .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .mbt-book-archive .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .buylinks .mbt-book-buybuttons .mbt-book-buybutton' ).css({
+      $( '.blueprint-extras .mbt-book .mbt-primary-button, .blueprint-extras .mbt-book .mbt-book-sections .mbt-primary-button, .blueprint-extras .mbt-featured-book-widget .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .mbt-book-archive .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,.blueprint-extras .buylinks .mbt-book-buybuttons .mbt-book-buybutton' ).css({
         'border-radius' : newval + 'px'
          });
       $('.blueprint-extras .mbt-featured-book-widget .mbt-book-buybuttons .mbt-book-buybutton a img,.blueprint-extras .mbt-book .mbt-book-buybuttons .mbt-book-buybutton a img,.blueprint-extras .mbt-book-archive .mbt-book .mbt-book-buybuttons .mbt-book-buybutton a img,.blueprint-extras .buylinks .mbt-book-buybuttons .mbt-book-buybutton a img').css({

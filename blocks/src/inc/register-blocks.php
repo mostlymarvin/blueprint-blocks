@@ -31,19 +31,19 @@ function blueprint_blocks_register_blocks() {
   $blocks = array(
     array(
       'name' => 'mbt-book',
-      //'render_callback' => 'blueprint_dynamic_render_mbt_book_block',
-    ),
-    array(
-      'name' => 'author-profile',
-    ),
-    array(
-      'name' => 'social-links',
     ),
     array(
       'name' => 'mbt-buylinks',
       'render_callback' => 'blueprint_dynamic_render_mbt_buttons',
     ),
+     array(
+      'name' => 'author-profile',
+    ),
+     array(
+        'name' => 'social-links',
+    ),
   );
+
 
   foreach( $blocks as $block ) {
     $render_cb = '';

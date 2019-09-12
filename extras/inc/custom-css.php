@@ -72,6 +72,17 @@ function blueprint_extras_custom_css(){
         border-top-left-radius: %8$spx !important;
         }
 
+        .blueprint-extras .mbt-book .mbt-primary-button {
+          background-color: %1$s;
+          color: %2$s;
+          border-radius: %3$spx;
+        }
+        .blueprint-extras .mbt-book .mbt-primary-button:hover {
+          background-color: %5$s;
+          color: %6$s;
+          border-radius: %3$spx;
+        }
+
         %9$s</style>
         ',
         sanitize_hex_color( $button_bg ),

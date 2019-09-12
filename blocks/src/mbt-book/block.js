@@ -779,6 +779,7 @@ class mbtSelectBook extends Component {
                style={ blockStyle }>
                { this.props.attributes.buttonsLabel }
                </h4>
+
                <InnerBlocks
                  allowedBlocks={ ['blueprint-blocks/mbt-buylinks'] }
                  template={ [
@@ -789,7 +790,6 @@ class mbtSelectBook extends Component {
                  ] }
                  templateLock='all'
                />
-
             </div>
          )
          }
@@ -821,6 +821,7 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
   supports: {
     align: [ 'center', 'wide', 'full' ],
     anchor: true,
+    inserter:false,
   },
 	attributes: {
       alignReadMore: {
@@ -1182,7 +1183,9 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
             style={ blockStyle }>
             { props.attributes.buttonsLabel }
           </h5>
+          <div class="mbt-book">
             <InnerBlocks.Content/>
+          </div>
          </div>
       )
       }
