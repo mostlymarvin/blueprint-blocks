@@ -5,12 +5,13 @@
  * customized to work with Blueprint Theme / Blueprint Child themes.
  */
 
+
+
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 const { SelectControl, ToggleControl, TextControl, Panel, PanelBody, PanelRow, RangeControl, FontSizePicker } = wp.components;
 const { Component, Fragment } = wp.element;
 const { RichText, InspectorControls, PanelColorSettings, getColorClassName, InnerBlocks} = wp.editor;
-
 
 class mbtSelectBook extends Component {
 
@@ -79,8 +80,8 @@ class mbtSelectBook extends Component {
          this.props.setAttributes( {
             mbtActive: blueprint.mbt_active,
          } );
-
       });
+
    }
 
    getOptions() {
@@ -821,7 +822,7 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
   supports: {
     align: [ 'center', 'wide', 'full' ],
     anchor: true,
-    inserter:false,
+    //inserter: false,
   },
 	attributes: {
       alignReadMore: {
