@@ -5,8 +5,6 @@
  * customized to work with Blueprint Theme / Blueprint Child themes.
  */
 
-
-
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 const { SelectControl, ToggleControl, TextControl, Panel, PanelBody, PanelRow, RangeControl, FontSizePicker } = wp.components;

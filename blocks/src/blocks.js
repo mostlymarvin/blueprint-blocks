@@ -1,5 +1,3 @@
-import './filters/disable-blocks.js';
-
 import './scss/style.scss';
 import './scss/editor.scss';
 //import './mbt-book/buttons.scss';

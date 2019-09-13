@@ -1,10 +1,13 @@
 module.exports = {
    context: __dirname,
-   entry: './blocks/src/blocks.js', 
+   entry: {
+     blocks: './blocks/src/blocks.js',
+     filters: './blocks/src/filters/block-filters.js',
+   },
    mode: 'production',
    output: {
       path: __dirname + '/blocks/dist/',
-      filename: 'blocks.build.js'
+      filename: '[name].build.js'
    },
    watch:true,
    module: {
