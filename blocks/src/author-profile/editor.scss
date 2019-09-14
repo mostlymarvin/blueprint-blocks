@@ -1,6 +1,10 @@
 .wp-block-blueprint-blocks-author-profile {
     box-sizing: border-box;
 
+    &.has-background-color  {
+      padding:0px 20px 10px;
+    }
+
     .button {
       text-shadow:none !important;
       box-shadow:none !important;
@@ -11,9 +15,10 @@
     }
    .profile-preview {
        margin-top:40px;
+       padding-top:20px;
 
        .profile-main {
-         padding-top:20px;
+         align-items:flex-start;
          padding-right:2%;
 
          & * {
@@ -26,6 +31,25 @@
 
        .social-icons {
          flex-basis:max-content;
+
+         .site-links span {
+           width:30px;
+           height:30px;
+           margin-bottom:10px;
+           padding:4px;
+           position:relative;
+
+           span {
+             mask-size:20px 20px;
+             mask-repeat: no-repeat;
+             mask-position:center;
+             box-sizing:border-box;
+             margin:0;
+             position:absolute;
+             top:0;
+             left:0;
+           }
+         }
        }
    }
    .profile-main {
@@ -35,16 +59,17 @@
         position: relative;
         background-color: rgba( #0085BA, .1 );
         z-index:1;
-        float:left;
         margin-right:22px !important;
         width:150px;
-      
+        float:none;
+        min-width:max-content;
 
         &.circle {
           border-radius:50%;
           shape-outside:circle();
           -webkit-shape-outside:circle();
           height:150px;
+          width:150px;
         }
         &.circle img{
           border-radius:50%;
@@ -91,6 +116,11 @@
       }
 
       .social-icons {
-        padding-left:20px;
+        width:70px;
+
+        .site-links {
+          padding-right:26px;
+          padding-left:0;
+        }
       }
 }

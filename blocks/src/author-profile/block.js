@@ -7,14 +7,15 @@
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 const { SelectControl, ToggleControl, RangeControl, TextControl, Panel, PanelBody, PanelRow } = wp.components;
-const { Component } = wp.element;
+const { Component, RawHTML } = wp.element;
 const { RichText, MediaUpload, InnerBlocks, InspectorControls, PanelColorSettings  } = wp.editor;
 const { dispatch, select } = wp.data;
 
 
-const TEMPLATE = [
+const SOCIALTEMPLATE = [
 	['blueprint-blocks/social-link', {}, []],
 ];
+
 
 
 class myAuthorEdit extends Component {
@@ -22,7 +23,11 @@ class myAuthorEdit extends Component {
 		return {
           authors: [],
           selectedAuthor: selectedAuthor,
-          author: {}
+          author: {},
+          imgDir: null,
+          socialBg: null,
+          socialColor: null,
+          socialBR: null,
 		      };
     }
 
@@ -32,11 +37,12 @@ class myAuthorEdit extends Component {
 
         this.state = this.constructor.getInitialState( this.props.attributes.selectedAuthor );
 
-        this.getAuthors = this.getAuthors.bind(this);
-        this.getAuthors();
+
 
         this.getBlueprintApi = this.getBlueprintApi.bind(this);
         this.getBlueprintApi();
+        this.getAuthors = this.getAuthors.bind(this);
+        this.getAuthors();
 
         this.getInspectorControls = this.getInspectorControls.bind(this);
         this.getBlockSettings = this.getBlockSettings.bind(this);
@@ -59,6 +65,10 @@ class myAuthorEdit extends Component {
         this.onChangeButtonBGColor = this.onChangeButtonBGColor.bind(this);
         this.onChangeButtonAlign = this.onChangeButtonAlign.bind(this);
         this.onChangeMaxWidthInner = this.onChangeMaxWidthInner.bind(this);
+
+        this.onChangeShowSocialLinks = this.onChangeShowSocialLinks.bind(this);
+        this.onChangeSocialLinkType = this.onChangeSocialLinkType.bind(this);
+        this.getSiteLinks = this.getSiteLinks.bind(this);
     }
 
 
@@ -103,9 +113,35 @@ class myAuthorEdit extends Component {
         const theBlueprint = new Blueprints();
 
         theBlueprint.fetch().then( ( blueprint ) => {
+
+            let siteLinks = blueprint.blueprint_social.links;
+            const formatSiteLinks = [];
+            const imgDirRoot = blueprint.img_dir + 'icons/';
+
+            siteLinks.map( (item, key) => {
+              formatSiteLinks.push({
+                network: item.network,
+                url: item.url,
+                iconLink: imgDirRoot + item.network + '.svg',
+              });
+            });
+
             this.props.setAttributes( {
-                mbtActive: blueprint.mbt_active
+              mbtActive: blueprint.mbt_active,
+              socialActive: blueprint.blueprint_social.status,
+              //socialBg: blueprint.blueprint_social.display.background,
+              //socialColor: blueprint.blueprint_social.display.color,
+              //socialBR: blueprint.blueprint_social.display.border_radius,
+              //siteLinks: formatSiteLinks,
+              //imgDir: blueprint.img_dir,
             } );
+            this.setState({
+              imgDir: blueprint.img_dir,
+              siteLinks: formatSiteLinks,
+              socialBg: blueprint.blueprint_social.display.background,
+              socialColor: blueprint.blueprint_social.display.color,
+              socialBR: blueprint.blueprint_social.display.border_radius,
+            });
 
         });
     }
@@ -219,6 +255,26 @@ class myAuthorEdit extends Component {
           </PanelRow>
           </PanelBody>
 
+          <PanelBody title="Social Media Settings"
+            initialOpen={ false }
+            className="blueprint-panel-body">
+
+            <PanelRow className="display-block parent">
+              <ToggleControl
+                label="Show Social Media Links?"
+                checked={ !! this.props.attributes.showSocialLinks }
+                onChange={ this.onChangeShowSocialLinks }
+                className="link-type"
+              />
+              <ToggleControl
+              label="Use site-wide social media links instead of user profile social links?"
+              checked={ !! this.props.attributes.useSiteLinks }
+              onChange={ this.onChangeSocialLinkType }
+              className="link-type"
+              />
+            </PanelRow>
+          </PanelBody>
+
 
           <PanelColorSettings
             title={ __('Block Colors', 'blueprint-blocks') }
@@ -281,6 +337,42 @@ class myAuthorEdit extends Component {
        );
     }
 
+
+
+    getSiteLinks() {
+        return (
+            this.state.siteLinks ? (
+            <div className="blueprint-profile-links site-links">
+            {
+            this.state.siteLinks.map( (item, key) =>{
+
+              let socialLinkBg = {
+                backgroundColor: this.state.socialBg,
+                borderRadius: this.state.socialBR,
+              }
+
+              let socialIconStyle = {
+                display: 'inline-block',
+                backgroundColor: this.state.socialColor,
+                maskImage: 'url( ' + item.iconLink + ')',
+                webkitMaskImage: 'url( ' + item.iconLink + ')',
+              }
+
+              return <span className={ item.network + ' icon-' + item.network }
+                      style={ socialLinkBg }>
+                <span
+                  className="editor-icon"
+                  style={ socialIconStyle }></span>
+                </span>
+              })
+            }
+            </div>
+            ) : (
+                null
+            )
+        );
+    }
+
     onChangeSelectAuthor( value ) {
         // Find the author
         const author = this.state.authors.find( ( item ) => { return item.id == parseInt( value ) } );
@@ -292,10 +384,15 @@ class myAuthorEdit extends Component {
           authorLink: author.link,
         } );
 
+        const authorImage = author.mbt_tax_image_url;
+        if( authorImage ) {
+          this.props.setAttributes({
+            imgUrl: authorImage,
+          });
+        }
         // Set the attributes
         this.props.setAttributes( {
             selectedAuthor: parseInt( value ),
-            //authorName: author.name,
             authorDescription: author.description,
             profileTitle: author.name,
             readMoreLink: author.link,
@@ -366,6 +463,30 @@ class myAuthorEdit extends Component {
       this.onChangeReadMoreLink( authorLink );
     }
 
+    onChangeShowSocialLinks( newValue) {
+      if ( this.props.attributes.showSocialLinks ) {
+         this.props.setAttributes( { showSocialLinks: false } );
+
+      } else {
+         this.props.setAttributes( { showSocialLinks: true } );
+      }
+    }
+
+
+    onChangeSocialLinkType( newValue) {
+      if ( this.props.attributes.useSiteLinks ) {
+         this.props.setAttributes( {
+           useSiteLinks: false,
+          } );
+      } else {
+         this.props.setAttributes( {
+           useSiteLinks: true,
+        } );
+      }
+    }
+
+
+
     onChangeReadMoreText( newValue) {
       this.props.setAttributes( { readMoreText: newValue });
     }
@@ -431,7 +552,6 @@ class myAuthorEdit extends Component {
         let placeholder = 'Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.';
         let spanStyle = {};
 
-
         if( this.state.authors.length > 0 ) {
             this.state.authors.forEach( ( author ) => {
             options.push({ value:author.id, label:author.name });
@@ -450,7 +570,6 @@ class myAuthorEdit extends Component {
             </div>;
 
         }
-
 
         if( this.props.attributes.buttonBG || this.props.attributes.buttonColor ) {
           buttonClass = 'custom button';
@@ -581,12 +700,25 @@ class myAuthorEdit extends Component {
                   </div>
                 </div>
 
-                <div className="social-icons">
-                    <InnerBlocks
-                      allowedBlocks={ ['blueprint-blocks/social-link'] }
-                      template={ TEMPLATE }
-                    />
-                </div>
+                {
+                  this.props.attributes.showSocialLinks && (
+
+                    <div className="social-icons">
+                    {
+                      this.props.attributes.useSiteLinks ? (
+                        <this.getSiteLinks/>
+                      ) : (
+
+                        <InnerBlocks
+                          allowedBlocks={ ['blueprint-blocks/social-link'] }
+                          template={ SOCIALTEMPLATE }
+                          />
+                      )
+                    }
+                    </div>
+
+                  )
+                }
 
                 </div>
               )
@@ -690,6 +822,14 @@ registerBlockType( 'blueprint-blocks/author-profile', {
             type: 'boolean',
             default: false,
         },
+        showSocialLinks: {
+          type:'boolean',
+          default: true,
+        },
+        useSiteLinks: {
+          type:'boolean',
+          default: false,
+        },
 	  },
 
 	edit: myAuthorEdit,
@@ -706,7 +846,6 @@ registerBlockType( 'blueprint-blocks/author-profile', {
     let customClass = null;
     let innerStyle = {};
     let profileClass = 'profile-main';
-
 
 
     if( props.attributes.align === 'full' ) {
@@ -767,7 +906,7 @@ registerBlockType( 'blueprint-blocks/author-profile', {
           };
         }
 
-
+      const socialShortcode = '[blueprint_social direction="column"]';
 		return (
 
       props.attributes.selectedAuthor && (
@@ -829,9 +968,23 @@ registerBlockType( 'blueprint-blocks/author-profile', {
             </div>
             </div>
 
-            <div className="blueprint-profile-links">
-                <InnerBlocks.Content />
-            </div>
+            {
+              props.attributes.showSocialLinks && (
+                <div className="blueprint-profile-links">
+                {
+                props.attributes.useSiteLinks ? (
+
+                  <RawHTML>{ socialShortcode }</RawHTML>
+
+                ) : (
+                  <InnerBlocks.Content />
+                )
+                }
+                </div>
+               )
+            }
+
+
 
         </div>
       </div>

@@ -150,7 +150,7 @@ class editSocialLink extends Component {
   onChangeButtonBG( newbgColor ) {
     this.props.setAttributes({ bgColor : newbgColor });
     }
-  
+
 
   linkInputFocus() {
     this.setState({ unFocused: false });
