@@ -11,21 +11,21 @@ function blueprint_blocks_register_blocks() {
   // Register our block script with WordPress
   wp_register_script(
     'blueprint-blocks',
-    plugins_url('../../dist/blocks.build.js', dirname(__FILE__)),
+    plugins_url('/blueprint-blocks/blocks/dist/blocks.build.js' ),
     array('wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data' )
   );
 
   // Register our block's base CSS
   wp_register_style(
     'blueprint-blocks-style',
-    plugins_url( '../../dist/blocks.style.build.css', dirname(__FILE__ )),
+    plugins_url( '/blueprint-blocks/blocks/dist/blocks.style.build.css' ),
     array()
   );
 
   // Register our block's editor-specific CSS
   wp_register_style(
     'blueprint-blocks-editor-style',
-    plugins_url('../../dist/blocks.editor.build.css', dirname(__FILE__)),
+    plugins_url('/blueprint-blocks/blocks/dist/blocks.editor.build.css'),
     array( 'wp-edit-blocks' )
   );
 

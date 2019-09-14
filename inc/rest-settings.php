@@ -2,7 +2,7 @@
    /*
    * Setup Rest Route
    */
-  
+
 add_action( 'rest_api_init', 'blueprint_register_api' );
 
 function blueprint_register_api() {
@@ -92,7 +92,7 @@ add_filter( 'blueprint_rest_fields', 'blueprint_add_image_base_url' );
 add_filter( 'blueprint_rest_fields', 'blueprint_blocks_mbt_get_mbt_status' );
 
 function blueprint_add_image_base_url( $rest_fields ) {
-  $imagePath = plugins_url() . '/blueprint-blocks/extras/assets/';
+  $imagePath = plugins_url() . '/blueprint-blocks/assets/';
   $rest_fields['img_dir'] = $imagePath;
   return $rest_fields;
 }
@@ -119,7 +119,6 @@ function blueprint_blocks_add_api_to_mbt_book( $args, $post_type ) {
      // Optionally customize the rest_base or rest_controller_class
      $args['rest_base']  = 'mbt_book';
      $args['rest_controller_class'] = 'WP_REST_Posts_Controller';
-     //$args['supports'][] = 'excerpt';
   }
 
   return $args;
@@ -156,7 +155,7 @@ function blueprint_blocks_mbt_get_tagline( $object ) {
 }
 
 function blueprint_blocks_mbt_editor_style( $object ) {
-   $style_url = plugins_url( 'blueprint-blocks/extras/assets/button-packs/blueprint-buttons/' );
+   $style_url = plugins_url( 'blueprint-blocks/assets/button-packs/blueprint-buttons/' );
 	return $style_url;
 }
 
