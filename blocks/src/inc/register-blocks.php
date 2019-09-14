@@ -8,21 +8,11 @@ function blueprint_blocks_register_blocks() {
 
   wp_enqueue_script( 'wp-api' );
 
-  wp_register_script(
-    'blueprint-filters',
-    plugins_url('../dist/filters.build.js', dirname(__FILE__)),
-    array('wp-api', 'wp-api-fetch', 'wp-element', 'wp-components' )
-  );
-
-  wp_enqueue_script( 'blueprint-filters' );
-
-
-
   // Register our block script with WordPress
   wp_register_script(
     'blueprint-blocks',
     plugins_url('../dist/blocks.build.js', dirname(__FILE__)),
-    array('wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data', 'blueprint-filters')
+    array('wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data' )
   );
 
   // Register our block's base CSS

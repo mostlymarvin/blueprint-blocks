@@ -13,62 +13,6 @@ function blueprint_extras_register_customizer( $wp_customize ) {
 
   $style = !empty( $settings['style_pack'] ) ? $settings['style_pack'] : 'blueprint-buttons';
 
-  //Block Options
-  $wp_customize->add_section(
-    'blueprint_blocks_settings_section',
-    array(
-      'title' => 'Blueprint Block Options',
-      'priority' => 0,
-      )
-  );
-
-  //MBT-Book
-  $wp_customize->add_setting(
-    'blueprint_blocks[disable_mbt_book]',
-      array(
-      'default'        => false,
-      'type'           => 'option',
-      'capability'     => 'manage_options',
-      'sanitize_callback' => 'blueprint_extras_sanitize_checkbox',
-      'transport'      => 'postMessage'
-      )
-  );
-  $wp_customize->add_control(
-    'blueprint_blocks[disable_mbt_book]',
-    array(
-      'label'    => __( 'Disable Book Preview Block', 'blueprint-blocks' ),
-      'description' => __('Block requires MyBookTable', 'blueprint-blocks'),
-      'section'  => 'blueprint_blocks_settings_section',
-      'settings' => 'blueprint_blocks[disable_mbt_book]',
-      'type' => 'checkbox',
-      'priority' => 10
-      )
-  );
-
-  //Author Profile
-  $wp_customize->add_setting(
-    'blueprint_blocks[disable_author_profile]',
-      array(
-      'default'        => false,
-      'type'           => 'option',
-      'capability'     => 'manage_options',
-      'sanitize_callback' => 'blueprint_extras_sanitize_checkbox',
-      'transport'      => 'postMessage'
-      )
-  );
-  $wp_customize->add_control(
-    'blueprint_blocks[disable_author_profile]',
-    array(
-      'label'    => __( 'Disable Author Profile Block', 'blueprint-blocks' ),
-      'description' => __('Block requires MyBookTable', 'blueprint-blocks'),
-      'section'  => 'blueprint_blocks_settings_section',
-      'settings' => 'blueprint_blocks[disable_author_profile]',
-      'type' => 'checkbox',
-      'priority' => 20
-      )
-  );
-
-
   //social media
   $wp_customize->add_section(
     'blueprint_extras_settings_section',
@@ -248,18 +192,3 @@ function blueprint_extras_sanitize_textarea( $text ) {
 }
 
 add_action( 'customize_register' ,'blueprint_extras_register_customizer'  );
-
-
-
-/**
- * We need to set these to true to avoid convoluted if-else argument,
- * not sure if this is the best way to do this
- * @todo: look into more efficient way to do this, maybe.
- * @method blueprint_blocks_set_blocks
- */
-//add_action( 'plugins_loaded', 'blueprint_blocks_set_blocks' );
-
-function blueprint_blocks_set_blocks() {
-  delete_option( 'blueprint_blocks' );
-
-}

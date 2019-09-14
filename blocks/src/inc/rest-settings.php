@@ -92,7 +92,6 @@ function blueprint_register_rest_route( WP_REST_Request $request ) {
 
 add_filter( 'blueprint_rest_fields', 'blueprint_add_image_base_url' );
 add_filter( 'blueprint_rest_fields', 'blueprint_blocks_mbt_get_mbt_status' );
-add_filter( 'blueprint_rest_fields', 'blueprint_blocks_check_disabled_blocks' );
 
 function blueprint_add_image_base_url( $rest_fields ) {
   $imagePath = plugins_url() . '/blueprint-blocks/extras/assets/';
@@ -110,24 +109,7 @@ function blueprint_blocks_mbt_get_mbt_status( $rest_fields ) {
    $rest_fields['mbt_active'] = $status;
 	 return $rest_fields;
 }
-function blueprint_blocks_check_disabled_blocks( $rest_fields ) {
-  $blueprint_options = get_option( 'blueprint_blocks', array() );
-  $disable_book = !empty( $blueprint_options['disable_mbt_book'] ) ? true : false;
-  $disable_author = !empty( $blueprint_options['disable_author_profile'] ) ? true : false;
 
-  $rest_fields['mbt_book'] = 'enabled';
-  $rest_fields['author_profile'] = 'enabled';
-
-  if( $disable_book ) {
-    $rest_fields['mbt_book'] = 'disabled';
-  }
-
-  if( $disable_author ) {
-    $rest_fields['author_profile'] = 'disabled';
-  }
-
-  return $rest_fields;
-}
 
 add_filter( 'register_post_type_args', 'blueprint_blocks_add_api_to_mbt_book', 10, 2 );
 
