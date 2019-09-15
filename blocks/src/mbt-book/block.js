@@ -8,8 +8,8 @@
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 const { SelectControl, ToggleControl, TextControl, Panel, PanelBody, PanelRow, RangeControl, FontSizePicker } = wp.components;
-const { Component, Fragment } = wp.element;
-const { RichText, InspectorControls, PanelColorSettings, getColorClassName, InnerBlocks} = wp.editor;
+const { Component, Fragment, RawHTML } = wp.element;
+const { RichText, InspectorControls, PanelColorSettings } = wp.editor;
 
 class mbtSelectBook extends Component {
 
@@ -35,7 +35,6 @@ class mbtSelectBook extends Component {
       this.getInspectorControls = this.getInspectorControls.bind(this);
       this.getBlockSettings = this.getBlockSettings.bind(this);
       this.getBookMedia = this.getBookMedia.bind(this);
-      this.updateDisplaySettings = this.updateDisplaySettings.bind(this);
 
       this.onChangeBGColor = this.onChangeBGColor.bind(this);
       this.onChangeBlurb = this.onChangeBlurb.bind(this);
@@ -386,26 +385,6 @@ class mbtSelectBook extends Component {
       );
    }
 
-   updateDisplaySettings( setting, newValue ) {
-      let buylinks = this.props.attributes.displaySettings.buylinks;
-      let moreLink = this.props.attributes.displaySettings.moreLink;
-      let sampleLinks = this.props.attributes.displaySettings.sampleLinks;
-      let tagLine = this.props.attributes.displaySettings.tagLine;
-
-      if( setting === 'buylinks' ) {  buylinks = newValue; }
-      if( setting === 'moreLink' ) {  moreLink = newValue; }
-      if( setting === 'sampleLinks' ) { sampleLinks = newValue; }
-      if( setting === 'showTagLine' ) { tagLine = newValue; }
-
-      this.props.setAttributes({
-         displaySettings: {
-            buylinks: buylinks,
-            moreLink: moreLink,
-            sampleLinks:sampleLinks,
-            tagLine: tagLine,
-         }
-      });
-   }
 
    onChangeBGColor( colorBG ) {
       this.props.setAttributes ( { colorBG: colorBG } );
@@ -470,51 +449,39 @@ class mbtSelectBook extends Component {
          customTagline: tagLine,
          readMoreLink: post.link,
          showReadMore: true,
-         displaySettings: {
-            buylinks: 'show',
-            moreLink: 'show',
-            sampleLinks: 'show',
-         },
          }
        );
    }
    onChangeShowBuyLinks() {
       if ( this.props.attributes.showBuyLinks ) {
          this.props.setAttributes( { showBuyLinks: false } );
-         this.updateDisplaySettings( 'buylinks', 'hide'  );
       } else {
          this.props.setAttributes( { showBuyLinks: true } );
-         this.updateDisplaySettings( 'buylinks', 'show'  );
       }
    }
    onChangeShowReadMore() {
       if ( this.props.attributes.showReadMore ) {
          this.props.setAttributes( {  showReadMore: false } );
-         this.updateDisplaySettings( 'moreLink', 'hide'  );
       } else {
          this.props.setAttributes( { showReadMore: true } );
-         this.updateDisplaySettings( 'moreLink', 'show'  );
       }
    }
    onChangeShowSampleLinks() {
       if ( this.props.attributes.showSampleLinks ) {
          this.props.setAttributes( { showSampleLinks: false });
-         this.updateDisplaySettings( 'sampleLinks', 'hide'  );
 
       } else {
          this.props.setAttributes( { showSampleLinks: true } );
-         this.updateDisplaySettings( 'sampleLinks', 'show'  );
       }
    }
 
    onChangeShowTagline() {
       if ( this.props.attributes.showTagLine ) {
          this.props.setAttributes( { showTagLine: false });
-         this.updateDisplaySettings( 'tagLine', 'hide'  );
 
       } else {
          this.props.setAttributes( { showTagLine: true } );
-         this.updateDisplaySettings( 'tagLine', 'show'  );
+
       }
    }
    onChangeTagline( newValue ) {
@@ -648,8 +615,6 @@ class mbtSelectBook extends Component {
       this.props.className += ' gutenberg-render';
 
 
-
-
 		return (
 
          <div
@@ -778,17 +743,23 @@ class mbtSelectBook extends Component {
                style={ blockStyle }>
                { this.props.attributes.buttonsLabel }
                </h4>
-
-               <InnerBlocks
-                 allowedBlocks={ ['blueprint-blocks/mbt-buylinks'] }
-                 template={ [
-                   ['blueprint-blocks/mbt-buylinks', {
-                     buylinks: this.props.attributes.buylinks,
-                     styleURL: this.props.attributes.styleURL },
-                     []],
-                 ] }
-                 templateLock='all'
-               />
+               <div className="mbt-book-buybuttons blueprint">
+               {
+               this.props.attributes.buylinks.map( (item, key) =>
+                  {
+                  return <div className="mbt-book-buybutton"
+                    key={item.store}>
+                  <a className="image-link"
+                        href={item.url}>
+                        <img className="image-link"
+                        src={this.props.attributes.styleURL + item.store + '_button.png'}
+                        alt={ 'buy from ' + item.store }/>
+                        </a>
+                  </div>
+                  }
+                  )
+               }
+              </div>
             </div>
          )
          }
@@ -963,24 +934,6 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
         selector: '.has-width',
         property: 'width',
       },
-      displaySettings: {
-         buylinks: {
-            type: 'string',
-            default: 'show'
-         },
-         moreLink: {
-            type: 'string',
-            default: 'show'
-         },
-         sampleLinks: {
-            type: 'string',
-            default: 'show'
-         },
-         tagLine: {
-           type: 'string',
-           default: 'show'
-         },
-      }
 	},
 
 	edit: mbtSelectBook,
@@ -1070,6 +1023,10 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
 
 
     props.className += ' gutenberg-render';
+
+    const buylinksShortcode=`[blueprint_mbt_buttons id="${props.attributes.selectedPost}"]`;
+
+
 
 		return (
 
@@ -1183,7 +1140,7 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
             { props.attributes.buttonsLabel }
           </h5>
           <div class="mbt-book">
-            <InnerBlocks.Content/>
+            <RawHTML>{ buylinksShortcode }</RawHTML>
           </div>
          </div>
       )

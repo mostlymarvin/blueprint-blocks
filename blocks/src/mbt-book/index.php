@@ -132,3 +132,97 @@ function blueprint_dynamic_render_mbt_buttons( $atts ) {
 
    return $buttons;
 }
+
+add_shortcode('blueprint_mbt_buttons', 'blueprint_shortcode_render_mbt_buttons' );
+function blueprint_shortcode_render_mbt_buttons( $atts, $content = null ) {
+
+  extract( shortcode_atts(
+    array(
+    'id' => '',
+    ), $atts )
+  );
+
+  if( !$atts['id'] ) {
+    return false;
+  }
+
+  $buylinks = get_post_meta( $atts['id'], 'mbt_buybuttons' );
+  $buylinks = $buylinks[0];
+
+  $styleURL = blueprint_dynamic_get_mbt_style_url();
+
+  $compliantStyle = false;
+  $buttons = '<div class="mbt-book-buybuttons">';
+
+  $settings = get_option( 'mbt_settings', array() );
+  $style = !empty( $settings['style_pack'] ) ? $settings['style_pack'] : 'blueprint-buttons';
+   /**
+   * Default style packs which have compliant buttons
+   */
+   $compliant_style_packs = array(
+   'blue_flat_compli',
+   'gold_flat_compli',
+   'golden_compli',
+   'green_flat_compli',
+   'grey_flat_compli',
+   'orange_flat_compli',
+   'silver_compli',
+   );
+
+   $compliant_stores = array(
+   'amazon',
+   'itunes',
+   'ibooks',
+   );
+
+   if( in_array( $style, $compliant_style_packs ) ) {
+      $compliantStyle = true;
+   }
+
+   if( !empty( $buylinks ) && is_array( $buylinks ) ) :
+
+      foreach( $buylinks as $buylink ) {
+
+         $url = !empty( $buylink['url'] ) ? $buylink['url'] : false;
+         $store = !empty( $buylink['store'] ) ? $buylink['store'] : false;
+         $imageURL = $styleURL;
+         $class = 'mbt-book-buybutton';
+
+         $compliantButton = false;
+
+         if( in_array( $store, $compliant_stores ) ) {
+            $compliantButton = true;
+            $class .= ' compliant-buttons';
+         }
+
+         /**
+          * Compliant buttons are a mini-set of buttons, and don't
+          * contain all the shop buttons. So, if the compliant pack
+          * is in use, but the button in question is not for one of the 3 compliant
+          * vendors, we'll strip the _compli from the image link and grab the image
+          * from the parent button set.
+          */
+         if( $compliantStyle && !$compliantButton ) {
+            $imageURL = str_replace( '_compli', '', $styleURL );
+         }
+
+         $button = sprintf(
+            '<div class="%4$s">
+            <a class="image-link" href="%1$s">
+            <img class="image-link" src="%3$s%2$s_button.png" alt="buy from %2$s"/></a></div>',
+            esc_url( $url ),
+            strip_tags( $store ),
+            $imageURL,
+            esc_attr( $class )
+         );
+
+         if( $url && $store ) {
+            $buttons .= $button;
+         }
+      }
+   endif;
+
+   $buttons .= '</div>';
+
+   return $buttons;
+}

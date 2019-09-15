@@ -33,10 +33,6 @@ function blueprint_blocks_register_blocks() {
     array(
       'name' => 'mbt-book',
     ),
-    array(
-      'name' => 'mbt-buylinks',
-      'render_callback' => 'blueprint_dynamic_render_mbt_buttons',
-    ),
      array(
       'name' => 'author-profile',
     ),
