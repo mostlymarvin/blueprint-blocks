@@ -37,8 +37,6 @@ class myAuthorEdit extends Component {
 
         this.state = this.constructor.getInitialState( this.props.attributes.selectedAuthor );
 
-
-
         this.getBlueprintApi = this.getBlueprintApi.bind(this);
         this.getBlueprintApi();
         this.getAuthors = this.getAuthors.bind(this);
@@ -129,11 +127,6 @@ class myAuthorEdit extends Component {
             this.props.setAttributes( {
               mbtActive: blueprint.mbt_active,
               socialActive: blueprint.blueprint_social.status,
-              //socialBg: blueprint.blueprint_social.display.background,
-              //socialColor: blueprint.blueprint_social.display.color,
-              //socialBR: blueprint.blueprint_social.display.border_radius,
-              //siteLinks: formatSiteLinks,
-              //imgDir: blueprint.img_dir,
             } );
             this.setState({
               imgDir: blueprint.img_dir,

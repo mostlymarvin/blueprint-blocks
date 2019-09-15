@@ -1,0 +1,47 @@
+.wp-block-blueprint-blocks-recent-posts {
+  .inner {
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+
+    & > div {
+      width:100%;
+      margin-bottom: 20px;
+
+      &.has-background {
+        padding:20px;
+      }
+    }
+  }
+}
+
+@media all and ( min-width: 768px ) {
+  .wp-block-blueprint-blocks-recent-posts {
+
+    &.two-across  .inner > div,
+    &.three-across .inner  > div,
+    &.four-across .inner  > div,
+    &.five-across .inner  > div {
+      flex-basis: 48%;
+    }
+
+  }
+}
+
+@media all and ( min-width: 800px ) {
+  .wp-block-blueprint-blocks-recent-posts {
+
+    &.two-across .inner > div {
+      flex-basis: calc( 96% /2 );
+      }
+    &.three-across .inner > div {
+      flex-basis: calc( 94% /3 );
+      }
+    &.four-across .inner > div {
+      flex-basis: calc( 92% /4 );
+      }
+    &.five-across .inner > div {
+      flex-basis: calc( 90% /5 );
+      }
+  }
+}
