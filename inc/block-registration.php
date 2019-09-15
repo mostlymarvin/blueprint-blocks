@@ -43,6 +43,9 @@ function blueprint_blocks_register_blocks() {
      array(
         'name' => 'social-links',
     ),
+    array(
+      'name' => 'recent-posts',
+    ),
   );
 
 

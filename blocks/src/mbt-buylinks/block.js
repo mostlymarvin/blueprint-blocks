@@ -4,7 +4,8 @@
  * MBT Buylinks for MBT Book Block
  * customized to work with Blueprint Theme / Blueprint Child themes.
  */
-
+// TODO: see if we can save buylinks in state to pass to child, so the
+// attributes aren't duplicated unneccessarily;
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 const { SelectControl, ToggleControl, TextControl, Panel, PanelBody, PanelRow, RangeControl, FontSizePicker } = wp.components;
