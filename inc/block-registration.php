@@ -41,6 +41,7 @@ function blueprint_blocks_register_blocks() {
     ),
     array(
       'name' => 'recent-posts',
+      'render_callback' => 'blueprint_blocks_dynamic_recent_posts_block',
     ),
   );
 

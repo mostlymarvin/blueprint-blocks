@@ -315,8 +315,8 @@ class editRecentPosts extends Component {
       } );
       // Set the attributes
       this.props.setAttributes( {
-          selectedCategory: parseInt( value ),
-          displaySettings : {
+            selectedCategory: parseInt( value ),
+            displaySettings : {
             showMeta: 'hide',
             includeSticky: 'show',
             showImg:'show',
@@ -582,7 +582,6 @@ registerBlockType( 'blueprint-blocks/recent-posts', {
 	],
   supports: {
     align: [ 'center', 'wide', 'full'  ],
-    anchor: true,
   },
 	attributes: {
         selectedCategory:{
@@ -614,7 +613,7 @@ registerBlockType( 'blueprint-blocks/recent-posts', {
         },
         roundImg:{
           type: 'integer',
-          default: 10,
+          default: 0,
         },
         imgBorder: {
           type: 'integer',
