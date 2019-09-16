@@ -40,6 +40,8 @@ class editRecentPosts extends Component {
     this.onChangeShowImg = this.onChangeShowImg.bind(this);
     this.onChangeColor = this.onChangeColor.bind(this);
     this.onChangeBackgroundColor = this.onChangeBackgroundColor.bind(this);
+    this.onChangePostBackgroundColor = this.onChangePostBackgroundColor.bind(this);
+    this.onChangePostColor = this.onChangePostColor.bind(this);
     this.onChangeImgBorderColor = this.onChangeImgBorderColor.bind(this);
     this.onChangeRoundImg = this.onChangeRoundImg.bind(this);
     this.onChangeNumberPosts = this.onChangeNumberPosts.bind(this);
@@ -62,7 +64,6 @@ class editRecentPosts extends Component {
     this.onChangeAlignButton = this.onChangeAlignButton.bind(this);
 
     this.onChangeSectionTitle = this.onChangeSectionTitle.bind(this);
-    this.onChangeSectionTitleSize = this.onChangeSectionTitleSize.bind(this);
 
     this.previewPost = this.previewPost.bind(this);
     this.previewButton = this.previewButton.bind(this);
@@ -151,43 +152,6 @@ class editRecentPosts extends Component {
                 value={ this.props.attributes.sectionTitle }
                 onChange={ this.onChangeSectionTitle }
                 keepPlaceholderOnFocus={true}
-             />
-             <FontSizePicker
-               fontSizes= {[
-                   {
-                     name: __( 'X-Small' ),
-                     slug: 'stitle-extra-small',
-                     size: '14',
-                   },
-                   {
-                     name: __( 'Small' ),
-                     slug: 'stitle-small',
-                     size: '16',
-                   },
-                   {
-                     name: __( 'Normal' ),
-                     slug: 'stitle-normal',
-                     size: '20',
-                   },
-                   {
-                     name: __( 'Medium' ),
-                     slug: 'stitle-medium',
-                     size: '24',
-                   },
-                   {
-                     name: __( 'Large' ),
-                     slug: 'stitle-large',
-                     size: '28',
-                   },
-                   {
-                     name: __( 'X-Large' ),
-                     slug: 'stitle-extra-large',
-                     size: '32',
-                   },
-               ] }
-               value={ this.props.attributes.sectionTitleSize }
-               fallbackFontSize='20'
-               onChange={ this.onChangeSectionTitleSize }
              />
            </PanelBody>
            <PanelBody title="Post Title Styles"
@@ -488,6 +452,16 @@ class editRecentPosts extends Component {
            onChange: this.onChangeBackgroundColor,
            label: __('Background Color', 'blueprint-blocks'),
            },
+           {
+           value: this.props.attributes.postBackgroundColor,
+           onChange: this.onChangePostBackgroundColor,
+           label: __('Post Background Color', 'blueprint-blocks'),
+           },
+           {
+           value: this.props.attributes.postColor,
+           onChange: this.onChangePostColor,
+           label: __('Post Color', 'blueprint-blocks'),
+           },
            ] }
            />
            </InspectorControls>
@@ -572,6 +546,12 @@ class editRecentPosts extends Component {
   onChangeBackgroundColor( newValue ) {
     this.props.setAttributes({ backgroundColor: newValue });
   }
+  onChangePostBackgroundColor( newValue ) {
+    this.props.setAttributes({ postBackgroundColor: newValue });
+  }
+  onChangePostColor( newValue ) {
+    this.props.setAttributes({ postColor: newValue });
+  }
   onChangeImgBorderColor( newValue ) {
     this.props.setAttributes({ imgBorderColor: newValue });
   }
@@ -622,13 +602,7 @@ class editRecentPosts extends Component {
   onChangeSectionTitle( newValue ) {
     this.props.setAttributes( { sectionTitle: newValue });
   }
-  onChangeSectionTitleSize( newValue ) {
-    if( newValue !== undefined ) {
-    this.props.setAttributes( { sectionTitleSize: newValue });
-    } else {
-    this.props.setAttributes({ sectionTitleSize: '20' });
-    }
-  }
+
   previewButton() {
     let btnWrapClass = 'btn-wrap';
     btnWrapClass += ' align-' + this.props.attributes.alignButton;
@@ -696,8 +670,8 @@ class editRecentPosts extends Component {
     const imgBorder = this.props.attributes.imgBorder;
     const imgBorderColor = this.props.attributes.imgBorderColor;
 
-    const backgroundColor = this.props.attributes.backgroundColor;
-    const color = this.props.attributes.color;
+    const postBackgroundColor = this.props.attributes.postBackgroundColor;
+    const postColor = this.props.attributes.postColor;
 
     const textSize = this.props.attributes.textFontSize;
     const titleSize = this.props.attributes.titleFontSize;
@@ -706,13 +680,13 @@ class editRecentPosts extends Component {
 
     let postClass = 'blueprint-recent-posts';
 
-    if( backgroundColor ) {
+    if( postBackgroundColor ) {
       postClass += ' has-background';
     }
 
     let postStyle = {
-      color: color,
-      backgroundColor: backgroundColor,
+      color: postColor,
+      backgroundColor: postBackgroundColor,
       fontSize: textSize + 'px',
       textAlign: alignText,
     }
@@ -727,8 +701,8 @@ class editRecentPosts extends Component {
     }
 
     let titleStyle = {
-      color: color,
-      backgroundColor: backgroundColor,
+      color: postColor,
+      backgroundColor: postBackgroundColor,
       fontSize: titleSize + 'px',
       textAlign: alignTitle,
     }
@@ -864,7 +838,6 @@ class editRecentPosts extends Component {
     let sectionTitleStyle = {
       color: this.props.attributes.color,
       backgroundColor: this.props.attributes.backgroundColor,
-      fontSize: this.props.attributes.sectionTitleSize + 'px',
     }
 
 
@@ -876,10 +849,25 @@ class editRecentPosts extends Component {
       previewPosts.push( this.previewPost() );
     }
 
+    const backgroundColor = this.props.attributes.backgroundColor;
+    const color = this.props.attributes.color;
+
+    let blockStyle = {};
+
+    if( this.props.attributes.backgroundColor ) {
+      this.props.className += ' has-background-color';
+      blockStyle.backgroundColor = backgroundColor;
+    }
+    if( this.props.attributes.color ) {
+      blockStyle.color = color;
+    }
+
+
      return (
 
           <div
-          className={ this.props.className }>
+          className={ this.props.className }
+          style={ blockStyle }>
 
           { this.getInspectorControls( options ) }
 
@@ -950,8 +938,14 @@ registerBlockType( 'blueprint-blocks/recent-posts', {
         backgroundColor: {
           type:'string',
         },
+        postBackgroundColor: {
+          type:'string',
+        },
         color: {
           type:'string',
+        },
+        postColor: {
+          type: 'string',
         },
         imgBorderColor: {
           type:'string',
@@ -1008,10 +1002,6 @@ registerBlockType( 'blueprint-blocks/recent-posts', {
         sectionTitle: {
           type: 'string',
           default: 'Latest from the Blog',
-        },
-        sectionTitleSize: {
-          type: 'integer',
-          default: '20',
         },
 	  },
 
