@@ -631,7 +631,7 @@ class myAuthorEdit extends Component {
             {
               this.props.attributes.profileTitle && (
 
-                <h3 className="profile-title" style={ h3Style }>
+                <h2 className="profile-title section-title" style={ h3Style }>
                 <RichText
                     tagName='span'
                     placeholder= { 'Author Name' }
@@ -641,7 +641,7 @@ class myAuthorEdit extends Component {
                     keepPlaceholderOnFocus={true}
                     style={ spanStyle }
                     />
-                </h3>
+                </h2>
 
               )
             }
@@ -911,7 +911,7 @@ registerBlockType( 'blueprint-blocks/author-profile', {
           className="inner-wrap"
           style={ innerStyle }>
 
-        <h3 className="profile-title"
+        <h2 className="profile-title section-title"
           style={ h3Style }>
         <RichText.Content
             tagName='span'
@@ -919,7 +919,7 @@ registerBlockType( 'blueprint-blocks/author-profile', {
             value={ props.attributes.profileTitle }
             style={ spanStyle }
             />
-        </h3>
+        </h2>
 
         <div
           className="inner is-flex">

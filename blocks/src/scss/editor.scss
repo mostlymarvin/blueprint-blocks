@@ -78,3 +78,10 @@
 .components-panel__row.display-block {
     display:block !important;
 }
+
+.wp-block-blueprint-blocks-recent-posts,
+.wp-block-blueprint-blocks-author-profile {
+  h2.section-title  {
+    width:100%;
+  }
+}

@@ -6,7 +6,7 @@
 
 
 function blueprint_blocks_dynamic_recent_posts_block( $atts ) {
-  print_r( $atts );
+  //print_r( $atts );
   /**
    * TODO: see about implementing templates
    */
@@ -36,26 +36,23 @@ function blueprint_blocks_dynamic_recent_posts_block( $atts ) {
   $classNames[] = $className;
   $classNames[] = $align;
 
-  
-
-
-
-  //switch( $postsPerRow ) {
-    //case 1:
-    //this.props.className +=' one-across';
-    //break;
-    //case 2:
-    //this.props.className += ' two-across';
-    //break;
-    //case 4:
-    //this.props.className += ' four-across';
-    //break;
-    //case 5:
-    //this.props.className += ' five-across';
-    //break;
-    //default:
-    //this.props.className += ' three-across';
-  //}
+  switch( $postsPerRow ) {
+    case 1:
+    $classNames[] ='one-across';
+    break;
+    case 2:
+    $classNames[] = 'two-across';
+    break;
+    case 4:
+    $classNames[] = 'four-across';
+    break;
+    case 5:
+    $classNames[] = 'five-across';
+    break;
+    default:
+    $classNames[] = 'three-across';
+    break;
+  }
 
 
 

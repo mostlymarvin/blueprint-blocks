@@ -52,7 +52,20 @@ class editRecentPosts extends Component {
     this.onChangeAlignText = this.onChangeAlignText.bind(this);
     this.onChangeReadMoreText = this.onChangeReadMoreText.bind(this);
 
+    this.onChangeButtonType = this.onChangeButtonType.bind(this);
+    this.onChangeButtonColor = this.onChangeButtonColor.bind(this);
+    this.onChangeButtonBorderColor = this.onChangeButtonBorderColor.bind(this);
+    this.onChangeButtonBG = this.onChangeButtonBG.bind(this);
+    this.onChangeButtonBorder = this.onChangeButtonBorder.bind(this);
+    this.onChangeButtonFontSize = this.onChangeButtonFontSize.bind(this);
+    this.onChangeButtonBorderRadius = this.onChangeButtonBorderRadius.bind(this);
+    this.onChangeAlignButton = this.onChangeAlignButton.bind(this);
+
+    this.onChangeSectionTitle = this.onChangeSectionTitle.bind(this);
+    this.onChangeSectionTitleSize = this.onChangeSectionTitleSize.bind(this);
+
     this.previewPost = this.previewPost.bind(this);
+    this.previewButton = this.previewButton.bind(this);
   }
 
 
@@ -91,10 +104,12 @@ class editRecentPosts extends Component {
            </PanelRow>
            </PanelBody>
 
-           <PanelBody title="Options">
+           <PanelBody
+           title="Post Options"
+           initialOpen={ false }>
            <ToggleControl
              label="include Sticky Posts?"
-             checked={ !! this.props.attributes.includeSticky }
+             checked={ !! this.props.attributes.ignoreSticky }
              onChange={ this.onChangeIncludeSticky }
              className="link-type"
            />
@@ -127,51 +142,91 @@ class editRecentPosts extends Component {
              onChange={ this.onChangeShowMeta }
              className="link-type"
            />
-           <ToggleControl
-             label="Show Featured Image?"
-             checked={ !! this.props.attributes.showImg }
-             onChange={ this.onChangeShowImg }
-             className="link-type"
-           />
-           <TextControl
-              placeholder= 'Read More Link Text'
-              label="label for 'read more' button"
-              value={ this.props.attributes.readMoreText }
-              onChange={ this.onChangeReadMoreText }
-              keepPlaceholderOnFocus={true}
-           />
            </PanelBody>
-           <PanelBody title="Title Styles">
+           <PanelBody
+           title="Section Title Settings"
+           initialOpen={false}>
+             <TextControl
+                placeholder= 'Section Title'
+                value={ this.props.attributes.sectionTitle }
+                onChange={ this.onChangeSectionTitle }
+                keepPlaceholderOnFocus={true}
+             />
+             <FontSizePicker
+               fontSizes= {[
+                   {
+                     name: __( 'X-Small' ),
+                     slug: 'stitle-extra-small',
+                     size: '14',
+                   },
+                   {
+                     name: __( 'Small' ),
+                     slug: 'stitle-small',
+                     size: '16',
+                   },
+                   {
+                     name: __( 'Normal' ),
+                     slug: 'stitle-normal',
+                     size: '20',
+                   },
+                   {
+                     name: __( 'Medium' ),
+                     slug: 'stitle-medium',
+                     size: '24',
+                   },
+                   {
+                     name: __( 'Large' ),
+                     slug: 'stitle-large',
+                     size: '28',
+                   },
+                   {
+                     name: __( 'X-Large' ),
+                     slug: 'stitle-extra-large',
+                     size: '32',
+                   },
+               ] }
+               value={ this.props.attributes.sectionTitleSize }
+               fallbackFontSize='20'
+               onChange={ this.onChangeSectionTitleSize }
+             />
+           </PanelBody>
+           <PanelBody title="Post Title Styles"
+           initialOpen={ false }>
            <FontSizePicker
              fontSizes= {[
                  {
-                   name: __( 'Small Title' ),
+                   name: __( 'X-Small' ),
                    slug: 'title-extra-small',
+                   size: '13',
+                 },
+                 {
+                   name: __( 'Small' ),
+                   slug: 'title-small',
                    size: '16',
                  },
                  {
-                   name: __( 'Normal Title' ),
-                   slug: 'title-small',
-                   size: '20',
+                   name: __( 'Normal' ),
+                   slug: 'title-normal',
+                   size: '18',
                  },
                  {
-                   name: __( 'Medium Title' ),
-                   slug: 'title-normal',
+                   name: __( 'Medium' ),
+                   slug: 'title-medium',
                    size: '24',
                  },
                  {
-                   name: __( 'Large Title' ),
+                   name: __( 'Large' ),
                    slug: 'title-large',
                    size: '28',
                  },
                  {
-                   name: __( 'X-Large Title' ),
+                   name: __( 'X-Large' ),
                    slug: 'title-extra-large',
                    size: '32',
                  },
              ] }
              value={ this.props.attributes.titleFontSize }
-             fallbackFontSize='20'
+             fallbackFontSize='18'
              onChange={ this.onChangeTitleFontSize }
            />
            <SelectControl
@@ -186,42 +241,44 @@ class editRecentPosts extends Component {
            />
 
            </PanelBody>
-           <PanelBody title="Text Styles">
+           <PanelBody
+           title="Text Styles"
+           initialOpen={ false }>
            <FontSizePicker
              fontSizes= {[
                  {
-                   name: __( 'X-Small Body' ),
+                   name: __( 'X-Small' ),
                    slug: 'title-extra-small',
                    size: '12',
                  },
                  {
-                   name: __( 'Small Body' ),
+                   name: __( 'Small' ),
                    slug: 'title-small',
                    size: '14',
                  },
                  {
-                   name: __( 'Normal Body' ),
+                   name: __( 'Normal' ),
                    slug: 'title-normal',
                    size: '16',
                  },
                  {
-                   name: __( 'Medium Body' ),
+                   name: __( 'Medium' ),
                    slug: 'title-normal',
                    size: '18',
                  },
                  {
-                   name: __( 'Large Body' ),
+                   name: __( 'Large' ),
                    slug: 'title-large',
                    size: '20',
                  },
                  {
-                   name: __( 'X-Large Body' ),
+                   name: __( 'X-Large' ),
                    slug: 'title-extra-large',
                    size: '24',
                  },
              ] }
              value={ this.props.attributes.textFontSize }
-             fallbackFontSize='18'
+             fallbackFontSize='16'
              onChange={ this.onChangeTextFontSize }
            />
            <SelectControl
@@ -237,7 +294,143 @@ class editRecentPosts extends Component {
 
            </PanelBody>
 
-           <PanelBody title="Styles">
+           <PanelBody
+           title="Button Settings"
+           initialOpen={ false }>
+             <TextControl
+                placeholder= 'Read More Link Text'
+                label="label for 'read more' button"
+                value={ this.props.attributes.readMoreText }
+                onChange={ this.onChangeReadMoreText }
+                keepPlaceholderOnFocus={true}
+             />
+           <FontSizePicker
+             fontSizes= {[
+                 {
+                   name: __( 'X-Small' ),
+                   slug: 'button-extra-small',
+                   size: '10',
+                 },
+                 {
+                   name: __( 'Small' ),
+                   slug: 'button-mall',
+                   size: '12',
+                 },
+                 {
+                   name: __( 'Normal' ),
+                   slug: 'button-normal',
+                   size: '14',
+                 },
+                 {
+                   name: __( 'Medium' ),
+                   slug: 'button-medium',
+                   size: '15',
+                 },
+                 {
+                   name: __( 'Large' ),
+                   slug: 'button-large',
+                   size: '16',
+                 },
+                 {
+                   name: __( 'X-Large' ),
+                   slug: 'button-extra-large',
+                   size: '18',
+                 },
+             ] }
+             value={ this.props.attributes.buttonFontSize }
+             fallbackFontSize='14'
+             onChange={ this.onChangeButtonFontSize }
+           />
+           <SelectControl
+             label="Button Type"
+             value={ this.props.attributes.buttonType }
+             options={ [
+               { label: 'Outlined', value: 'outlined' },
+               { label: 'Solid', value: 'solid' },
+               { label: 'Inline Text', value: 'inline' },
+             ] }
+             onChange={ this.onChangeButtonType }
+           />
+           {
+             this.props.attributes.buttonType !== 'inline' && (
+               <SelectControl
+                 label="Button Alignment"
+                 value={ this.props.attributes.alignButton }
+                 options={ [
+                   { label: 'Left', value: 'left' },
+                   { label: 'Center', value: 'center' },
+                   { label: 'Right', value: 'right' },
+                 ] }
+                 onChange={ this.onChangeAlignButton }
+               />
+             )
+           }
+           <RangeControl
+            label="Button Border Radius"
+            value={ this.props.attributes.buttonBorderRadius }
+            onChange={ this.onChangeButtonBorderRadius }
+            min={ 0 }
+            max={ 20 }
+           />
+           {
+             this.props.attributes.buttonType === 'outlined' && (
+             <RangeControl
+              label="Button Border Size"
+              value={ this.props.attributes.buttonBorder }
+              onChange={ this.onChangeButtonBorder }
+              min={ 0 }
+              max={ 10 }
+             />
+             )
+           }
+           {
+             this.props.attributes.buttonType === 'outlined' ? (
+               <PanelColorSettings
+                title={ __('Button Colors', 'blueprint-blocks') }
+                initialOpen={false}
+                colorSettings= { [
+               {
+               value: this.props.attributes.buttonColor,
+               onChange:  this.onChangeButtonColor,
+               label: __('Button Text Color', 'blueprint-blocks'),
+               },
+               {
+               value: this.props.attributes.buttonBorderColor,
+               onChange: this.onChangeButtonBorderColor,
+               label: __('Button Border Color', 'blueprint-blocks'),
+               },
+               ] }
+               />
+             ) : (
+               <PanelColorSettings
+                title={ __('Button Colors', 'blueprint-blocks') }
+                initialOpen={false}
+                colorSettings= { [
+                  {
+                  value: this.props.attributes.buttonColor,
+                  onChange:  this.onChangeButtonColor,
+                  label: __('Button Text Color', 'blueprint-blocks'),
+                  },
+                  {
+                  value: this.props.attributes.buttonBG,
+                  onChange: this.onChangeButtonBG,
+                  label: __('Button Background Color', 'blueprint-blocks'),
+                  },
+               ] }
+               />
+             )
+           }
+           </PanelBody>
+
+           <PanelBody
+           title="Image Settings"
+           initialOpen={ false }>
+           <ToggleControl
+             label="Show Featured Image?"
+             checked={ !! this.props.attributes.showImg }
+             onChange={ this.onChangeShowImg }
+             className="link-type"
+           />
            {
            this.props.attributes.showImg && (
 
@@ -263,10 +456,25 @@ class editRecentPosts extends Component {
            />
            </div>
             )
-            }
-            </PanelBody>
+          }
+          {
+            this.props.attributes.imgBorder && (
+              <PanelColorSettings
+                title={ __('Image Border', 'blueprint-blocks') }
+                initialOpen={false}
+                colorSettings= { [
+               {
+               value: this.props.attributes.imgBorderColor,
+               onChange: this.onChangeImgBorderColor,
+               label: __('Image Border Color', 'blueprint-blocks'),
+               },
+               ] }
+               />
+            )
+          }
+          </PanelBody>
 
-           <PanelColorSettings
+          <PanelColorSettings
             title={ __('Colors', 'blueprint-blocks') }
             initialOpen={false}
             colorSettings= { [
@@ -279,11 +487,6 @@ class editRecentPosts extends Component {
            value: this.props.attributes.backgroundColor,
            onChange: this.onChangeBackgroundColor,
            label: __('Background Color', 'blueprint-blocks'),
-           },
-           {
-           value: this.props.attributes.imgBorderColor,
-           onChange: this.onChangeImgBorderColor,
-           label: __('Image Border Color', 'blueprint-blocks'),
            },
            ] }
            />
@@ -304,7 +507,7 @@ class editRecentPosts extends Component {
             selectedCategory: parseInt( value ),
             displaySettings : {
             showMeta: 'hide',
-            includeSticky: 'show',
+            ignoreSticky: 'show',
             showImg:'show'``,
             showExcerpts:'show',
           },
@@ -315,7 +518,7 @@ class editRecentPosts extends Component {
     if( newValue !== undefined ) {
       this.props.setAttributes( { titleFontSize: newValue });
     } else {
-      this.props.setAttributes( { titleFontSize: '20' });
+      this.props.setAttributes( { titleFontSize: '18' });
     }
   }
 
@@ -323,15 +526,15 @@ class editRecentPosts extends Component {
     if( newValue !== undefined ) {
       this.props.setAttributes( { textFontSize: newValue });
     } else {
-      this.props.setAttributes( { textFontSize: '18' });
+      this.props.setAttributes( { textFontSize: '16' });
     }
   }
 
   onChangeIncludeSticky() {
-    if ( this.props.attributes.includeSticky ) {
-       this.props.setAttributes( { includeSticky: false } );
+    if ( this.props.attributes.ignoreSticky ) {
+       this.props.setAttributes( { ignoreSticky: false } );
     } else {
-       this.props.setAttributes( { includeSticky: true } );
+       this.props.setAttributes( { ignoreSticky: true } );
 
     }
   }
@@ -384,8 +587,104 @@ class editRecentPosts extends Component {
   onChangeImgBorder( newValue ) {
     this.props.setAttributes({ imgBorder: newValue });
   }
+
   onChangeReadMoreText( newValue ) {
     this.props.setAttributes({ readMoreText : newValue });
+  }
+  onChangeButtonType( newValue ) {
+    this.props.setAttributes({ buttonType: newValue });
+    }
+  onChangeButtonColor( newValue ) {
+    this.props.setAttributes({ buttonColor: newValue });
+    }
+  onChangeButtonBorderColor( newValue ) {
+    this.props.setAttributes({ buttonBorderColor: newValue });
+    }
+  onChangeButtonBG( newValue ) {
+    this.props.setAttributes({ buttonBG: newValue });
+    }
+  onChangeButtonBorder( newValue ) {
+    this.props.setAttributes({ buttonBorder: newValue });
+    }
+  onChangeButtonFontSize( newValue ) {
+    if( newValue !== undefined ) {
+      this.props.setAttributes( { buttonFontSize: newValue });
+    } else {
+    this.props.setAttributes({ buttonFontSize: '14' });
+    }
+  }
+  onChangeButtonBorderRadius( newValue ) {
+    this.props.setAttributes({ buttonBorderRadius: newValue });
+    }
+  onChangeAlignButton( newValue ) {
+    this.props.setAttributes({ alignButton: newValue });
+  }
+  onChangeSectionTitle( newValue ) {
+    this.props.setAttributes( { sectionTitle: newValue });
+  }
+  onChangeSectionTitleSize( newValue ) {
+    if( newValue !== undefined ) {
+    this.props.setAttributes( { sectionTitleSize: newValue });
+    } else {
+    this.props.setAttributes({ sectionTitleSize: '20' });
+    }
+  }
+  previewButton() {
+    let btnWrapClass = 'btn-wrap';
+    btnWrapClass += ' align-' + this.props.attributes.alignButton;
+
+    let linkClass = 'read-more-link button button-primary';
+
+    let solidBtnStyle = {};
+    if( this.props.attributes.buttonBG ) {
+      linkClass = 'read-more-link button';
+      solidBtnStyle.backgroundColor = this.props.attributes.buttonBG;
+    }
+    if( this.props.attributes.buttonColor ) {
+      solidBtnStyle.color = this.props.attributes.buttonColor;
+    }
+    if( this.props.attributes.buttonBorderRadius > 0 ) {
+      solidBtnStyle.borderRadius = this.props.attributes.buttonBorderRadius + 'px';
+    }
+    solidBtnStyle.fontSize = this.props.attributes.buttonFontSize + 'px';
+
+
+    let outlineBtnStyle = {
+      backgroundColor: 'transparent',
+    };
+    if( this.props.attributes.buttonColor ) {
+      outlineBtnStyle.color = this.props.attributes.buttonColor;
+    }
+    if( this.props.attributes.buttonBorderRadius > 0 ) {
+      outlineBtnStyle.borderRadius = this.props.attributes.buttonBorderRadius + 'px';
+    }
+    if( this.props.attributes.buttonBorder > 0 ) {
+      outlineBtnStyle.borderWidth = this.props.attributes.buttonBorder + 'px';
+      outlineBtnStyle.borderStyle = 'solid';
+      outlineBtnStyle.borderColor = this.props.attributes.buttonBorderColor;
+    }
+    outlineBtnStyle.fontSize = this.props.attributes.buttonFontSize + 'px';
+
+
+    let btnStyle = '';
+
+    if( this.props.attributes.buttonType === 'solid' ) {
+      btnStyle = solidBtnStyle;
+    } else {
+      btnStyle = outlineBtnStyle;
+      linkClass = 'read-more-link button button-outlined';
+    }
+    btnStyle.height = 'auto';
+    btnStyle.lineHeight = '2em';
+    btnStyle.paddingTop = '0';
+    btnStyle.paddingBottom = '0';
+    btnStyle.textShadow = 'none';
+
+    return (
+      <div class={ btnWrapClass }>
+      <a className={ linkClass } style={ btnStyle }>{ this.props.attributes.readMoreText }</a>
+      </div>
+    );
   }
 
   previewPost() {
@@ -446,6 +745,13 @@ class editRecentPosts extends Component {
 
     let imgURL = images[Math.floor(Math.random()*images.length)];
 
+    let inlineButton = false;
+    let blockButton = true;
+    if( this.props.attributes.buttonType === 'inline' ) {
+      inlineButton = true;
+      blockButton = false;
+    }
+
     return(
       <div className={ postClass }
       style={ postStyle }>
@@ -456,17 +762,43 @@ class editRecentPosts extends Component {
           </div>
         )
       }
-      <h3 className="post-title" style={ titleStyle }>{ title }</h3>
+
+      <h3 className="post-title" style={ titleStyle }>
+      { title }
+      </h3>
+
       {
         this.props.attributes.showMeta && (
           <div className="post-meta">{ meta }</div>
         )
       }
+
       {
-        this.props.attributes.showExcerpts && (
+        this.props.attributes.showExcerpts &&
+        inlineButton && (
+
           <div className="excerpt">
-          { excerpt }
-          <a className="read-more-link" style={ postStyle }> Read More &raquo;</a>
+            { excerpt }
+
+
+          <a
+          className="read-more-link"
+          style={ postStyle }>
+          Read More &raquo;
+          </a>
+
+
+          </div>
+        )
+      }
+
+      {
+        this.props.attributes.showExcerpts &&
+        blockButton && (
+
+          <div className="excerpt">
+            { excerpt }
+            <this.previewButton/>
           </div>
         )
       }
@@ -529,6 +861,11 @@ class editRecentPosts extends Component {
       this.props.className += ' three-across';
     }
 
+    let sectionTitleStyle = {
+      color: this.props.attributes.color,
+      backgroundColor: this.props.attributes.backgroundColor,
+      fontSize: this.props.attributes.sectionTitleSize + 'px',
+    }
 
 
     const previewPosts = [];
@@ -545,6 +882,15 @@ class editRecentPosts extends Component {
           className={ this.props.className }>
 
           { this.getInspectorControls( options ) }
+
+              <h2
+              className="section-title">
+              <span
+              className="title"
+              style={ sectionTitleStyle }>
+                 { this.props.attributes.sectionTitle }
+              </span>
+              </h2>
 
               <div className="inner">
               { previewPosts }
@@ -569,9 +915,9 @@ registerBlockType( 'blueprint-blocks/recent-posts', {
         selectedCategory:{
           type: 'integer',
         },
-        includeSticky: {
+        ignoreSticky: {
           type: 'boolean',
-          default: true,
+          default: false,
         },
         numberPosts: {
           type: 'integer',
@@ -612,11 +958,11 @@ registerBlockType( 'blueprint-blocks/recent-posts', {
         },
         titleFontSize: {
            type: 'integer',
-           default: '20',
+           default: '18',
          },
         textFontSize: {
           type: 'integer',
-          default: '18',
+          default: '16',
         },
         alignText: {
           type: 'string',
@@ -629,6 +975,43 @@ registerBlockType( 'blueprint-blocks/recent-posts', {
         readMoreText: {
           type: 'string',
           default: 'Read More',
+        },
+        buttonType: {
+          type: 'string',
+          default: 'outlined',
+        },
+        buttonColor: {
+          type: 'string',
+        },
+        buttonBG: {
+          type: 'string',
+        },
+        buttonBorderColor: {
+          type: 'string',
+        },
+        buttonBorder: {
+          type: 'integer',
+          default: '2',
+        },
+        buttonFontSize: {
+          type: 'integer',
+          default: '14',
+        },
+        buttonBorderRadius: {
+          type: 'integer',
+          default:'0'
+        },
+        alignButton: {
+          type: 'string',
+          default: 'center',
+        },
+        sectionTitle: {
+          type: 'string',
+          default: 'Latest from the Blog',
+        },
+        sectionTitleSize: {
+          type: 'integer',
+          default: '20',
         },
 	  },
 
