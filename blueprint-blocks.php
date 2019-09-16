@@ -1,8 +1,7 @@
 <?php
 /**
  * Plugin Name: Blueprint Blocks
- * Description: A collection of blocks and add-ons for Authors using
- * MyBookTable
+ * Description: A collection of blocks and add-ons for Authors using MyBookTable
  * Version: 1.0.0
  * Author: Memphis McKay
  *
