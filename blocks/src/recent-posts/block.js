@@ -34,9 +34,6 @@ class editRecentPosts extends Component {
     this.getInspectorControls = this.getInspectorControls.bind(this);
 
     this.onChangeSelectCategory = this.onChangeSelectCategory.bind(this);
-
-    this.updateDisplaySettings = this.updateDisplaySettings.bind(this);
-
     this.onChangeIncludeSticky = this.onChangeIncludeSticky.bind(this);
     this.onChangeShowExcerpts = this.onChangeShowExcerpts.bind(this);
     this.onChangeShowMeta = this.onChangeShowMeta.bind(this);
@@ -53,6 +50,7 @@ class editRecentPosts extends Component {
     this.onChangeTitleFontSize = this.onChangeTitleFontSize.bind(this);
     this.onChangeAlignTitle = this.onChangeAlignTitle.bind(this);
     this.onChangeAlignText = this.onChangeAlignText.bind(this);
+    this.onChangeReadMoreText = this.onChangeReadMoreText.bind(this);
 
     this.previewPost = this.previewPost.bind(this);
   }
@@ -72,26 +70,7 @@ class editRecentPosts extends Component {
     });
   }
 
-  updateDisplaySettings( setting, newValue ) {
-     let showExcerpts = this.props.attributes.displaySettings.showExcerpts;
-     let showMeta = this.props.attributes.displaySettings.showMeta;
-     let includeSticky = this.props.attributes.displaySettings.includeSticky;
-     let showImg = this.props.attributes.displaySettings.showImg;
 
-     if( setting === 'showExcerpts' ) {  showExcerpts = newValue; }
-     if( setting === 'showMeta' ) {  showMeta = newValue; }
-     if( setting === 'includeSticky' ) { includeSticky = newValue; }
-     if( setting === 'showImg' ) { showImg = newValue; }
-
-     this.props.setAttributes({
-        displaySettings: {
-           showExcerpts: showExcerpts,
-           showMeta: showMeta,
-           includeSticky:includeSticky,
-           showImg: showImg,
-        }
-     });
-  }
 
   getInspectorControls( options ) {
 
@@ -153,6 +132,13 @@ class editRecentPosts extends Component {
              checked={ !! this.props.attributes.showImg }
              onChange={ this.onChangeShowImg }
              className="link-type"
+           />
+           <TextControl
+              placeholder= 'Read More Link Text'
+              label="label for 'read more' button"
+              value={ this.props.attributes.readMoreText }
+              onChange={ this.onChangeReadMoreText }
+              keepPlaceholderOnFocus={true}
            />
            </PanelBody>
            <PanelBody title="Title Styles">
@@ -319,7 +305,7 @@ class editRecentPosts extends Component {
             displaySettings : {
             showMeta: 'hide',
             includeSticky: 'show',
-            showImg:'show',
+            showImg:'show'``,
             showExcerpts:'show',
           },
       } );
@@ -344,37 +330,30 @@ class editRecentPosts extends Component {
   onChangeIncludeSticky() {
     if ( this.props.attributes.includeSticky ) {
        this.props.setAttributes( { includeSticky: false } );
-       this.updateDisplaySettings( 'includeSticky', 'hide'  );
     } else {
        this.props.setAttributes( { includeSticky: true } );
-       this.updateDisplaySettings( 'includeSticky', 'show'  );
+
     }
   }
   onChangeShowExcerpts() {
     if ( this.props.attributes.showExcerpts ) {
        this.props.setAttributes( { showExcerpts: false } );
-       this.updateDisplaySettings( 'showExcerpts', 'hide'  );
     } else {
        this.props.setAttributes( { showExcerpts: true } );
-       this.updateDisplaySettings( 'showExcerpts', 'show'  );
     }
   }
   onChangeShowMeta() {
     if ( this.props.attributes.showMeta ) {
        this.props.setAttributes( { showMeta: false } );
-       this.updateDisplaySettings( 'showMeta', 'hide'  );
     } else {
        this.props.setAttributes( { showMeta: true } );
-       this.updateDisplaySettings( 'showMeta', 'show'  );
     }
   }
   onChangeShowImg() {
     if ( this.props.attributes.showImg ) {
        this.props.setAttributes( { showImg: false } );
-       this.updateDisplaySettings( 'showImg', 'hide'  );
     } else {
        this.props.setAttributes( { showImg: true } );
-       this.updateDisplaySettings( 'showImg', 'show'  );
     }
   }
 
@@ -404,6 +383,9 @@ class editRecentPosts extends Component {
   }
   onChangeImgBorder( newValue ) {
     this.props.setAttributes({ imgBorder: newValue });
+  }
+  onChangeReadMoreText( newValue ) {
+    this.props.setAttributes({ readMoreText : newValue });
   }
 
   previewPost() {
@@ -581,7 +563,7 @@ registerBlockType( 'blueprint-blocks/recent-posts', {
         __( 'Post Grid' ),
 	],
   supports: {
-    align: [ 'center', 'wide', 'full'  ],
+    align: [ 'center', 'wide', 'full' ],
   },
 	attributes: {
         selectedCategory:{
@@ -589,7 +571,7 @@ registerBlockType( 'blueprint-blocks/recent-posts', {
         },
         includeSticky: {
           type: 'boolean',
-          default: false,
+          default: true,
         },
         numberPosts: {
           type: 'integer',
@@ -613,7 +595,7 @@ registerBlockType( 'blueprint-blocks/recent-posts', {
         },
         roundImg:{
           type: 'integer',
-          default: 0,
+          default: 50,
         },
         imgBorder: {
           type: 'integer',
@@ -628,42 +610,26 @@ registerBlockType( 'blueprint-blocks/recent-posts', {
         imgBorderColor: {
           type:'string',
         },
-        displaySettings: {
-           showExcerpts: {
-              type: 'string',
-              default: 'show'
-           },
-           showMeta: {
-              type: 'string',
-              default: 'show'
-           },
-           includeSticky: {
-              type: 'string',
-              default: 'hide'
-           },
-           showImg: {
-             type: 'string',
-             default: 'show'
-           },
-         },
         titleFontSize: {
-           type: 'string',
+           type: 'integer',
            default: '20',
          },
         textFontSize: {
-          type: 'string',
+          type: 'integer',
           default: '18',
         },
         alignText: {
           type: 'string',
-          default: 'left',
-
+          default: 'center',
         },
         alignTitle: {
           type: 'string',
-          default: 'left',
+          default: 'center',
         },
-
+        readMoreText: {
+          type: 'string',
+          default: 'Read More',
+        },
 	  },
 
 	edit: editRecentPosts,
