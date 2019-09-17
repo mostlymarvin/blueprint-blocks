@@ -62,8 +62,12 @@
     & > div {
       margin:0 8px;
     }
-
   }
+
+  .blueprint-profile-links .blueprint-social-wrap.author-profile.flex-column .blueprint-social {
+    flex-direction: row !important;
+  }
+
 }
 
 
@@ -110,6 +114,11 @@
       padding-left:30px;
       margin-top:0;
     }
+
+    .blueprint-profile-links .blueprint-social-wrap.author-profile.flex-column .blueprint-social {
+      flex-direction: column !important;
+    }
+
 
     &.alignfull {
       .blueprint-profile-links {
