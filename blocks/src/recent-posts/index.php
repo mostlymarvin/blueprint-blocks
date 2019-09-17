@@ -6,7 +6,6 @@
 
 
 function blueprint_blocks_dynamic_recent_posts_block( $atts ) {
-  //print_r( $atts );
   /**
    * TODO: see about implementing templates
    */
@@ -296,5 +295,4 @@ function blueprint_blocks_dynamic_recent_posts_block( $atts ) {
   wp_reset_postdata();
 
   return $html;
-
 }

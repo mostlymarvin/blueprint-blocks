@@ -26,17 +26,17 @@ function  blueprint_extras_scripts() {
     if( in_array( $activeStyle, $blueprint_button_packs ) || !defined( 'MBT_VERSION' )  ) {
 
       wp_register_style(
-        'blueprint-extras-css',
-        plugins_url( 'css/blueprint-extras.css', dirname(__FILE__) ) ,
+        'blueprint-extras',
+        BLUEPRINT_BLOCKS_PLUGIN_URL . 'css/blueprint-extras.css',
         '',
         $version
       );
 
-      wp_enqueue_style( 'blueprint-extras-css' );
+      wp_enqueue_style( 'blueprint-extras' );
 
       wp_register_script(
-        'blueprint-extras',
-        plugins_url( 'js/blueprint-extras-min.js', dirname(__FILE__) ),
+        'blueprint-extras-js',
+        BLUEPRINT_BLOCKS_PLUGIN_URL . 'js/blueprint-extras-min.js',
         '',
         $version,
          true);
@@ -48,7 +48,7 @@ function  blueprint_extras_scripts() {
 function blueprint_extras_live_preview() {
   wp_enqueue_script(
       'blueprint-extras-customizer',
-      plugins_url( 'js/blueprint-customizer-preview-min.js', dirname(__FILE__) ) ,
+      BLUEPRINT_BLOCKS_PLUGIN_URL . 'js/blueprint-customizer-preview-min.js',
       array( 'jquery','customize-preview' ),
       '',
       false

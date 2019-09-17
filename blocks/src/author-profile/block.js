@@ -772,7 +772,7 @@ registerBlockType( 'blueprint-blocks/author-profile', {
         },
         circleImage: {
             type: 'boolean',
-            default: false,
+            default: true,
         },
         colorBG: {
             type: 'string',
@@ -786,7 +786,7 @@ registerBlockType( 'blueprint-blocks/author-profile', {
         },
         imgBorder: {
             type: 'boolean',
-            default: false,
+            default: true,
         },
         imgBorderWidth: {
             type: 'integer',
@@ -821,7 +821,7 @@ registerBlockType( 'blueprint-blocks/author-profile', {
         },
         useSiteLinks: {
           type:'boolean',
-          default: false,
+          default: true,
         },
 	  },
 
@@ -899,7 +899,7 @@ registerBlockType( 'blueprint-blocks/author-profile', {
           };
         }
 
-      const socialShortcode = '[blueprint_social direction="column"]';
+      const socialShortcode = '[blueprint_social class="author-profile" direction="column" size="small"]';
 		return (
 
       props.attributes.selectedAuthor && (

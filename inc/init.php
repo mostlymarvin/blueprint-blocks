@@ -5,13 +5,13 @@
  * @package           Blueprint Blocks
  *
  */
-require_once plugin_dir_path( __FILE__ ) . 'setup.php';
-require_once plugin_dir_path( __FILE__ ) . 'custom-css.php';
-require_once plugin_dir_path( __FILE__ ) . 'button-packs.php';
-require_once plugin_dir_path( __FILE__ ) . 'functions.php';
-require_once plugin_dir_path( __FILE__ ) . 'customizer.php';
+require_once BLUEPRINT_BLOCKS_PLUGIN_PATH . 'inc/setup.php';
+require_once BLUEPRINT_BLOCKS_PLUGIN_PATH . 'inc/custom-css.php';
+require_once BLUEPRINT_BLOCKS_PLUGIN_PATH . 'inc/button-packs.php';
+require_once BLUEPRINT_BLOCKS_PLUGIN_PATH . 'inc/functions.php';
+require_once BLUEPRINT_BLOCKS_PLUGIN_PATH . 'inc/customizer.php';
 
 
-require_once plugin_dir_path( __FILE__ ) . 'block-settings.php';
-require_once plugin_dir_path( __FILE__ ) . 'block-registration.php';
-require_once plugin_dir_path( __FILE__ ) . 'rest-settings.php';
+require_once BLUEPRINT_BLOCKS_PLUGIN_PATH . 'inc/block-settings.php';
+require_once BLUEPRINT_BLOCKS_PLUGIN_PATH . 'inc/block-registration.php';
+require_once BLUEPRINT_BLOCKS_PLUGIN_PATH . 'inc/rest-settings.php';
