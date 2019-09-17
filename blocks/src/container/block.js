@@ -143,6 +143,7 @@ registerBlockType( 'blueprint-blocks/container', {
 		return (
       <div
       className={ props.className }
+      id={ props.attributes.anchor }
       style={ blockStyle }>
       <div className="inner" style={blockStyle}>
       <InnerBlocks.Content/>
