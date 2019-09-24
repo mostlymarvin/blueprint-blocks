@@ -890,7 +890,14 @@ class editRecentPosts extends Component {
 
 registerBlockType( 'blueprint-blocks/recent-posts', {
 	title: __( 'Recent Posts' ),
-	icon: 'admin-post',
+  icon: {
+    // Specifying a background color to appear with the icon e.g.: in the inserter.
+    background: '#fff',
+    // Specifying a color for the icon (optional: if not set, a readable color will be automatically defined)
+    foreground: '#49A5C3',
+    // Specifying a dashicon for the block
+    src: 'admin-post',
+  },
 	category: 'blueprint-blocks',
 	keywords: [
 		    __( 'Posts' ),

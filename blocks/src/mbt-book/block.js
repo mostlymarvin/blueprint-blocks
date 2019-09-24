@@ -430,7 +430,9 @@ class mbtSelectBook extends Component {
       const bookASIN = post.mbt_unique_id_asin;
       const bookSample = bookASIN[0];
       const bookSampleLink = 'https://read.amazon.com/kp/embed?asin=' + bookSample + '&preview=newtab';
+
       const booklinks = post.mbt_buybuttons[0];
+      const buylinks = booklinks.length > 0 ? booklinks : false;
       const styleURL = post.mbt_editor_style_url;
       const coverID = post.mbt_book_image_id[0];
       this.getBookMedia( coverID );
@@ -439,7 +441,7 @@ class mbtSelectBook extends Component {
       this.props.setAttributes( {
          selectedPost: parseInt( value ),
          title: post.title.rendered,
-         buylinks: booklinks,
+         buylinks: buylinks,
          audioSample: audioSample,
          bookSample: bookSampleLink,
          buttonsLabel: 'Now Available From',
@@ -1099,7 +1101,8 @@ registerBlockType( 'blueprint-blocks/mbt-book', {
             </h2>
 
             {
-              props.attributes.showTagLine && (
+              props.attributes.showTagLine &&
+              props.attributes.customTagline && (
               <RichText.Content
                  tagName='div'
                  className='preview-tagline'
