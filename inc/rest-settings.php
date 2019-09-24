@@ -173,9 +173,8 @@ function blueprint_blocks_mbt_get_author_meta( $object ) {
 }
 
 function blueprint_blocks_mbt_book_excerpt( $object ) {
-	$excerpt = get_the_excerpt( $object['id'] );
-  $excerpt = wpautop( $excerpt );
+  global $post;
+  $excerpt = wpautop( $post->post_excerpt );
   $excerpt = trim(preg_replace('/\s/', ' ', $excerpt));
-
 	return $excerpt;
 }

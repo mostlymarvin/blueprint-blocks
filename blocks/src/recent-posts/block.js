@@ -715,7 +715,7 @@ class editRecentPosts extends Component {
 
     let excerpt = 'Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Donec ullamcorper nulla non metus auctor fringilla. Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit sit amet non magna.';
 
-    let images = ['http://lorempixel.com/400/400/cats/1', 'http://lorempixel.com/400/400/cats/6', 'http://lorempixel.com/400/400/cats/3', 'http://lorempixel.com/400/400/cats/4', 'http://lorempixel.com/400/400/cats/5', 'http://lorempixel.com/400/400/cats/7', 'http://lorempixel.com/400/400/cats/8', 'http://lorempixel.com/400/400/cats/9', 'http://lorempixel.com/400/400/cats/10'];
+    let images = ['https://lorempixel.com/400/400/cats/1', 'https://lorempixel.com/400/400/cats/6', 'https://lorempixel.com/400/400/cats/3', 'https://lorempixel.com/400/400/cats/4', 'https://lorempixel.com/400/400/cats/5', 'https://lorempixel.com/400/400/cats/7', 'https://lorempixel.com/400/400/cats/8', 'https://lorempixel.com/400/400/cats/9', 'https://lorempixel.com/400/400/cats/10'];
 
     let imgURL = images[Math.floor(Math.random()*images.length)];
 
