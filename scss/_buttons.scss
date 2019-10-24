@@ -16,11 +16,11 @@
       flex-wrap: wrap;
 
      .mbt-book-buybutton {
-        background: #3c3d42;
-        border: 2px solid #3c3d42;
+        border: 2px solid;
         color: #fff;
         display: block;
-        font-family: Futura, Trebuchet MS, Arial, sans-serif;
+        //font-family: Futura, Trebuchet MS, Arial, sans-serif;
+        font-family: inherit;
         text-transform: uppercase;
         font-weight: bold;
         margin: 0.40625rem;

@@ -1,40 +1,45 @@
 <?php
-
 /**
- * Functions Misc
- * @package    Blueprint Blocks
+ * Helper Functions
  *
+ * @package   Blueprint_Blocks
+ * @author    Memphis McKay
  */
 
+add_filter( 'body_class', 'blueprint_extras_body_class' );
 
-
+/**
+ * Add body classes to help with styling
+ *
+ * @method blueprint_extras_body_class
+ * @param  array $classes body classes.
+ * @return array $classes
+ */
 function blueprint_extras_body_class( $classes ) {
 
-  $settings = get_option( 'mbt_settings', array() );
+	$settings = get_option( 'mbt_settings', array() );
 
-  $activeStyle = !empty( $settings['style_pack'] ) ? $settings['style_pack'] : 'blueprint-buttons';
-  $bookSize = !empty( $settings['book_button_size'] ) ? $settings['book_button_size'] : 'medium';
-  $listSize = !empty( $settings['listing_button_size'] ) ? $settings['listing_button_size'] : 'medium';
+	$active_style = ! empty( $settings['style_pack'] ) ? $settings['style_pack'] : 'blueprint-buttons';
+	$book_size    = ! empty( $settings['book_button_size'] ) ? $settings['book_button_size'] : 'medium';
+	$list_size    = ! empty( $settings['listing_button_size'] ) ? $settings['listing_button_size'] : 'medium';
 
-  $btnSize = $listSize;
+	$button_size = $list_size;
 
-  if( in_array( 'single-mbt_book', $classes ) ) {
-    $btnSize = $bookSize;
-  }
+	if ( in_array( 'single-mbt_book', $classes, true ) ) {
+		$button_size = $book_size;
+	}
 
-  if( $activeStyle === 'blueprint-simple-buttons' || $activeStyle === 'blueprint-buttons' ) {
-    $classes[] = 'mbt-btn-size-' . $btnSize;
-  }
+	if ( 'blueprint-simple-buttons' === $active_style || 'blueprint-buttons' === $active_style ) {
+		$classes[] = 'mbt-btn-size-' . $button_size;
+	}
 
-  if( defined( 'MBT_VERSION' ) ) {
-    $classes[] = $activeStyle;
-  } else {
-    $classes[] = 'blueprint-simple-buttons';
-  }
+	if ( defined( 'MBT_VERSION' ) ) {
+		$classes[] = $active_style;
+	} else {
+		$classes[] = 'blueprint-simple-buttons';
+	}
 
-  $classes[] = 'blueprint-extras';
+	$classes[] = 'blueprint-extras';
 
-  return $classes;
+	return $classes;
 }
-
-add_filter( 'body_class', 'blueprint_extras_body_class' );
