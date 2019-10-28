@@ -48,58 +48,58 @@ function blueprint_extras_custom_css() {
 			$grayscale_off = '-webkit-filter: grayscale(0%); filter: grayscale(0%);';
 		}
 
-		$style = sprintf(
-			'<style type="text/css">
-			.blueprint-extras .mbt-featured-book-widget .mbt-book-buybuttons .mbt-book-buybutton,
-			.blueprint-extras .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,
-			.blueprint-extras .mbt-book-archive .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,
-			.blueprint-extras .buylinks .mbt-book-buybuttons .mbt-book-buybutton {
-				background-color: %1$s;
-				border-color: %1$s;
-				border-radius: %3$s;
-				color: %2$s;
-				%4$s
-			}
-			.blueprint-extras .mbt-featured-book-widget .mbt-book-buybuttons .mbt-book-buybutton:hover,
-			.blueprint-extras .mbt-book .mbt-book-buybuttons .mbt-book-buybutton:hover,
-			.blueprint-extras .mbt-book-archive .mbt-book .mbt-book-buybuttons .mbt-book-buybutton:hover,
-			.blueprint-extras .buylinks .mbt-book-buybuttons .mbt-book-buybutton:hover {
-				background-color: %5$s;
-				border-color: %5$s;
-				color:  %6$s;
-				%7$s
-			}
-			.blueprint-extras .mbt-featured-book-widget .mbt-book-buybuttons .mbt-book-buybutton a img,
-			.blueprint-extras .mbt-book .mbt-book-buybuttons .mbt-book-buybutton a img,
-			.blueprint-extras .mbt-book-archive .mbt-book .mbt-book-buybuttons .mbt-book-buybutton a img,
-			.blueprint-extras .buylinks .mbt-book-buybuttons .mbt-book-buybutton a img {
-				border-bottom-left-radius: %8$spx !important;
-				border-top-left-radius: %8$spx !important;
-			}
-			.blueprint-extras .mbt-book .mbt-primary-button {
-				background-color: %1$s;
-				border-radius: %3$spx;
-				color: %2$s;
-			}
-			.blueprint-extras .mbt-book .mbt-primary-button:hover {
-				background-color: %5$s;
-				border-radius: %3$spx;
-				color: %6$s;
-			}
-			%9$s</style>
-			',
-			sanitize_hex_color( $button_bg ),
-			sanitize_hex_color( $button_color ),
-			intval( $border_radius ),
-			wp_kses_post( $grayscale_on ),
-			sanitize_hex_color( $hover_bg ),
-			sanitize_hex_color( $hover_color ),
-			wp_kses_post( $grayscale_off ),
-			intval( $img_radius ),
-			wp_kses_post( $custom_css )
-		);
+		$style = '';
 
-	if ( in_array( $active_style, $blueprint_button_packs, true ) ) {
-		echo wp_kses_post( $style );
-	}
+		if ( in_array( $active_style, $blueprint_button_packs, true ) ) {
+			$style = printf(
+				'<style type="text/css">
+				.blueprint-extras .mbt-featured-book-widget .mbt-book-buybuttons .mbt-book-buybutton,
+				.blueprint-extras .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,
+				.blueprint-extras .mbt-book-archive .mbt-book .mbt-book-buybuttons .mbt-book-buybutton,
+				.blueprint-extras .buylinks .mbt-book-buybuttons .mbt-book-buybutton, .blueprint-extras .buylinks .mbt-book .mbt-book-buybuttons .mbt-book-buybutton {
+					background-color: %1$s;
+					border-color: %1$s;
+					border-radius: %3$spx;
+					color: %2$s;
+					%4$s
+				}
+				.blueprint-extras .mbt-featured-book-widget .mbt-book-buybuttons .mbt-book-buybutton:hover,
+				.blueprint-extras .mbt-book .mbt-book-buybuttons .mbt-book-buybutton:hover,
+				.blueprint-extras .mbt-book-archive .mbt-book .mbt-book-buybuttons .mbt-book-buybutton:hover,
+				.blueprint-extras .buylinks .mbt-book-buybuttons .mbt-book-buybutton:hover {
+					background-color: %5$s;
+					border-color: %5$s;
+					color:  %6$s;
+					%7$s
+				}
+				.blueprint-extras .mbt-featured-book-widget .mbt-book-buybuttons .mbt-book-buybutton a img,
+				.blueprint-extras .mbt-book .mbt-book-buybuttons .mbt-book-buybutton a img,
+				.blueprint-extras .mbt-book-archive .mbt-book .mbt-book-buybuttons .mbt-book-buybutton a img,
+				.blueprint-extras .buylinks .mbt-book-buybuttons .mbt-book-buybutton a img {
+					border-bottom-left-radius: %8$spx !important;
+					border-top-left-radius: %8$spx !important;
+				}
+				.blueprint-extras .mbt-book .mbt-primary-button {
+					background-color: %1$s;
+					border-radius: %3$spx;
+					color: %2$s;
+				}
+				.blueprint-extras .mbt-book .mbt-primary-button:hover {
+					background-color: %5$s;
+					border-radius: %3$spx;
+					color: %6$s;
+				}
+				%9$s</style>
+				',
+				esc_html( $button_bg ),
+				esc_html( $button_color ),
+				intval( $border_radius ),
+				wp_kses_post( $grayscale_on ),
+				esc_html( $hover_bg ),
+				esc_html( $hover_color ),
+				wp_kses_post( $grayscale_off ),
+				intval( $img_radius ),
+				wp_kses_post( $custom_css )
+			);
+		}
 }

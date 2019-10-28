@@ -1,11 +1,16 @@
 .wp-block-blueprint-blocks-container {
-  padding: 20px;
+	padding: 20px;
 
-  .inner,
-  & > *,
-  h1, h2, h3, h4, h5, h6, a{
-    color: inherit !important;
-    background-color: inherit !important;
-  }
-
+	& > *,
+	.inner,
+	a,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		background-color: inherit !important;
+		color           : inherit !important;
+	}
 }

@@ -56,10 +56,11 @@ function blueprint_extras_register_customizer( $wp_customize ) {
 	$wp_customize->add_setting(
 		'blueprint_extras[button_background]',
 		array(
-			'default'    => '#3c3d42',
-			'type'       => 'option',
-			'capability' => 'manage_options',
-			'transport'  => 'postMessage',
+			'default'           => '#3c3d42',
+			'type'              => 'option',
+			'capability'        => 'manage_options',
+			'transport'         => 'postMessage',
+			'sanitize_callback' => 'sanitize_hex_color',
 		)
 	);
 
@@ -80,10 +81,11 @@ function blueprint_extras_register_customizer( $wp_customize ) {
 	$wp_customize->add_setting(
 		'blueprint_extras[button_hover_background]',
 		array(
-			'default'    => '#4c4d54',
-			'type'       => 'option',
-			'capability' => 'manage_options',
-			'transport'  => 'postMessage',
+			'default'           => '#4c4d54',
+			'type'              => 'option',
+			'capability'        => 'manage_options',
+			'transport'         => 'postMessage',
+			'sanitize_callback' => 'sanitize_hex_color',
 		)
 	);
 
@@ -100,15 +102,16 @@ function blueprint_extras_register_customizer( $wp_customize ) {
 		)
 	);
 
-	if ( $style !== 'blueprint-simple-buttons' ) :
+	if ( 'blueprint-simple-buttons' !== $style ) :
 		/* Text color */
 		$wp_customize->add_setting(
 			'blueprint_extras[button_text_color]',
 			array(
-				'default'    => '#ffffff',
-				'type'       => 'option',
-				'capability' => 'manage_options',
-				'transport'  => 'postMessage',
+				'default'           => '#ffffff',
+				'type'              => 'option',
+				'capability'        => 'manage_options',
+				'transport'         => 'postMessage',
+				'sanitize_callback' => 'sanitize_hex_color',
 			)
 		);
 
@@ -129,10 +132,11 @@ function blueprint_extras_register_customizer( $wp_customize ) {
 		$wp_customize->add_setting(
 			'blueprint_extras[button_hover_text_color]',
 			array(
-				'default'    => '#ffffff',
-				'type'       => 'option',
-				'capability' => 'manage_options',
-				'transport'  => 'postMessage',
+				'default'           => '#ffffff',
+				'type'              => 'option',
+				'capability'        => 'manage_options',
+				'transport'         => 'postMessage',
+				'sanitize_callback' => 'sanitize_hex_color',
 			)
 		);
 

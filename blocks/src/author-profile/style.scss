@@ -1,151 +1,143 @@
 .wp-block-blueprint-blocks-author-profile {
-  padding: 0 20px;
-  box-sizing:border-box;
+	box-sizing: border-box;
+	padding   : 0 20px;
 
+	&.has-background-color {
+		padding: 50px 20px 30px;
+	}
 
-  &.has-background-color  {
-    padding:50px 20px 30px;
-  }
+	.inner-wrap {
+		margin   : 0 auto;
+		max-width: 100%;
+	}
 
-  .inner-wrap {
-    margin:0 auto;
-    max-width:100%;
-  }
+	.profile-main {
+		.media {
+			margin: 0 auto 20px;
+			width : max-content;
+		}
 
-  .profile-main {
+		img {
+			display   : block;
+			object-fit: cover;
+		}
 
-    .media {
-      width:max-content;
-      margin:0 auto 20px;
-    }
+		&.circle-left {
+			.media {
+				border-radius: 50%;
 
-    img {
-       display:block;
-       object-fit:cover;
-    }
+				img {
+					border-radius: 50%;
+					height       : 240px;
+					width        : 240px;
+				}
+			}
+		}
 
-    &.circle-left {
-      .media {
-        border-radius:50%;
+		.bpb-more-link {
+			display   : block;
+			margin-top: 30px;
 
-        img {
-          border-radius: 50%;
-          width:240px;
-          height:240px;
-        }
-      }
-    }
+			&.btn-center {
+				text-align: center;
+			}
 
-    .bpb-more-link{
-        display:block;
-        margin-top:30px;
+			&.btn-right {
+				text-align: right;
+			}
 
-      &.btn-center {
-        text-align:center;
-      }
-      &.btn-right {
-        text-align:right;
-      }
-      &.btn-left {
-        text-align:left;
-      }
-    }
-  }
+			&.btn-left {
+				text-align: left;
+			}
+		}
+	}
 
+	.blueprint-profile-links {
+		display        : flex;
+		justify-content: center;
+		margin-top     : 60px;
+		width          : 100%;
 
-  .blueprint-profile-links {
-    display:flex;
-    width:100%;
-    justify-content:center;
-    margin-top:60px;
+		& > div {
+			margin: 0 8px;
+		}
+	}
 
-    & > div {
-      margin:0 8px;
-    }
-  }
-
-  .blueprint-profile-links .blueprint-social-wrap.author-profile.flex-column .blueprint-social {
-    flex-direction: row !important;
-  }
-
+	.blueprint-profile-links .blueprint-social-wrap.author-profile.flex-column .blueprint-social {
+		flex-direction: row !important;
+	}
 }
+@media all and (min-width: 600px) {
+	.wp-block-blueprint-blocks-author-profile {
+		.is-flex {
+			display: block;
+		}
 
+		.profile-main {
+			align-items: center;
+			display    : flex;
 
-@media all and (min-width: 600px ) {
-.wp-block-blueprint-blocks-author-profile {
+			.media {
+				margin-right: 10px;
+				min-width   : 30%;
+			}
 
-  .is-flex {
-    display:block;
-  }
-  .profile-main {
-    display:flex;
-    align-items:center;
-    .media {
-      margin-right: 10px;
-      min-width:30%;
-    }
+			&.circle-left {
+				display: block;
 
-    &.circle-left {
-      display:block;
-      .media {
-        float:left;
-        margin-right:30px;
-        -webkit-shape-outside:circle();
-        shape-outside:circle();
-        }
-      }
-    }
-  }
-
+				.media {
+					float                : left;
+					margin-right         : 30px;
+					-webkit-shape-outside: circle();
+					shape-outside        : circle();
+				}
+			}
+		}
+	}
 }
+@media all and (min-width: 768px) {
+	.wp-block-blueprint-blocks-author-profile {
+		.is-flex {
+			align-items: flex-start;
+			display    : flex;
+		}
 
-@media all and (min-width: 768px ) {
-  .wp-block-blueprint-blocks-author-profile {
+		.blueprint-profile-links {
+			flex-direction : column;
+			justify-content: flex-start;
+			margin-top     : 0;
+			padding-left   : 30px;
+			width          : max-content;
+		}
 
-    .is-flex {
-       display:flex;
-       align-items:flex-start;
-    }
+		.blueprint-profile-links .blueprint-social-wrap.author-profile.flex-column .blueprint-social {
+			flex-direction: column !important;
+		}
 
-    .blueprint-profile-links {
-      flex-direction:column;
-      justify-content:flex-start;
-      width:max-content;
-      padding-left:30px;
-      margin-top:0;
-    }
-
-    .blueprint-profile-links .blueprint-social-wrap.author-profile.flex-column .blueprint-social {
-      flex-direction: column !important;
-    }
-
-
-    &.alignfull {
-      .blueprint-profile-links {
-        padding-left:40px;
-      }
-    }
-
+		&.alignfull {
+			.blueprint-profile-links {
+				padding-left: 40px;
+			}
+		}
+	}
 }
-}
+@media all and (min-width: 960px) {
+	.wp-block-blueprint-blocks-author-profile {
+		padding: 40px 50px 20px;
 
-@media all and (min-width: 960px ) {
-  .wp-block-blueprint-blocks-author-profile {
-    padding:40px 50px 20px;
+		&.has-background-color {
+			padding: 60px 50px 30px;
+		}
 
-    &.has-background-color {
-      padding: 60px 50px 30px;
-    }
+		.blueprint-profile-links {
+			margin-top  : 0;
+			padding-left: 40px;
+		}
 
-    .blueprint-profile-links {
-      padding-left:40px;
-      margin-top:0;
-    }
-
-    &.alignfull {
-      .blueprint-profile-links {
-        padding-left:60px;
-      }
-    }
-}
+		&.alignfull {
+			.blueprint-profile-links {
+				padding-left: 60px;
+			}
+		}
+	}
 }

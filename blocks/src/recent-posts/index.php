@@ -1,298 +1,311 @@
 <?php
-   /**
-   * Block: Recent Posts
-   * Functions to render dynamic block
-   */
+/**
+ * Block: Recent Posts
+ * Functions to render dynamic block
+ *
+ * @package Blueprint_Blocks
+ */
 
-
+/**
+ * Dynamic output for recent posts block
+ *
+ * @method blueprint_blocks_dynamic_recent_posts_block
+ * @param array $atts block attributes.
+ * @return mixed html recent posts
+ */
 function blueprint_blocks_dynamic_recent_posts_block( $atts ) {
-  /**
-   * TODO: see about implementing templates
-   */
+	/**
+	 * TODO: see about implementing templates
+	 */
 
-  /**
-   * Query $atts:
-   */
+	/**
+	 * Query $atts:
+	 */
+	$selected_category = isset( $atts['selectedCategory'] ) ? $atts['selectedCategory'] : '';
+	$ignore_sticky     = isset( $atts['ignoreSticky'] ) ? $atts['ignoreSticky'] : false;
+	$number_posts      = isset( $atts['numberPosts'] ) ? $atts['numberPosts'] : 3;
 
-  $selectedCategory = isset($atts['selectedCategory']) ? $atts['selectedCategory'] : '';
-  $ignoreSticky = isset($atts['ignoreSticky']) ? $atts['ignoreSticky'] : false;
-  $numberPosts = isset($atts['numberPosts']) ? $atts['numberPosts'] : 3;
+	/**
+	 * Style and Class $atts
+	 */
+	$align                = isset( $atts['align'] ) ? $atts['align'] : '';
+	$align_button         = isset( $atts['alignButton'] ) ? $atts['alignButton'] : 'center';
+	$align_text           = isset( $atts['alignText'] ) ? $atts['alignText'] : 'center';
+	$align_title          = isset( $atts['alignTitle'] ) ? $atts['alignTitle'] : 'center';
+	$background_color     = isset( $atts['backgroundColor'] ) ? $atts['backgroundColor'] : '';
+	$button_bg            = isset( $atts['buttonBG'] ) ? $atts['buttonBG'] : '';
+	$button_border        = isset( $atts['buttonBorder'] ) ? $atts['buttonBorder'] : 2;
+	$button_border_color  = isset( $atts['buttonBorderColor'] ) ? $atts['buttonBorderColor'] : '';
+	$button_border_radius = isset( $atts['buttonBorderRadius'] ) ? $atts['buttonBorderRadius'] : 0;
+	$button_color         = isset( $atts['buttonColor '] ) ? $atts['buttonColor '] : '';
+	$button_font_size     = isset( $atts['buttonFontSize'] ) ? $atts['buttonFontSize'] : 14;
+	$button_type          = isset( $atts['buttonType'] ) ? $atts['buttonType'] : 'outlined';
+	$class_name           = isset( $atts['className'] ) ? $atts['className'] : '';
+	$color                = isset( $atts['color'] ) ? $atts['color'] : '';
+	$img_border           = isset( $atts['imgBorder'] ) ? $atts['imgBorder'] : 2;
+	$img_border_color     = isset( $atts['imgBorderColor'] ) ? $atts['imgBorderColor'] : '';
+	$post_background      = isset( $atts['postBackgroundColor'] ) ? $atts['postBackgroundColor'] : $background_color;
+	$posts_per_row        = isset( $atts['postsPerRow'] ) ? $atts['postsPerRow'] : 3;
+	$round_image          = isset( $atts['roundImg'] ) ? $atts['roundImg'] : 50;
+	$section_title        = isset( $atts['sectionTitle'] ) ? $atts['sectionTitle'] : 'Latest from the Blog';
+	$section_title_size   = isset( $atts['sectionTitleFontSize'] ) ? $atts['sectionTitleFontSize'] : 20;
+	$text_font_size       = isset( $atts['textFontSize'] ) ? $atts['textFontSize'] : 18;
+	$title_font_size      = isset( $atts['titleFontSize'] ) ? $atts['titleFontSize'] : 20;
+	$post_color           = isset( $atts['postColor'] ) ? $atts['postColor'] : $color;
 
-  /**
-   * Style and Class $atts
-   */
+	/**
+	 * Display $atts
+	 */
+	$read_more_text = isset( $atts['readMoreText'] ) ? $atts['readMoreText'] : 'Read More';
+	$show_excerpts  = isset( $atts['showExcerpts'] ) ? $atts['showExcerpts'] : true;
+	$show_img       = isset( $atts['showImg'] ) ? $atts['showImg'] : true;
+	$show_meta      = isset( $atts['showMeta'] ) ? $atts['showMeta'] : false;
 
-  $className = isset($atts['className']) ? $atts['className'] : '';
-  $align = isset($atts['align']) ? $atts['align'] : '';
-  $postsPerRow = isset($atts['postsPerRow']) ? $atts['postsPerRow'] : 3;
+	/**
+	 * Class Names
+	 *
+	 * @var array $class_names array of classnames to output
+	 */
+	$class_names   = array();
+	$class_names[] = 'wp-block-blueprint-blocks-recent-posts';
 
-  $alignText = isset($atts['alignText']) ? $atts['alignText'] : 'center';
-  $alignTitle = isset($atts['alignTitle']) ? $atts['alignTitle'] : 'center';
-  $backgroundColor = isset($atts['backgroundColor']) ? $atts['backgroundColor'] : '';
-  $color = isset($atts['color']) ? $atts['color'] : '';
-  $postBackground = isset($atts['postBackgroundColor']) ? $atts['postBackgroundColor'] : $backgroundColor;
-  $postColor = isset($atts['postColor']) ? $atts['postColor'] : $color;
-  $imgBorder = isset($atts['imgBorder']) ? $atts['imgBorder'] : 2;
-  $imgBorderColor = isset($atts['imgBorderColor']) ? $atts['imgBorderColor'] : '';
-  $roundImg = isset($atts['roundImg']) ? $atts['roundImg'] : 50;
-  $textFontSize = isset($atts['textFontSize']) ? $atts['textFontSize'] : 18;
-  $titleFontSize = isset($atts['titleFontSize']) ? $atts['titleFontSize'] : 20;
+	$block_styles = array();
+	if ( $background_color ) {
+		$block_styles[] = 'background-color:' . sanitize_hex_color( $background_color ) . ';';
+		$class_names[]  = 'has-background-color';
+	}
 
-  $buttonType = isset( $atts['buttonType']) ? $atts['buttonType'] : 'outlined';
-  $buttonColor  = isset( $atts['buttonColor ']) ? $atts['buttonColor '] : '';
-  $buttonBG = isset( $atts['buttonBG']) ? $atts['buttonBG'] : '';
-  $buttonBorderColor = isset( $atts['buttonBorderColor']) ? $atts['buttonBorderColor'] : '';
-  $buttonBorder = isset( $atts['buttonBorder']) ? $atts['buttonBorder'] : 2;
-  $buttonFontSize = isset( $atts['buttonFontSize']) ? $atts['buttonFontSize'] : 14;
-  $buttonBorderRadius = isset( $atts['buttonBorderRadius']) ? $atts['buttonBorderRadius'] : 0;
-  $alignButton = isset( $atts['alignButton']) ? $atts['alignButton'] : 'center';
-  $sectionTitle = isset( $atts['sectionTitle']) ? $atts['sectionTitle'] : 'Latest from the Blog';
-  $sectionTitleFontSize = isset( $atts['sectionTitleFontSize']) ? $atts['sectionTitleFontSize'] : 20;
+	if ( $color ) {
+		$block_styles[] = 'color:' . sanitize_hex_color( $color ) . ';';
+	}
 
-  /**
-   * Display $atts
-   */
-  $showExcerpts = isset($atts['showExcerpts']) ? $atts['showExcerpts'] : true;
-  $showMeta = isset($atts['showMeta']) ? $atts['showMeta'] : false;
-  $showImg = isset($atts['showImg']) ? $atts['showImg'] : true;
-  $readMoreText = isset($atts['readMoreText']) ? $atts['readMoreText'] : 'Read More';
+	$block_style = 'style="' . implode( ' ', $block_styles ) . '"';
 
+	if ( ! empty( $align ) ) {
+		$class_names[] = 'align' . $align;
+	}
 
-  /**
-   * Class Names
-   * @var array
-   */
+	if ( ! empty( $class_name ) ) {
+		$class_names[] = $class_name;
+	}
 
-  $classNames = [];
-  $classNames[] = 'wp-block-blueprint-blocks-recent-posts';
+	switch ( $posts_per_row ) {
+		case 1:
+			$class_names[] = 'one-across';
+			break;
+		case 2:
+			$class_names[] = 'two-across';
+			break;
+		case 4:
+			$class_names[] = 'four-across';
+			break;
+		case 5:
+			$class_names[] = 'five-across';
+			break;
+		default:
+			$class_names[] = 'three-across';
+			break;
+	}
 
-  $blockStyles = [];
-  if( $backgroundColor ) {
-    $blockStyles[] = 'background-color:' . sanitize_hex_color( $backgroundColor ) . ';';
-    $classNames[] = 'has-background-color';
-  }
-  if( $color ) {
-    $blockStyles[] = 'color:' . sanitize_hex_color( $color ) . ';';
-  }
-  $blockStyle = 'style="' . implode( ' ', $blockStyles ) . '"';
+	$block_class = implode( ' ', $class_names );
 
+	/**
+	 * Post + Title Classes and Styles
+	 */
+	$post_class   = 'blueprint-recent-posts';
+	$post_styles  = array();
+	$title_styles = array();
 
-  if( !empty( $align ) ) {
-    $classNames[] = 'align' . $align;
-  }
+	$post_styles[] = 'font-size:' . intval( $text_font_size ) . 'px;';
+	$post_styles[] = 'text-align:' . esc_attr( $align_text ) . ';';
 
-  if( !empty( $className) ) {
-    $classNames[] = $className;
-  }
+	$title_styles[] = 'font-size:' . intval( $title_font_size ) . 'px;';
+	$title_styles[] = 'text-align:' . esc_attr( $align_title ) . ';';
 
-  switch( $postsPerRow ) {
-    case 1:
-    $classNames[] ='one-across';
-    break;
-    case 2:
-    $classNames[] = 'two-across';
-    break;
-    case 4:
-    $classNames[] = 'four-across';
-    break;
-    case 5:
-    $classNames[] = 'five-across';
-    break;
-    default:
-    $classNames[] = 'three-across';
-    break;
-  }
+	if ( ! empty( $post_background ) ) {
+		$post_class   .= ' has-background';
+		$post_styles[] = 'background-color:' . sanitize_hex_color( $post_background ) . ';';
+	}
 
-  $blockClass = implode( ' ', $classNames );
+	if ( ! empty( $color ) ) {
+		$post_styles[]  = 'color:' . sanitize_hex_color( $post_color ) . ';';
+		$title_styles[] = 'color:' . sanitize_hex_color( $post_color ) . ';';
+	}
 
+	/**
+	 * Image Styles
+	 *
+	 * @var [type]
+	 */
+	$img_styles   = array();
+	$img_styles[] = 'border-radius:' . intval( $round_image ) . '%;';
+	$img_class    = 'bpbrp-image';
 
+	if ( $img_border > 0 ) {
+		$img_class    = 'bpbrp-image circle';
+		$img_styles[] = 'border:' . intval( $img_border ) . 'px solid ' . sanitize_hex_color( $img_border_color ) . ';';
+	}
 
-  /**
-   * Post + Title Classes and Styles
-   */
+	/**
+	 * QUERY
+	 *
+	 * @var array
+	 */
+	$args = array(
+		'category'       => $selected_category,
+		'post_status'    => 'publish',
+		'ignore_sticky'  => $ignore_sticky,
+		'posts_per_page' => $number_posts,
+	);
 
-  $postClass = 'blueprint-recent-posts';
-  $postStyles = [];
-  $titleStyles = [];
+	$rposts = new WP_Query( $args );
 
-  $postStyles[] = 'font-size:' . intval( $textFontSize ) . 'px;';
-  $postStyles[] = 'text-align:' . esc_attr( $alignText ) . ';';
+	$html = '';
 
-  $titleStyles[] = 'font-size:' . intval( $titleFontSize ) . 'px;';
-  $titleStyles[] = 'text-align:' . esc_attr( $alignTitle ) . ';';
+	if ( $rposts->have_posts() ) {
 
-  if( !empty( $postBackground ) ) {
-    $postClass .= ' has-background';
-    $postStyles[] = 'background-color:' . sanitize_hex_color( $postBackground ) . ';';
-  }
+		/* Opening HTML for post block */
+		$html .= '<div class="' . esc_attr( $block_class ) . '" ' . $block_style . '>';
+		$html .= '<h2 class="section-title"><span ' . $block_style . '>' . wp_kses_post( $section_title ) . '</span></h2>';
+		$html .= '<div class="inner is-flex">';
+		$phtml = '';
 
-  if( !empty( $color ) ) {
-    $postStyles[] = 'color:' . sanitize_hex_color( $postColor ) . ';';
-    $titleStyles[] = 'color:' .sanitize_hex_color( $postColor ) . ';';
-  }
+		while ( $rposts->have_posts() ) {
 
-  /**
-   * Image Styles
-   * @var [type]
-   */
-  $imgStyles = [];
-  $imgStyles[] = 'border-radius:' . intval( $roundImg ) . '%;';
-  $imgClass = 'bpbrp-image';
+			$rposts->the_post();
 
-  if( $imgBorder > 0 ) {
-    $imgClass = 'bpbrp-image circle';
-    $imgStyles[] = 'border:' . intval( $imgBorder ) . 'px solid ' . sanitize_hex_color( $imgBorderColor ) . ';';
-  }
+			/* Format image if show_img is true and the post has an image */
+			$img = '';
+			if ( $show_img && has_post_thumbnail() ) {
+				$img = sprintf(
+					'<div class="%4$s"><img src="%1$s" alt="%2$s" style="%3$s"/></div>',
+					get_the_post_thumbnail_url( '', 'medium' ),
+					get_the_title(),
+					implode( ' ', $img_styles ),
+					esc_attr( $img_class )
+				);
+			}
 
-  /**
-   * QUERY
-   * @var array
-   */
+			/* Format meta if show_meta is true */
+			$meta = '';
+			if ( $show_meta ) {
+				$meta = sprintf(
+					'<div class="bpbrp-meta"><span class="meta-label">posted on</span>%1$s <span class="meta-label">by</span>%2$s</div>',
+					get_the_date(),
+					get_the_author()
+				);
+			}
 
-  $args = array(
-    'category' => $selectedCategory,
-    'post_status' => 'publish',
-    'ignore_sticky' => $ignoreSticky,
-    'posts_per_page' => $numberPosts,
-  );
+			/**
+			 * Format the button, which seems to be an inordinate
+			 * amount of code for such a small element.
+			 */
+			$btn_wrap_class  = 'btn-wrap';
+			$btn_wrap_class .= ' align-' . $align_button;
+			$link_class      = 'bpbrp-read-more-link button button-primary';
 
+			$solid_btn_style = array();
 
-  $rposts = new WP_Query( $args );
+			if ( $button_bg ) {
+				$link_class        = 'bpbrp-read-more-link button';
+				$solid_btn_style[] = 'background-color:' . sanitize_hex_color( $button_bg ) . ';';
+			}
 
-  $html = '';
+			$outline_btn_style = array();
 
-  if ( $rposts->have_posts() ) {
+			$outline_btn_style[] = 'background-color: transparent';
 
-    $html .= '<div class="' . esc_attr( $blockClass ) . '" ' . $blockStyle . '>';
-    $html .= '<h2 class="section-title"><span ' . $blockStyle . '>' . wp_kses_post( $sectionTitle ) . '</span></h2>';
-    $html .= '<div class="inner is-flex">';
-    $pHtml = '';
+			if ( $button_border > 0 ) {
+				$outline_btn_style[] = 'border:' . intval( $button_border ) . 'px solid ' . sanitize_hex_color( $button_border_color ) . ';';
+			}
 
-    while ( $rposts->have_posts() ) {
+			$btn_styles = array();
+			if ( 'solid' === $button_type ) {
+				$btn_styles = $solid_btn_style;
+			} else {
+				$btn_styles = $outline_btn_style;
+			}
 
-        $rposts->the_post();
+			if ( 'solid' === $button_type && ! empty( $button_bg ) ) {
+				$link_class = 'read-more-link button';
+			}
 
-        $img = '';
-        if( $showImg && has_post_thumbnail() ) {
-          $img = sprintf(
-            '<div class="%4$s"><img src="%1$s" alt="%2$s" style="%3$s"/></div>',
-            get_the_post_thumbnail_url( '', 'medium'),
-            get_the_title(),
-            implode( ' ', $imgStyles ),
-            esc_attr( $imgClass )
-          );
-        }
+			if ( $button_color ) {
+				$btn_styles[] = 'color:' . sanitize_hex_color( $button_color ) . ';';
+			}
 
-        $meta = '';
-        if( $showMeta ) {
-          $meta = sprintf(
-            '<div class="bpbrp-meta"><span class="meta-label">posted on</span>%1$s <span class="meta-label">by</span>%2$s</div>',
-            get_the_date(),
-            get_the_author()
-          );
-        }
+			if ( $button_border_radius > 0 ) {
+				$btn_styles[] = 'border-radius:' . intval( $button_border_radius ) . 'px';
+			}
 
-        $btnWrapClass = 'btn-wrap';
-        $btnWrapClass .= ' align-' .  $alignButton;
-        $linkClass = 'bpbrp-read-more-link button button-primary';
+			$btn_style[] = 'font-size:' . intval( $button_font_size ) . 'px';
 
-        $solidBtnStyle = [];
+			$button = '';
 
-        if( $buttonBG ) {
-          $linkClass = 'bpbrp-read-more-link button';
-          $solidBtnStyle[] = 'background-color:' . sanitize_hex_color( $buttonBG ) . ';';
-        }
+			if ( 'inline' === $align_button ) {
 
-        $outlineBtnStyle = [];
+				$button = sprintf(
+					'<a href="%1$s" class="bpbrp-read-more-button">%2$s</a>',
+					get_the_permalink(),
+					stripslashes( esc_html( $read_more_text ) )
+				);
 
-        $outlineBtnStyle[] = 'background-color: transparent';
+			} else {
 
-        if( $buttonBorder > 0 ) {
-          $outlineBtnStyle[] = 'border:' . intval( $buttonBorder ) . 'px solid ' . sanitize_hex_color( $buttonBorderColor ) . ';';
-        }
+				$button = sprintf(
+					'<div class="%1$s"><a href="%2$s" style="%3$s" class="%4$s">%5$s</a></div>',
+					esc_attr( $btn_wrap_class ),
+					get_the_permalink(),
+					implode( ' ', $btn_styles ),
+					esc_attr( $link_class ),
+					stripslashes( esc_html( $read_more_text ) )
+				);
 
-        $btnStyles = [];
-        if( $buttonType === 'solid' ) {
-          $btnStyles = $solidBtnStyle;
-        } else {
-          $btnStyles = $outlineBtnStyle;
-        }
+			}
 
-        if( $buttonType === 'solid' && !empty( $buttonBG ) ) {
-          $linkClass = 'read-more-link button';
-        }
+			/**
+			 * Format the excerpt (the long way, so we can add a button if set above)
+			 */
+			$get_excerpt = get_the_content( '', true );
+			$get_excerpt = strip_shortcodes( $get_excerpt );
+			$get_excerpt = excerpt_remove_blocks( $get_excerpt );
+			$excerpt_len = '55';
+			$fmt_excerpt = wp_trim_words( $get_excerpt, $excerpt_len, $button );
 
-        if( $buttonColor ) {
-          $btnStyles[] = 'color:' . sanitize_hex_color( $buttonColor ) . ';';
-        }
+			if ( $show_excerpts ) {
+				$excerpt = sprintf(
+					'<div class="bpbrp-excerpt">%1$s</div>',
+					$fmt_excerpt
+				);
+			}
 
-        if( $buttonBorderRadius > 0 ) {
-          $btnStyles[] = 'border-radius:' . intval( $buttonBorderRadius ) . 'px';
-        }
-
-        $btnStyle[] = 'font-size:' . intval( $buttonFontSize ) . 'px';
-
-        $button = '';
-
-
-        if( $alignButton === 'inline' ) {
-
-          $button = sprintf(
-            '<a href="%1$s" class="bpbrp-read-more-button">%2$s</a>',
-            get_the_permalink(),
-            stripslashes(esc_html( $readMoreText ) )
-          );
-
-        } else {
-
-          $button = sprintf(
-            '<div class="%1$s"><a href="%2$s" style="%3$s" class="%4$s">%5$s</a></div>',
-            esc_attr( $btnWrapClass ),
-            get_the_permalink(),
-            implode( ' ', $btnStyles ),
-            esc_attr( $linkClass ),
-            stripslashes(esc_html( $readMoreText ) )
-          );
-
-        }
-
-        $getExcerpt = get_the_content( '', true );
-        $getExcerpt = strip_shortcodes( $getExcerpt );
-        $getExcerpt = excerpt_remove_blocks( $getExcerpt );
-        $excerptLength = '55';
-        $formatExcerpt = wp_trim_words( $getExcerpt, $excerptLength, $button );
-
-
-        if( $showExcerpts ) {
-          $excerpt = sprintf(
-            '<div class="bpbrp-excerpt"> %1$s </div>',
-            $formatExcerpt
-          );
-        }
-
-
-      $pHtml .= sprintf(
-        '<div class="%1$s" style="%5$s">
+			/*
+			 * Put it all together...
+			 */
+			$phtml .= sprintf(
+				'<div class="%1$s" style="%5$s">
         <div class="recent-post-header">%2$s %7$s
         <h4 class="bpbrp-postTitle" style="%4$s">%3$s</h4></div>
         %6$s
         </div>',
-        esc_attr( $postClass ),
-        $img,
-        get_the_title(),
-        implode( ' ', $titleStyles ),
-        implode( ' ', $postStyles ),
-        $excerpt,
-        $meta
-      );
-    }
+				esc_attr( $post_class ),
+				$img,
+				get_the_title(),
+				implode( ' ', $title_styles ),
+				implode( ' ', $post_styles ),
+				$excerpt,
+				$meta
+			);
+		}
 
-    $html .= $pHtml;
+		/* Add all the posts to the output */
+		$html .= $phtml;
 
-    $html .= '</div></div>';
-  }
-  /* Restore original Post Data */
-  wp_reset_postdata();
+		$html .= '</div></div>';
+	}
+	/* Restore original Post Data */
+	wp_reset_postdata();
 
-  return $html;
+	/* Escape and return the whole shebang. */
+	return wp_kses_post( $html );
 }

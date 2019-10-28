@@ -2,7 +2,6 @@ module.exports = {
    context: __dirname,
    entry: {
      blocks: './blocks/src/blocks.js',
-     //filters: './blocks/src/filters/block-filters.js',
    },
    mode: 'production',
    output: {

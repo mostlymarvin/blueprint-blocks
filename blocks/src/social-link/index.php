@@ -1,5 +1,4 @@
 <?php
    /**
-   * Block: Social Links
-   * 
-   */
+	* Block: Social Links
+	*/

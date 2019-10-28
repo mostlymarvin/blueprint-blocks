@@ -27,7 +27,7 @@ function blueprint_extras_scripts() {
 	/* Register style */
 	wp_register_style(
 		'blueprint-extras',
-		BLUEPRINT_BLOCKS_PLUGIN_URL . 'css/blueprint-extras.css',
+		BLUEPRINT_BLOCKS_PLUGIN_URL . 'assets/css/blueprint-extras.css',
 		'',
 		BLUEPRINT_BLOCKS_VERSION
 	);
@@ -35,7 +35,7 @@ function blueprint_extras_scripts() {
 	/* Register WP_Scripts::reset */
 	wp_register_script(
 		'blueprint-extras-js',
-		BLUEPRINT_BLOCKS_PLUGIN_URL . 'js/blueprint-extras-min.js',
+		BLUEPRINT_BLOCKS_PLUGIN_URL . 'assets/js/blueprint-extras.js',
 		'',
 		BLUEPRINT_BLOCKS_VERSION,
 		true
@@ -58,7 +58,7 @@ function blueprint_extras_live_preview() {
 
 	wp_register_script(
 		'blueprint-extras-customizer',
-		BLUEPRINT_BLOCKS_PLUGIN_URL . 'js/blueprint-customizer-preview-min.js',
+		BLUEPRINT_BLOCKS_PLUGIN_URL . 'assets/js/blueprint-customizer-preview.js',
 		array( 'jquery', 'customize-preview' ),
 		BLUEPRINT_BLOCKS_VERSION,
 		false

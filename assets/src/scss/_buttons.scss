@@ -1,0 +1,255 @@
+/*
+* Styles for Outline MBT Buttons
+* Colors can be customized in theme customizer
+* Custom CSS can be added
+*/
+.blueprint-extras {
+	.buylinks .mbt-book,
+	.mbt-book,
+	.mbt-book-archive .mbt-book,
+	.mbt-featured-book-widget {
+		.mbt-book-buybuttons {
+			display        : flex !important;
+			flex-wrap      : wrap;
+			justify-content: center;
+
+			.mbt-book-buybutton {
+				-moz-transition   : all 0.5s;
+				-webkit-transition: all 0.5s;
+				//font-family: Futura, Trebuchet MS, Arial, sans-serif;
+				border            : 2px solid;
+				color             : #fff;
+				display           : block;
+				float             : none !important;
+				font-family       : inherit;
+				font-weight       : bold;
+				margin            : 0.40625rem;
+				overflow          : hidden;
+				position          : relative;
+				text-transform    : uppercase;
+				transition        : all 0.5s;
+
+				a {
+					-moz-transition   : none;
+					-webkit-transition: none;
+					background-color  : white;
+					border            : none;
+					color             : inherit;
+					display           : block;
+					line-height       : 0;
+					text-align        : center;
+					transition        : none;
+					vertical-align    : middle;
+					width             : 100%;
+
+					&:hover {
+						border-bottom: none;
+					}
+
+					img {
+						-webkit-filter: inherit;
+						border-bottom-right-radius: 0;
+						border-top-right-radius   : 0;
+						border                    : none;
+						filter: inherit;
+						height                    : 36px;
+						object-fit                : contain;
+						vertical-align            : initial;
+						width                     : auto;
+					}
+				}
+			}
+		}
+	}
+}
+
+.blueprint-extras.blueprint-buttons {
+	.buylinks .mbt-book,
+	.mbt-book,
+	.mbt-book-archive .mbt-book,
+	.mbt-featured-book-widget {
+		.mbt-book-buybuttons .mbt-book-buybutton {
+			&:after {
+				-moz-transition   : none;
+				-webkit-transition: none;
+				content           : "Buy \00000a Now";
+				line-height       : 12px;
+				position          : absolute;
+				right             : 0;
+				text-align        : center;
+				top               : 50%;
+				transform         : translateY(-50%);
+				transition        : none;
+				width             : 40px;
+			}
+		}
+	}
+}
+
+.blueprint-extras.blueprint-buttons.mbt-btn-size-small {
+	.buylinks .mbt-book,
+	.mbt-book,
+	.mbt-book-archive .mbt-book {
+		.mbt-book-buybuttons .mbt-book-buybutton {
+			font-size: 9px;
+			padding  : 0 38px 0 0;
+			width    : 144px;
+
+			&:after {
+				width: 34px;
+			}
+
+			a img {
+				height: 25px;
+			}
+		}
+	}
+}
+
+.blueprint-extras.blueprint-buttons.mbt-btn-size-medium {
+	.buylinks .mbt-book,
+	.mbt-book,
+	.mbt-book-archive .mbt-book {
+		.mbt-book-buybuttons .mbt-book-buybutton {
+			font-size: 11px;
+			padding  : 0 44px 0 0;
+			width    : 172px;
+
+			&:after {
+				width: 40px;
+			}
+
+			a img {
+				height: 30px;
+			}
+		}
+	}
+}
+
+.blueprint-extras.blueprint-buttons.mbt-btn-size-large {
+	.buylinks .mbt-book,
+	.mbt-book,
+	.mbt-book-archive .mbt-book {
+		.mbt-book-buybuttons .mbt-book-buybutton {
+			font-size: 12px;
+			padding  : 0 52px 0 0;
+			width    : 201px;
+
+			&:after {
+				width: 48px;
+			}
+
+			a img {
+				height: 35px;
+			}
+		}
+	}
+}
+
+.blueprint-extras.blueprint-simple-buttons {
+	.buylinks .mbt-book,
+	.mbt-book,
+	.mbt-book-archive .mbt-book,
+	.mbt-featured-book-widget {
+		.mbt-book-buybuttons .mbt-book-buybutton {
+			padding: 0;
+			width  : 135px;
+
+			a {
+				background-color: white;
+				height          : 100%;
+				width           : 100%;
+
+				img {
+					width: auto;
+				}
+			}
+		}
+	}
+}
+
+.blueprint-extras.blueprint-simple-buttons.mbt-btn-size-small {
+	.buylinks .mbt-book,
+	.mbt-book,
+	.mbt-book-archive .mbt-book {
+		.mbt-book-buybuttons .mbt-book-buybutton {
+			width: 120px;
+
+			a img {
+				height: 25px;
+			}
+		}
+	}
+}
+
+.blueprint-extras.blueprint-simple-buttons.mbt-btn-size-medium {
+	.buylinks .mbt-book,
+	.mbt-book,
+	.mbt-book-archive .mbt-book {
+		.mbt-book-buybuttons .mbt-book-buybutton {
+			width: 135px;
+
+			a img {
+				height: 30px;
+			}
+		}
+	}
+}
+
+.blueprint-extras.blueprint-simple-buttons.mbt-btn-size-large {
+	.buylinks .mbt-book,
+	.mbt-book,
+	.mbt-book-archive .mbt-book {
+		.mbt-book-buybuttons .mbt-book-buybutton {
+			width: 152px;
+
+			a img {
+				height: 35px;
+			}
+		}
+	}
+}
+/** Widgets*/
+.blueprint-extras.blueprint-buttons.mbt-btn-size-large,
+.blueprint-extras.blueprint-buttons.mbt-btn-size-medium,
+.blueprint-extras.blueprint-buttons.mbt-btn-size-small {
+	.mbt-featured-book-widget {
+		.mbt-book-buybuttons .mbt-book-buybutton {
+			font-size: 8px !important;
+			padding  : 0 31px 0 0 !important;
+			width    : 120px !important;
+
+			&:after {
+				width: 28px !important;
+			}
+
+			a img {
+				height: 25px !important;
+			}
+		}
+	}
+}
+
+.blueprint-extras.blueprint-simple-buttons.mbt-btn-size-large,
+.blueprint-extras.blueprint-simple-buttons.mbt-btn-size-medium,
+.blueprint-extras.blueprint-simple-buttons.mbt-btn-size-small {
+	.mbt-featured-book-widget {
+		.mbt-book-buybuttons .mbt-book-buybutton {
+			width: 120px !important;
+
+			a img {
+				height: 25px !important;
+			}
+		}
+	}
+}
+
+.blueprint-extras {
+	.mbt-book .mbt-primary-button,
+	.mbt-book .mbt-primary-button:link,
+	.mbt-book .mbt-primary-button:visited {
+		//need to set color in custom css
+		//need to set border radius in custom css
+		border-bottom: none !important;
+	}
+}
